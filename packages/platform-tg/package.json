@@ -1,0 +1,10 @@
+{
+  "name": "@henta/platform-tg",
+  "description": "TG support on henta",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "src/index.ts",
+  "dependencies": {
+    "telegraf": "^4.9.0"
+  }
+}

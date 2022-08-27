@@ -1,0 +1,9 @@
+{
+  "name": "@henta/platform-vk",
+  "description": "VK support on henta",
+  "type": "module",
+  "main": "src/index.ts",
+  "dependencies": {
+    "vk-io": "^4.6.0"
+  }
+}

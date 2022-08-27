@@ -1,0 +1,21 @@
+{
+  "name": "@henta/core",
+  "description": "henta core",
+  "type": "module",
+  "main": "src/index.ts",
+  "version": "4.0.0-dev",
+  "typesVersions": {
+    "*": {
+      "context": ["src/context.ts"],
+      "platform": ["src/platform.ts"]
+    }
+  },
+  "exports": {
+    ".": "./src/index.ts",
+    "./context": "./src/context.js",
+    "./platform": "./src/platform.js"
+  },
+  "dependencies": {
+    "middleware-io": "^2.8.0"
+  }
+}
