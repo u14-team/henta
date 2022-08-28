@@ -1,7 +1,7 @@
 # HENTA
 Фреймворк для создания полностью программируемых чат-ботов любой сложности.
 
-```
+```js
 import VkPlatform from '@henta/platform-vk';
 import TgPlatform from '@henta/platform-tg';
 
