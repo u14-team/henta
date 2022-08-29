@@ -7,13 +7,15 @@
   "typesVersions": {
     "*": {
       "context": ["src/context.ts"],
-      "platform": ["src/platform.ts"]
+      "platform": ["src/platform.ts"],
+      "error": ["src/error.ts"]
     }
   },
   "exports": {
     ".": "./src/index.ts",
     "./context": "./src/context.js",
-    "./platform": "./src/platform.js"
+    "./platform": "./src/platform.js",
+    "./error": "./src/error.js"
   },
   "dependencies": {
     "middleware-io": "^2.8.0"

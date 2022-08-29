@@ -1,6 +1,7 @@
 import Platform from '@henta/core/platform';
 import PlatformTgContext from './context.js';
 import { Telegraf } from 'telegraf';
+import type HentaBot from '@henta/core';
 
 export interface PlatformTgOptions {
   token: string;
@@ -15,8 +16,8 @@ export default class PlatformTg extends Platform {
     this.tg = new Telegraf(options.token);
   }
 
-  setCallback(callback: (PlatformVkContext) => void) {
-    this.tg.on('message', rawContext => callback(new PlatformTgContext(rawContext)));
+  setCallback(callback: (PlatformVkContext) => void, bot: HentaBot) {
+    this.tg.on('message', (rawContext) => callback(new PlatformTgContext(rawContext, bot)));
   }
 
   async startPooling() {

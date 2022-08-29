@@ -1,21 +1,34 @@
+import type HentaBot from './index.js';
+
 export default abstract class PlatformContext {
+  readonly bot: HentaBot;
+
   source: string;
-  abstract raw: unknown;
+  raw: unknown;
 
   text?: string;
 
+  answerBody?: unknown;
   isAnswered: boolean;
 
+  constructor(raw: unknown, bot: HentaBot) {
+    this.raw = raw;
+    this.bot = bot;
+  }
+
   abstract get originalText (): string | undefined;
+  abstract get senderId (): string;
 
   abstract send(options): Promise<void>;
 
   answer(options, payload?) {
     if (this.isAnswered) {
-      throw Error('Message is answered');
+      console.warn('Message is answered');
     }
 
     this.isAnswered = true;
-    return this.send(options);
+    this.answerBody = options;
+
+    return this.bot.onAnswer(this);
   }
 }

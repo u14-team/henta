@@ -3,7 +3,14 @@ import PlatformContext from '@henta/core/context';
 export interface Command {
   name: string;
   handler: (ctx: PlatformContext) => Promise<void>;
+  requires?: string[];
 }
+
+/*
+  Написал эти декораторы на коленке чтобы побыстрее затестить и уйти спать.
+  Сейчас я пишу другой функционал, это вполне ноормальное явление, просто не завязывайтесь
+  на локальном API, юзайте BotCmd.View и BotCmd.Command, а я позабочусь о их содержании..
+*/
 
 export class CommandView {
   botcmd: BotCmd;
@@ -11,10 +18,10 @@ export class CommandView {
   constructor(botcmd: BotCmd) {
     this.botcmd = botcmd;
 
-    console.log('$view', this.constructor);
-    console.log('$commands', this.$commands);
     // todo: move to reflection
     this.$commands?.forEach(v => this.botcmd.add(buildCommand(v, this.constructor.$view)));
+    this.botcmd.commands = this.botcmd.commands.sort((a, b) => b.name.length - a.name.length);
+    console.log(this.botcmd.commands.map(v => v.name));
   }
 }
 
@@ -27,7 +34,7 @@ function buildCommand(command: Command, parent: Command) {
 }
 
 function checkCommand(command: Command, commandLine: string) {
-  return command.name === commandLine || command.name.startsWith(`${commandLine} `);
+  return command.name === commandLine || commandLine.startsWith(`${command.name} `);
 }
 
 export default class BotCmd {

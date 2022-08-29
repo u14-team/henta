@@ -1,3 +1,4 @@
+import type HentaBot from '@henta/core';
 import Platform from '@henta/core/platform';
 import { VK } from 'vk-io';
 import PlatformVkContext from './context.js';
@@ -17,8 +18,8 @@ export default class PlatformVk extends Platform {
     });
   }
 
-  setCallback(callback: (PlatformVkContext) => void) {
-    this.vk.updates.on('message_new', rawContext => callback(new PlatformVkContext(rawContext)));
+  setCallback(callback: (PlatformVkContext) => void, bot: HentaBot) {
+    this.vk.updates.on('message_new', rawContext => callback(new PlatformVkContext(rawContext, bot)));
   }
 
   async startPooling() {

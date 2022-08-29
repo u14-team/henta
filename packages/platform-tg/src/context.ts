@@ -1,16 +1,15 @@
 
+import type HentaBot from '@henta/core';
 import PlatformContext from '@henta/core/context';
 import Context from 'telegraf/typings/context';
 import { Update } from 'telegraf/typings/core/types/typegram';
 
 export default class PlatformTgContext extends PlatformContext {
   source = 'tg';
-  raw: Context<Update>;
+  declare raw: Context<Update>;
 
-  constructor(raw: Context<Update>) {
-    super();
-
-    this.raw = raw;
+  constructor(raw: Context<Update>, bot: HentaBot) {
+    super(raw, bot);
     this.text = this.raw.update.message.text;
   }
 
@@ -18,7 +17,11 @@ export default class PlatformTgContext extends PlatformContext {
     return this.raw.update.message.text;
   }
 
-  send(message) {
-    return this.raw.reply(message.text);
+  get senderId() {
+    return this.raw.from.id.toString();
+  }
+
+  async send(message) {
+    await this.raw.reply(message.text);
   }
 }

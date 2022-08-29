@@ -1,14 +1,13 @@
 import type { MessageContext } from 'vk-io';
 import PlatformContext from '@henta/core/context';
+import type HentaBot from '@henta/core';
 
 export default class PlatformVkContext extends PlatformContext {
   source = 'vk';
-  raw: MessageContext;
+  declare raw: MessageContext;
 
-  constructor(raw: MessageContext) {
-    super();
-
-    this.raw = raw;
+  constructor(raw: MessageContext, bot: HentaBot) {
+    super(raw, bot);
     this.text = this.raw.text;
   }
 
@@ -16,7 +15,11 @@ export default class PlatformVkContext extends PlatformContext {
     return this.raw.text;
   }
 
-  send(message) {
-    return this.raw.send(message.text);
+  get senderId() {
+    return this.raw.senderId.toString();
+  }
+
+  async send(message) {
+    await this.raw.send(message.text);
   }
 }
