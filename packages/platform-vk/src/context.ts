@@ -1,6 +1,7 @@
 import type { MessageContext } from 'vk-io';
 import PlatformContext from '@henta/core/context';
 import type HentaBot from '@henta/core';
+import getKeyboardButton from './util/keyboard.js';
 
 export default class PlatformVkContext extends PlatformContext {
   source = 'vk';
@@ -20,6 +21,12 @@ export default class PlatformVkContext extends PlatformContext {
   }
 
   async send(message) {
-    await this.raw.send(message.text);
+    await this.raw.send({
+      message: message.text,
+      keyboard: message.keyboard && JSON.stringify({
+        inline: true,
+        buttons: message.keyboard.map(row => row.map(v => getKeyboardButton(v)))
+      })
+    });
   }
 }
