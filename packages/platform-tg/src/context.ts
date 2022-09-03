@@ -11,11 +11,11 @@ export default class PlatformTgContext extends PlatformContext {
 
   constructor(raw: Context<Update>, bot: HentaBot) {
     super(raw, bot);
-    this.text = this.raw.update.message.text;
+    this.text = this.raw.update.message?.text;
   }
 
   get originalText() {
-    return this.raw.update.message.text;
+    return this.raw.update.message?.text;
   }
 
   get senderId() {
@@ -25,8 +25,12 @@ export default class PlatformTgContext extends PlatformContext {
   async send(message) {
     await this.raw.reply(message.text, {
       reply_markup: JSON.stringify({
-        inline_keyboard: message.keyboard?.map(row => row.map(v => getKeyboardButton(v)))
+        inline_keyboard: this.normalizeKeyboard(message.keyboard)?.map(row => row.map(v => getKeyboardButton(v)))
       })
     });
+  }
+
+  get payload() {
+    return this.raw.update.callback_query?.data && JSON.parse(this.raw.update.callback_query?.data);
   }
 }

@@ -2,6 +2,7 @@ import PlatformContext from '@henta/core/context';
 
 export interface Command {
   name: string;
+  description?: string;
   handler: (ctx: PlatformContext) => Promise<void>;
   requires?: string[];
 }
@@ -63,11 +64,12 @@ export default class BotCmd {
       return next();
     }
 
-    const commandLine = /* ctx.payload?.text || */ ctx.text?.trim();
+    const commandLine = ctx.payload?.text || ctx.text?.trim();
     if (!commandLine) {
       return next();
     }
 
+    ctx.commandLine = commandLine;
     const command = this.commands.find(item => checkCommand(item, commandLine));
     if (!command) {
       return next();

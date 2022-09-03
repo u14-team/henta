@@ -25,8 +25,12 @@ export default class PlatformVkContext extends PlatformContext {
       message: message.text,
       keyboard: message.keyboard && JSON.stringify({
         inline: true,
-        buttons: message.keyboard.map(row => row.map(v => getKeyboardButton(v)))
+        buttons: this.normalizeKeyboard(message.keyboard).map(row => row.map(v => getKeyboardButton(v)))
       })
     });
+  }
+
+  get payload() {
+    return this.raw.messagePayload;
   }
 }
