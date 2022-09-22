@@ -22,7 +22,7 @@ export class CommandView {
     // todo: move to reflection
     this.$commands?.forEach(v => this.botcmd.add(buildCommand(v, this.constructor.$view)));
     this.botcmd.commands = this.botcmd.commands.sort((a, b) => b.name.length - a.name.length);
-    console.log(this.botcmd.commands.map(v => v.name));
+    // console.log(this.botcmd.commands.map(v => v.name));
   }
 }
 

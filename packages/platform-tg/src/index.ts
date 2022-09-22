@@ -2,6 +2,7 @@ import Platform from '@henta/core/platform';
 import PlatformTgContext from './context.js';
 import { Telegraf } from 'telegraf';
 import type HentaBot from '@henta/core';
+import TgAttachmentSender from './attachment.sender.js';
 
 export interface PlatformTgOptions {
   token: string;
@@ -9,6 +10,7 @@ export interface PlatformTgOptions {
 
 export default class PlatformTg extends Platform {
   tg: Telegraf;
+  attachmentSender = new TgAttachmentSender(this);
 
   constructor(options: PlatformTgOptions) {
     super();

@@ -3,7 +3,8 @@
   "description": "VK support on henta",
   "type": "module",
   "main": "src/index.ts",
+  "version": "0.2.0",
   "dependencies": {
-    "vk-io": "^4.6.0"
+    "vk-io": "^4.7.0"
   }
 }

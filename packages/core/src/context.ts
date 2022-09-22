@@ -51,4 +51,11 @@ export default abstract class PlatformContext {
       ...requiredButtons
     ], buttonsInRow);
   }
+
+  loadAttachments(attachments: any[]) {
+    // TODO: attachment loader
+    return [
+      { type: 'photo', data: attachments[0].source }
+    ];
+  }
 }
