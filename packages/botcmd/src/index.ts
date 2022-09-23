@@ -5,6 +5,8 @@ export interface Command {
   description?: string;
   handler: (ctx: PlatformContext) => Promise<void>;
   requires?: string[];
+  // payload
+  [key: string]: any;
 }
 
 /*
@@ -20,17 +22,19 @@ export class CommandView {
     this.botcmd = botcmd;
 
     // todo: move to reflection
-    this.$commands?.forEach(v => this.botcmd.add(buildCommand(v, this.constructor.$view)));
+    this.$commands?.forEach(v => this.botcmd.add(buildCommand(v, this.constructor.$view, this)));
     this.botcmd.commands = this.botcmd.commands.sort((a, b) => b.name.length - a.name.length);
     // console.log(this.botcmd.commands.map(v => v.name));
   }
 }
 
-function buildCommand(command: Command, parent: Command) {
+function buildCommand(command: Command, parent: Command, context: CommandView) {
   return {
+    ...parent,
+    ...command,
     view: parent.name,
     name: command.name ? `${parent.name} ${command.name}` : parent.name,
-    handler: command.handler
+    handler: command.handler.bind(context)
   };
 }
 
@@ -51,7 +55,7 @@ export default class BotCmd {
   static Command(options?) {
     return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
       target.$commands = target.$commands || [];
-      target.$commands.push({ ...(options || {}), handler: descriptor.value.bind(target) });
+      target.$commands.push({ ...(options || {}), handler: descriptor.value });
     };
   }
 
@@ -75,6 +79,8 @@ export default class BotCmd {
       return next();
     }
 
+    ctx.commandName = command.name;
+    ctx.command = command;
     await command.handler(ctx);
     return next();
   }
