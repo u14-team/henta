@@ -4,14 +4,29 @@ import PlatformContext from '@henta/core/context';
 import Context from 'telegraf/typings/context';
 import { Update } from 'telegraf/typings/core/types/typegram';
 import getKeyboardButton from './util/keyboard.js';
+import TgAttachment from './attachment.js';
+
+function collectAttachmentsFromMessage(message, platform) {
+  const response = [];
+
+    if (message.photo) {
+      response.push(new TgAttachment(
+        'photo',
+        message.photo,
+        platform
+      ));
+    }
+
+    return response;
+}
 
 export default class PlatformTgContext extends PlatformContext {
   source = 'tg';
   declare raw: Context<Update>;
 
-  constructor(raw: Context<Update>, bot: HentaBot) {
-    super(raw, bot);
-    this.text = this.raw.update.message?.text;
+  constructor(raw: Context<Update>, bot: HentaBot, platform: any) {
+    super(raw, bot, platform);
+    this.text = this.originalText || this.raw?.message?.caption;
   }
 
   get originalText() {
@@ -24,6 +39,22 @@ export default class PlatformTgContext extends PlatformContext {
 
   get isChat() {
     return this.raw.chat.type !== 'private';
+  }
+
+  get attachments() {
+    if (!this.raw.message) {
+      return [];
+    }
+
+    return collectAttachmentsFromMessage(this.raw.message, this.platform);
+  }
+
+  get nestedAttachments() {
+    if (!this.raw.message?.reply_to_message) {
+      return [];
+    }
+
+    return collectAttachmentsFromMessage(this.raw.message.reply_to_message, this.platform);
   }
 
   async send(message) {

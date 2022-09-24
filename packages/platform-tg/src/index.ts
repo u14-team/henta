@@ -19,8 +19,8 @@ export default class PlatformTg extends Platform {
   }
 
   setCallback(callback: (PlatformVkContext) => void, bot: HentaBot) {
-    this.tg.on('message', (rawContext) => callback(new PlatformTgContext(rawContext, bot)));
-    this.tg.on('callback_query', (rawContext) => callback(new PlatformTgContext(rawContext, bot)));
+    this.tg.on('message', (rawContext) => callback(new PlatformTgContext(rawContext, bot, this)));
+    this.tg.on('callback_query', (rawContext) => callback(new PlatformTgContext(rawContext, bot, this)));
   }
 
   async startPooling() {

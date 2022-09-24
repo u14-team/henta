@@ -26,3 +26,5 @@ export default class HentaBot {
     return this._answerComposed(ctx, () => ctx.send(ctx.answerBody));
   }
 }
+
+export { default as Attachment } from './attachment.js';

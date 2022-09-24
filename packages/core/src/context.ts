@@ -1,25 +1,33 @@
+import BotError from './error.js';
 import type HentaBot from './index.js';
+import type Attachment from './attachment.js';
+import type Platform from './platform.js';
 
 export default abstract class PlatformContext {
   readonly bot: HentaBot;
 
   source: string;
   raw: unknown;
+  platform: unknown;
 
   text?: string;
 
   answerBody?: unknown;
   isAnswered: boolean;
 
-  constructor(raw: unknown, bot: HentaBot) {
+  constructor(raw: unknown, bot: HentaBot, platform: Platform) {
     this.raw = raw;
     this.bot = bot;
+    this.platform = platform;
   }
 
   abstract get originalText (): string | undefined;
   abstract get senderId (): string;
   abstract get isChat (): boolean;
   abstract get payload (): unknown;
+
+  abstract get attachments (): Attachment[];
+  abstract get nestedAttachments (): Attachment[];
 
   abstract send(options): Promise<void>;
 
@@ -58,5 +66,34 @@ export default abstract class PlatformContext {
     return [
       { type: 'photo', data: attachments[0].source }
     ];
+  }
+
+  requireAttachments(attachments: any[]) {
+    if (attachments.length === 0) {
+      return [];
+    }
+
+    const allAttachments: Attachment[] = [
+      ...this.attachments,
+      ...this.nestedAttachments
+    ];
+
+    const foundList = [];
+    attachments.forEach(attachment => {
+      const foundIndex = allAttachments.findIndex(v => v.type === attachment.type);
+      if (foundIndex === -1) {
+        throw new BotError('Вы не прикрепили все требуемые медиафайлы.');
+      }
+
+      const [found] = allAttachments.splice(foundIndex, 1);
+      let value: any = found;
+      if (attachment.to === 'url') {
+        value = () => found.getUrl();
+      }
+
+      foundList.push(typeof value === 'function' ? value : () => value);
+    });
+
+    return Promise.all(foundList.map(v => v()));
   }
 }

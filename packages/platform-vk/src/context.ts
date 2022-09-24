@@ -3,13 +3,14 @@ import PlatformContext from '@henta/core/context';
 import type HentaBot from '@henta/core';
 import getKeyboardButton from './util/keyboard.js';
 import BotError from '@henta/core/error';
+import VkAttachment from './attachment.js';
 
 export default class PlatformVkContext extends PlatformContext {
   source = 'vk';
   declare raw: MessageContext;
 
-  constructor(raw: MessageContext, bot: HentaBot) {
-    super(raw, bot);
+  constructor(raw: MessageContext, bot: HentaBot, platform: any) {
+    super(raw, bot, platform);
     this.text = this.raw.text;
   }
 
@@ -52,36 +53,31 @@ export default class PlatformVkContext extends PlatformContext {
     return this.raw.isChat;
   }
 
-  requireAttachments(attachments: any[]) {
-    if (attachments.length === 0) {
-      return [];
-    }
+  get attachments() {
+    return this.raw.attachments
+      .map(attachment => new VkAttachment(
+        attachment.type,
+        attachment.toJSON(),
+        this.platform
+      ));
+  }
 
-    const allAttachments = [...this.raw.attachments];
+  get nestedAttachments() {
+    const response = [];
+
     if (this.raw.hasReplyMessage) {
-      allAttachments.push(...this.raw.replyMessage.attachments);
+      response.push(...this.raw.replyMessage.attachments);
     }
 
     if (this.raw.hasForwards) {
-      this.raw.forwards.forEach(v => allAttachments.push(...v.attachments));
+      this.raw.forwards.forEach(v => response.push(...v.attachments));
     }
 
-    const foundList = [];
-    attachments.forEach(attachment => {
-      const foundIndex = allAttachments.findIndex(v => v.type === attachment.type);
-      if (foundIndex === -1) {
-        throw new BotError('Вы не прикрепили все требуемые медиафайлы.');
-      }
-
-      const [found] = allAttachments.splice(foundIndex, 1);
-      let value = found;
-      if (attachment.to === 'url') {
-        value = found.largeSizeUrl;
-      }
-
-      foundList.push(value);
-    });
-
-    return Promise.all(foundList);
+    return response
+      .map(attachment => new VkAttachment(
+        attachment.type,
+        attachment.toJSON(),
+        this.platform
+      ));
   }
 }

@@ -19,7 +19,7 @@ export default class PlatformVk extends Platform {
   }
 
   setCallback(callback: (PlatformVkContext) => void, bot: HentaBot) {
-    this.vk.updates.on('message_new', rawContext => callback(new PlatformVkContext(rawContext, bot)));
+    this.vk.updates.on('message_new', rawContext => callback(new PlatformVkContext(rawContext, bot, this)));
   }
 
   async startPooling() {
