@@ -48,6 +48,10 @@ export default class PlatformVkContext extends PlatformContext {
     return this.raw.messagePayload;
   }
 
+  get isChat() {
+    return this.raw.isChat;
+  }
+
   requireAttachments(attachments: any[]) {
     if (attachments.length === 0) {
       return [];

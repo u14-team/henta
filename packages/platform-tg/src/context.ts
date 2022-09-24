@@ -22,6 +22,10 @@ export default class PlatformTgContext extends PlatformContext {
     return this.raw.from.id.toString();
   }
 
+  get isChat() {
+    return this.raw.chat.type !== 'private';
+  }
+
   async send(message) {
     let attachments: any[];
     if (message.attachments?.length) {

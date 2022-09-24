@@ -18,6 +18,7 @@ export default abstract class PlatformContext {
 
   abstract get originalText (): string | undefined;
   abstract get senderId (): string;
+  abstract get isChat (): boolean;
   abstract get payload (): unknown;
 
   abstract send(options): Promise<void>;
