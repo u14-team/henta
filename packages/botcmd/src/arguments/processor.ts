@@ -17,7 +17,7 @@ export default function requireArguments(ctx: PlatformContext, params: ArgumentR
         throw new BotError(`Слишком мало аргументов!!!`);
       }
 
-      const payload = param.parser.parse(ctx, args);
+      const payload = param.parser.parse(ctx, args, param);
       payloads.push(payload);
     } catch (error) {
       if (error instanceof ArgumentError) {
