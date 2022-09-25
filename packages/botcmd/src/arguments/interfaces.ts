@@ -1,6 +1,6 @@
 export interface ArgumentRequest {
   name: string;
-  isRequired: string;
+  isRequired?: boolean;
   parser: ArgumentTypeParser;
 }
 
