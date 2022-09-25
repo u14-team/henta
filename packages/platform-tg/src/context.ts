@@ -78,7 +78,7 @@ export default class PlatformTgContext extends PlatformContext {
       return;
     }
 
-    await this.raw.reply(message.text, {
+    return this.raw.reply(message.text, {
       reply_markup: JSON.stringify({
         inline_keyboard: keyboard
       })

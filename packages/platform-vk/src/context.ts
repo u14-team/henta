@@ -35,14 +35,20 @@ export default class PlatformVkContext extends PlatformContext {
 			})
 		))) : [];
 
-    await this.raw.send({
+    const messageBody = {
       message: message.text,
       attachment,
       keyboard: message.keyboard && JSON.stringify({
         inline: true,
         buttons: this.normalizeKeyboard(message.keyboard).map(row => row.map(v => getKeyboardButton(v)))
       })
-    });
+    };
+
+    if (this.sendedAnswer) {
+      return this.sendedAnswer.editMessage(messageBody);
+    }
+
+    return this.raw.send(messageBody);
   }
 
   get payload() {

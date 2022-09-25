@@ -81,6 +81,16 @@ export default class BotCmd {
 
     ctx.commandName = command.name;
     ctx.command = command;
+
+    ctx.commandInput = {
+      attachments: [],
+      arguments: []
+    };
+
+    if (command.attachments) {
+      ctx.commandInput.attachments = await ctx.requireAttachments(command.attachments);
+    }
+
     await command.handler(ctx);
     return next();
   }

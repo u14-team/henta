@@ -31,15 +31,12 @@ export default abstract class PlatformContext {
 
   abstract send(options): Promise<void>;
 
-  answer(options, payload?) {
-    if (this.isAnswered) {
-      console.warn('Message is answered');
-    }
-
+  async answer(options, payload?) {
     this.isAnswered = true;
     this.answerBody = options;
 
-    return this.bot.onAnswer(this);
+    this.sendedAnswer = await this.bot.onAnswer(this);
+    return this.sendedAnswer;
   }
 
   normalizeKeyboard(rawKeyboard: (object | object[])[], buttonsInRow = 4, rows = 4) {
