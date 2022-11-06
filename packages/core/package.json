@@ -6,9 +6,15 @@
   "version": "4.0.0-dev",
   "typesVersions": {
     "*": {
-      "context": ["src/context.ts"],
-      "platform": ["src/platform.ts"],
-      "error": ["src/error.ts"]
+      "context": [
+        "src/context.ts"
+      ],
+      "platform": [
+        "src/platform.ts"
+      ],
+      "error": [
+        "src/error.ts"
+      ]
     }
   },
   "exports": {

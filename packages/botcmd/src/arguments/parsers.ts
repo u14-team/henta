@@ -1,15 +1,26 @@
-import type { ArgumentRequest, ArgumentTypeParser } from './interfaces.js';
+import { ArgumentRequest, ArgumentTypeParser } from './interfaces.js';
 
-export const StringParser = {
-  parse: (_ctx, args: string[], request: ArgumentRequest) => {
+export interface StringParserOptions {
+  toEnd: boolean;
+}
+
+export class StringParser extends ArgumentTypeParser<string> {
+  options: StringParserOptions;
+
+  constructor(options: StringParserOptions = { toEnd: false }) {
+    super();
+    this.options = options;
+  }
+
+  parse (_ctx, args: string[], request: ArgumentRequest) {
     if (request.toEnd) {
       return args.splice(0).join(' ');
     }
 
     return args.shift();
-  },
+  }
 
-  resolve: (_ctx, payload: string) => {
+  resolve(_ctx, payload: string) {
     return payload;
   }
-} as ArgumentTypeParser<string>;
+}

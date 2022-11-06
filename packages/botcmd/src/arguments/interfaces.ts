@@ -1,11 +1,13 @@
 export interface ArgumentRequest {
   name: string;
   isRequired?: boolean;
-  parser: ArgumentTypeParser;
+  parser: ArgumentTypeParser | typeof ArgumentTypeParser;
   [key: string]: any;
 }
 
-export interface ArgumentTypeParser<T = unknown> {
-  parse: (ctx, args, request: ArgumentRequest) => unknown;
-  resolve: (ctx, payload) => Promise<T> | T;
+export abstract class ArgumentTypeParser<T = unknown> {
+  isTextRequired = false;
+
+  abstract parse (ctx, args, request: ArgumentRequest): unknown;
+  abstract resolve (ctx, payload): Promise<T> | T;
 }

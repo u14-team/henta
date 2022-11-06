@@ -6,14 +6,16 @@
   "main": "src/index.ts",
   "typesVersions": {
     "*": {
-      "arguments": ["src/arguments/index.ts"]
+      "arguments": [
+        "src/arguments/index.ts"
+      ]
     }
   },
   "exports": {
     ".": "./src/index.ts",
     "./arguments": "./src/arguments/index.ts"
   },
-	"scripts": {
-		"build": "tsc --project tsconfig.json"
-	}
+  "scripts": {
+    "build": "tsc --project tsconfig.json"
+  }
 }

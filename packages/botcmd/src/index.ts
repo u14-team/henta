@@ -1,4 +1,5 @@
 import PlatformContext from '@henta/core/context';
+import requireArguments from './arguments/processor.js';
 
 export interface Command {
   name: string;
@@ -74,7 +75,7 @@ export default class BotCmd {
     }
 
     ctx.commandLine = commandLine;
-    const command = this.commands.find(item => checkCommand(item, commandLine));
+    const command = this.commands.find(item => checkCommand(item, commandLine.toLowerCase()));
     if (!command) {
       return next();
     }
@@ -89,6 +90,10 @@ export default class BotCmd {
 
     if (command.attachments) {
       ctx.commandInput.attachments = await ctx.requireAttachments(command.attachments);
+    }
+
+    if (command.arguments) {
+      ctx.commandInput.arguments = await requireArguments(ctx, command.arguments);
     }
 
     await command.handler(ctx);

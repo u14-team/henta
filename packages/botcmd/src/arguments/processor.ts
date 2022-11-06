@@ -1,4 +1,4 @@
-import { ArgumentRequest } from './interfaces.js';
+import { ArgumentRequest, ArgumentTypeParser } from './interfaces.js';
 import PlatformContext from '@henta/core/context';
 import ArgumentError from './error.js';
 import BotError from '@henta/core/error';
@@ -12,12 +12,13 @@ export default function requireArguments(ctx: PlatformContext, params: ArgumentR
 
   for (const param of params) {
     try {
-      const isTextRequired = param.parser.isTextRequired ?? true;
+      const parser: ArgumentTypeParser = typeof param.parser === 'function' ? new (param.parser as any)() : param.parser;
+      const isTextRequired = parser.isTextRequired ?? true;
       if (isTextRequired && args.length === 0) {
         throw new BotError(`Слишком мало аргументов!!!`);
       }
 
-      const payload = param.parser.parse(ctx, args, param);
+      const payload = parser.parse(ctx, args, param);
       payloads.push(payload);
     } catch (error) {
       if (error instanceof ArgumentError) {
@@ -40,7 +41,8 @@ export default function requireArguments(ctx: PlatformContext, params: ArgumentR
       }
 
       try {
-        return await param.parser.resolve(ctx, payload)
+        const parser: ArgumentTypeParser = typeof param.parser === 'function' ? new (param.parser as any)() : param.parser;
+        return await parser.resolve(ctx, payload)
       } catch (error) {
         if (error instanceof ArgumentError) {
           if (!param.isRequired) {
