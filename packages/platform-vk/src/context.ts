@@ -4,10 +4,12 @@ import type HentaBot from '@henta/core';
 import getKeyboardButton from './util/keyboard.js';
 import BotError from '@henta/core/error';
 import VkAttachment from './attachment.js';
+import type PlatformVk from './index.js';
 
 export default class PlatformVkContext extends PlatformContext {
   source = 'vk';
   declare raw: MessageContext;
+  declare platform: PlatformVk;
 
   constructor(raw: MessageContext, bot: HentaBot, platform: any) {
     super(raw, bot, platform);
@@ -28,16 +30,28 @@ export default class PlatformVkContext extends PlatformContext {
       attachments = await this.loadAttachments(message.attachments);
     }
 
+    const methodByAttachmentType = {
+      photo: this.platform.vk.upload.messagePhoto.bind(this.platform.vk.upload),
+      document: this.platform.vk.upload.messageDocument.bind(this.platform.vk.upload)
+    };
+
     const attachment = attachments ? await Promise.all(attachments.map(source => (
-			this.raw.upload.messagePhoto({
-				source: { value: source.data },
-				peer_id: this.raw.peerId
-			})
-		))) : [];
+      methodByAttachmentType[source.type]({
+        source: { value: source.data },
+        peer_id: this.raw.peerId
+      })
+    ))) : [];
 
     const messageBody = {
       message: message.text,
+      content_source: JSON.stringify({
+        type: 'message',
+        owner_id: this.raw.senderId,
+        peer_id: this.raw.peerId,
+        conversation_message_id: this.raw.conversationMessageId,
+      }),
       attachment,
+      dont_parse_links: !(message.isParseLinks ?? true),
       keyboard: message.keyboard && JSON.stringify({
         inline: true,
         buttons: this.normalizeKeyboard(message.keyboard).map(row => row.map(v => getKeyboardButton(v)))

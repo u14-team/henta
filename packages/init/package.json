@@ -1,0 +1,6 @@
+{
+  "name": "@henta/init",
+  "type": "module",
+  "main": "src/index.js",
+  "license": "MIT"
+}

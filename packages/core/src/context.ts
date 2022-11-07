@@ -60,9 +60,12 @@ export default abstract class PlatformContext {
 
   loadAttachments(attachments: any[]) {
     // TODO: attachment loader
-    return [
-      { type: 'photo', data: attachments[0].source }
-    ];
+    return attachments.map(
+      attachment => ({
+        type: attachment.type,
+        data: attachment.source
+      })
+    );
   }
 
   requireAttachments(attachments: any[]) {
