@@ -13,7 +13,7 @@ export class StringParser extends ArgumentTypeParser<string> {
   }
 
   parse (_ctx, args: string[], request: ArgumentRequest) {
-    if (request.toEnd) {
+    if (this.options.toEnd) {
       return args.splice(0).join(' ');
     }
 
