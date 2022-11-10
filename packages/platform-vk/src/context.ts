@@ -22,6 +22,10 @@ export default class PlatformVkContext extends PlatformContext {
     return this.raw.text;
   }
 
+  get peerId(): string {
+    return this.raw.peerId.toString();
+  }
+
   get senderId() {
     return this.raw.senderId.toString();
   }

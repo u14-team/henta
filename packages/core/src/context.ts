@@ -3,6 +3,7 @@ import type HentaBot from './index.js';
 import type Attachment from './attachment.js';
 import type Platform from './platform.js';
 import type ISendMessageOptions from './sendMessageOptions.js';
+import { IHistoryAttachment } from './index.js';
 
 export default abstract class PlatformContext {
   readonly bot: HentaBot;
@@ -25,6 +26,7 @@ export default abstract class PlatformContext {
 
   abstract get originalText (): string | undefined;
   abstract get senderId (): string;
+  abstract get peerId (): string;
   abstract get isChat (): boolean;
   abstract get payload (): any;
 
@@ -70,14 +72,15 @@ export default abstract class PlatformContext {
     );
   }
 
-  requireAttachments(attachments: any[]) {
+  requireAttachments(attachments: any[], fallback = []) {
     if (attachments.length === 0) {
       return [];
     }
 
     const allAttachments: Attachment[] = [
       ...this.attachments,
-      ...this.nestedAttachments
+      ...this.nestedAttachments,
+      ...fallback
     ];
 
     const foundList = [];

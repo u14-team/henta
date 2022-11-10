@@ -1,4 +1,5 @@
 import PlatformContext from '@henta/core/context';
+import type BaseAttachmentHistory from '@henta/attachment-history';
 import requireArguments from './arguments/processor.js';
 import BotCmdContext from './botcmdContext.js';
 
@@ -46,6 +47,7 @@ function checkCommand(command: Command, commandLine: string) {
 
 export default class BotCmd {
   commands: Command[] = [];
+  attachmentHistory?: BaseAttachmentHistory;
 
   static View(options: Omit<Command, "handler">) {
     return function (target: any) {
@@ -90,7 +92,11 @@ export default class BotCmd {
     };
 
     if (command.attachments) {
-      ctx.commandInput.attachments = await ctx.requireAttachments(command.attachments);
+      ctx.commandInput.attachments = await ctx.requireAttachments(
+        command.attachments,
+        // unstable, в планах вообще вынсти attachment requirer отдельно
+        this.attachmentHistory ? await this.attachmentHistory.request(ctx.platform, ctx.peerId, command.attachments.length) : []
+      );
     }
 
     if (command.arguments) {

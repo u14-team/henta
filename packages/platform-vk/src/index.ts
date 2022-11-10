@@ -8,6 +8,7 @@ export interface PlatformVkOptions {
 }
 
 export default class PlatformVk extends Platform {
+  slug = 'vk';
   vk: VK;
 
   constructor(options: PlatformVkOptions) {

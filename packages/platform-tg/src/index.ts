@@ -9,6 +9,8 @@ export interface PlatformTgOptions {
 }
 
 export default class PlatformTg extends Platform {
+  slug = 'tg';
+
   tg: Telegraf;
   attachmentSender = new TgAttachmentSender(this);
 
