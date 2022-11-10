@@ -5,7 +5,7 @@ import BotError from '@henta/core/error';
 
 export default function requireArguments(ctx: PlatformContext, params: ArgumentRequest[]) {
   const payloads: unknown[] = [];
-  const args = ctx.commandLine.substring(ctx.commandName.length).split(' ');
+  const args = ctx['commandLine'].substring(ctx['commandName'].length).split(' ');
   if (!args[0]) {
     args.shift();
   }

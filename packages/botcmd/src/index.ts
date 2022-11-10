@@ -1,5 +1,6 @@
 import PlatformContext from '@henta/core/context';
 import requireArguments from './arguments/processor.js';
+import BotCmdContext from './botcmdContext.js';
 
 export interface Command {
   name: string;
@@ -23,7 +24,7 @@ export class CommandView {
     this.botcmd = botcmd;
 
     // todo: move to reflection
-    this.$commands?.forEach(v => this.botcmd.add(buildCommand(v, this.constructor.$view, this)));
+    this['$commands']?.forEach(v => this.botcmd.add(buildCommand(v, this.constructor['$view'], this)));
     this.botcmd.commands = this.botcmd.commands.sort((a, b) => b.name.length - a.name.length);
     // console.log(this.botcmd.commands.map(v => v.name));
   }
@@ -64,7 +65,7 @@ export default class BotCmd {
     this.commands.push(command);
   }
 
-  async handler(ctx: PlatformContext, next) {
+  async handler(ctx: BotCmdContext, next) {
     if (ctx.isAnswered) {
       return next();
     }

@@ -1,6 +1,8 @@
 import { compose, Middleware } from 'middleware-io';
 import type Platform from './platform.js';
 import type PlatformContext from './context.js';
+import Attachment from './attachment.js';
+import type ISendMessageOptions from './sendMessageOptions.js';
 
 export default class HentaBot {
   private _middlewares: Middleware<PlatformContext>[] = [];
@@ -27,4 +29,4 @@ export default class HentaBot {
   }
 }
 
-export { default as Attachment } from './attachment.js';
+export { Attachment, ISendMessageOptions };

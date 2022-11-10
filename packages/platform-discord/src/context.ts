@@ -2,6 +2,9 @@ import PlatformContext from '@henta/core/context';
 import DiscordAttachment from './attachment.js';
 import type HentaBot from '@henta/core';
 import { CacheType, ChatInputCommandInteraction, Attachment, AttachmentBuilder } from 'discord.js';
+import { buildAttachment } from './util/upload.js';
+import { normalizeUploads, UploadSourceType, UploadStream } from '@henta/core/files';
+import { ISendMessageOptions } from '@henta/core';
 
 export default class DiscordPlatformContext extends PlatformContext {
   source = 'discord';
@@ -20,48 +23,24 @@ export default class DiscordPlatformContext extends PlatformContext {
     return this.raw.user.id;
   }
 
-  async send(message) {
-    let attachments: any[];
-    if (message.attachments?.length) {
-      attachments = await this.loadAttachments(message.attachments);
+  async send(message: ISendMessageOptions) {
+    let files;
+    if (message.files && message.files.length) {
+      const normalizedFiles = await normalizeUploads(message.files, [UploadSourceType.Stream]);
+      files = await Promise.all(normalizedFiles.map(async source => buildAttachment(source as UploadStream)));
     }
-
-    const attachment = attachments ? await Promise.all(attachments.map(async source => new AttachmentBuilder(
-      typeof source.data === 'string' ? await fetch(source.data).then(v => v.body) as any : source.data,
-      { name: 'tet.jpg' }
-      ))) : [];
 
     if (this.sendedAnswer) {
       return this.raw.editReply({
         content: message.text,
-        files: attachment
+        files
       });
     }
 
     return this.raw.reply({
       content: message.text,
-      files: attachment
+      files
     });
-    /*let attachments: any[];
-    if (message.attachments?.length) {
-      attachments = await this.loadAttachments(message.attachments);
-    }
-
-    const attachment = attachments ? await Promise.all(attachments.map(source => (
-			this.raw.upload.messagePhoto({
-				source: { value: source.data },
-				peer_id: this.raw.peerId
-			})
-		))) : [];
-
-    await this.raw.send({
-      message: message.text,
-      attachment,
-      keyboard: message.keyboard && JSON.stringify({
-        inline: true,
-        buttons: this.normalizeKeyboard(message.keyboard).map(row => row.map(v => getKeyboardButton(v)))
-      })
-    });*/
   }
 
   get payload() {

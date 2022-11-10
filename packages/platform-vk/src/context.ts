@@ -5,6 +5,7 @@ import getKeyboardButton from './util/keyboard.js';
 import BotError from '@henta/core/error';
 import VkAttachment from './attachment.js';
 import type PlatformVk from './index.js';
+import type { ISendMessageOptions } from '@henta/core';
 
 export default class PlatformVkContext extends PlatformContext {
   source = 'vk';
@@ -24,10 +25,10 @@ export default class PlatformVkContext extends PlatformContext {
     return this.raw.senderId.toString();
   }
 
-  async send(message) {
+  async send(message: ISendMessageOptions) {
     let attachments: any[];
-    if (message.attachments?.length) {
-      attachments = await this.loadAttachments(message.attachments);
+    if (message.files?.length) {
+      attachments = await this.loadAttachments(message.files);
     }
 
     const methodByAttachmentType = {

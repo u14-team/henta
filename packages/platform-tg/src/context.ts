@@ -26,11 +26,11 @@ export default class PlatformTgContext extends PlatformContext {
 
   constructor(raw: Context<Update>, bot: HentaBot, platform: any) {
     super(raw, bot, platform);
-    this.text = this.originalText || this.raw?.message?.caption;
+    this.text = this.originalText || this.raw?.message?.['caption'];
   }
 
   get originalText() {
-    return this.raw.update.message?.text;
+    return this.raw.update['message']?.text;
   }
 
   get senderId() {
@@ -50,11 +50,11 @@ export default class PlatformTgContext extends PlatformContext {
   }
 
   get nestedAttachments() {
-    if (!this.raw.message?.reply_to_message) {
+    if (!this.raw.message?.['reply_to_message']) {
       return [];
     }
 
-    return collectAttachmentsFromMessage(this.raw.message.reply_to_message, this.platform);
+    return collectAttachmentsFromMessage(this.raw.message['reply_to_message'], this.platform);
   }
 
   async send(message) {
@@ -81,11 +81,11 @@ export default class PlatformTgContext extends PlatformContext {
     return this.raw.reply(message.text, {
       reply_markup: JSON.stringify({
         inline_keyboard: keyboard
-      })
+      }) as any
     });
   }
 
   get payload() {
-    return this.raw.update.callback_query?.data && JSON.parse(this.raw.update.callback_query?.data);
+    return this.raw.update['callback_query']?.data && JSON.parse(this.raw.update['callback_query']?.data);
   }
 }

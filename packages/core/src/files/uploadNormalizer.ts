@@ -1,0 +1,29 @@
+import type { Stream } from "node:stream";
+import Upload, { UploadSourceType, UploadUrl } from "./upload.js";
+
+export function normalizeUploads(rawUploads: any[], supportTypes: UploadSourceType[]): Promise<Upload[]> {
+  return Promise.all(rawUploads.map(
+    raw => rebuildUpload(raw, supportTypes)
+  ));
+}
+
+const rebuildTable = {
+  url: {
+    stream: (from: UploadUrl) => fetch(from.data)
+      .then(response => Upload.fromStream(from.type, response.body as unknown as Stream)
+        .setName(from.name))
+  }
+};
+
+export async function rebuildUpload(from: Upload, supportTypes: UploadSourceType[]) {
+  if (supportTypes.includes(from.sourceType)) {
+    return from;
+  }
+
+  const method = rebuildTable[from.sourceType]?.[supportTypes[0]];
+  if (!method) {
+    throw new Error(`Normalizer ${from.sourceType} > ${supportTypes[0]} not found`)
+  }
+
+  return method(from);
+}

@@ -2,6 +2,7 @@ import BotError from './error.js';
 import type HentaBot from './index.js';
 import type Attachment from './attachment.js';
 import type Platform from './platform.js';
+import type ISendMessageOptions from './sendMessageOptions.js';
 
 export default abstract class PlatformContext {
   readonly bot: HentaBot;
@@ -12,6 +13,7 @@ export default abstract class PlatformContext {
 
   text?: string;
 
+  sendedAnswer?: any;
   answerBody?: unknown;
   isAnswered: boolean;
 
@@ -24,14 +26,14 @@ export default abstract class PlatformContext {
   abstract get originalText (): string | undefined;
   abstract get senderId (): string;
   abstract get isChat (): boolean;
-  abstract get payload (): unknown;
+  abstract get payload (): any;
 
   abstract get attachments (): Attachment[];
   abstract get nestedAttachments (): Attachment[];
 
-  abstract send(options): Promise<void>;
+  abstract send(options: ISendMessageOptions): Promise<unknown>;
 
-  async answer(options, payload?) {
+  async answer(options: ISendMessageOptions, payload?) {
     this.isAnswered = true;
     this.answerBody = options;
 
@@ -45,7 +47,7 @@ export default abstract class PlatformContext {
     }
 
     const allButtons = rawKeyboard.flat();
-    const requiredButtons = allButtons.filter(v => v.isRequired);
+    const requiredButtons = allButtons.filter((v: any) => v.isRequired);
 
     function chunk(array, chunkSize) {
       return new Array(Math.ceil(array.length / chunkSize)).fill(0)
@@ -53,7 +55,7 @@ export default abstract class PlatformContext {
     }
 
     return chunk([
-      ...allButtons.filter(v => !v.isRequired).splice(0, buttonsInRow * rows - requiredButtons.length),
+      ...allButtons.filter((v: any) => !v.isRequired).splice(0, buttonsInRow * rows - requiredButtons.length),
       ...requiredButtons
     ], buttonsInRow);
   }

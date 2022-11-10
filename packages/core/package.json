@@ -14,6 +14,9 @@
       ],
       "error": [
         "src/error.ts"
+      ],
+      "files": [
+        "src/files/files.ts"
       ]
     }
   },
@@ -21,7 +24,8 @@
     ".": "./src/index.ts",
     "./context": "./src/context.ts",
     "./platform": "./src/platform.ts",
-    "./error": "./src/error.ts"
+    "./error": "./src/error.ts",
+    "./files": "./src/files/files.ts"
   },
   "dependencies": {
     "middleware-io": "^2.8.0"
