@@ -1,7 +1,11 @@
 import type { Stream } from "node:stream";
 import Upload, { UploadSourceType, UploadUrl } from "./upload.js";
 
-export function normalizeUploads(rawUploads: any[], supportTypes: UploadSourceType[]): Promise<Upload[]> {
+export function normalizeUploads(rawUploads: any[], supportTypes: UploadSourceType[] = [
+  UploadSourceType.Buffer,
+  UploadSourceType.Stream,
+  UploadSourceType.Url
+]): Promise<Upload[]> {
   return Promise.all(rawUploads.map(
     raw => rebuildUpload(raw, supportTypes)
   ));

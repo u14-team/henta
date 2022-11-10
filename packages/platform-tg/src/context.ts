@@ -5,19 +5,21 @@ import Context from 'telegraf/typings/context';
 import { Update } from 'telegraf/typings/core/types/typegram';
 import getKeyboardButton from './util/keyboard.js';
 import TgAttachment from './attachment.js';
+import { ISendMessageOptions } from '@henta/core';
+import { normalizeUploads, Upload, UploadSourceType, UploadStream } from '@henta/core/files';
 
 function collectAttachmentsFromMessage(message, platform) {
   const response = [];
 
-    if (message.photo) {
-      response.push(new TgAttachment(
-        'photo',
-        message.photo,
-        platform
-      ));
-    }
+  if (message.photo) {
+    response.push(new TgAttachment(
+      'photo',
+      message.photo,
+      platform
+    ));
+  }
 
-    return response;
+  return response;
 }
 
 export default class PlatformTgContext extends PlatformContext {
@@ -57,18 +59,19 @@ export default class PlatformTgContext extends PlatformContext {
     return collectAttachmentsFromMessage(this.raw.message['reply_to_message'], this.platform);
   }
 
-  async send(message) {
-    let attachments: any[];
-    if (message.attachments?.length) {
-      attachments = await this.loadAttachments(message.attachments);
+  async send(message: ISendMessageOptions) {
+    let files: Upload[];
+    if (message.files?.length) {
+      files = await normalizeUploads(message.files);
     }
 
     const keyboard = this.normalizeKeyboard(message.keyboard)
       ?.map(row => row.map(v => getKeyboardButton(v)));
 
-    if (attachments) {
-      const firstAttachment = attachments.shift();
-      await this.raw.sendPhoto(typeof firstAttachment.data === 'string' ? firstAttachment.data : { source: firstAttachment.data }, {
+    // TODO: multiattachments
+    if (files) {
+      const firstAttachment = files.shift();
+      await this.raw.sendPhoto({ source: firstAttachment.data as any }, {
         caption: message.text,
         reply_markup: {
           inline_keyboard: keyboard
