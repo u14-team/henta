@@ -6,6 +6,7 @@ import BotError from '@henta/core/error';
 import VkAttachment from './attachment.js';
 import type PlatformVk from './index.js';
 import type { ISendMessageOptions } from '@henta/core';
+import { normalizeUploads, Upload, UploadSourceType, UploadStream } from '@henta/core/files';
 
 export default class PlatformVkContext extends PlatformContext {
   source = 'vk';
@@ -26,9 +27,9 @@ export default class PlatformVkContext extends PlatformContext {
   }
 
   async send(message: ISendMessageOptions) {
-    let attachments: any[];
+    let files: Upload[];
     if (message.files?.length) {
-      attachments = await this.loadAttachments(message.files);
+      files = await normalizeUploads(message.files);
     }
 
     const methodByAttachmentType = {
@@ -36,7 +37,7 @@ export default class PlatformVkContext extends PlatformContext {
       document: this.platform.vk.upload.messageDocument.bind(this.platform.vk.upload)
     };
 
-    const attachment = attachments ? await Promise.all(attachments.map(source => (
+    const attachment = files ? await Promise.all(files.map(source => (
       methodByAttachmentType[source.type]({
         source: { value: source.data },
         peer_id: this.raw.peerId
