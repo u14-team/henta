@@ -3,6 +3,7 @@ import PlatformTgContext from './context.js';
 import { Telegraf } from 'telegraf';
 import type HentaBot from '@henta/core';
 import TgAttachmentSender from './attachment.sender.js';
+import TgAttachment from './attachment.js';
 
 export interface PlatformTgOptions {
   token: string;
@@ -31,3 +32,5 @@ export default class PlatformTg extends Platform {
     process.once('SIGTERM', () => this.tg.stop('SIGTERM'));
   }
 }
+
+export { TgAttachment };

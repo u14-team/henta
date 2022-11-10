@@ -1,6 +1,7 @@
 import type HentaBot from '@henta/core';
 import Platform from '@henta/core/platform';
 import { VK } from 'vk-io';
+import VkAttachment from './attachment.js';
 import PlatformVkContext from './context.js';
 
 export interface PlatformVkOptions {
@@ -27,3 +28,5 @@ export default class PlatformVk extends Platform {
     await this.vk.updates.start();
   }
 }
+
+export { VkAttachment };
