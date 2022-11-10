@@ -107,3 +107,5 @@ export default class BotCmd {
     return next();
   }
 }
+
+export { BotCmdContext };
