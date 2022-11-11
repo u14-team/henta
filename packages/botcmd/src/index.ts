@@ -95,7 +95,7 @@ export default class BotCmd {
       ctx.commandInput.attachments = await ctx.requireAttachments(
         command.attachments,
         // unstable, в планах вообще вынсти attachment requirer отдельно
-        this.attachmentHistory ? await this.attachmentHistory.request(ctx.platform, ctx.peerId, command.attachments.length) : []
+        this.attachmentHistory ? await this.attachmentHistory.request(ctx.platform, ctx.peerId, command.attachments.length).catch(() => []) : []
       );
     }
 
