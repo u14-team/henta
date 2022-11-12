@@ -6,6 +6,7 @@ import VkAttachment from './attachment.js';
 import type PlatformVk from './index.js';
 import type { ISendMessageOptions } from '@henta/core';
 import { normalizeUploads, Upload } from '@henta/core/files';
+import { uploadFile } from './util/files.js';
 
 export default class PlatformVkContext extends PlatformContext {
   source = 'vk';
@@ -29,24 +30,12 @@ export default class PlatformVkContext extends PlatformContext {
     return this.raw.senderId.toString();
   }
 
-  async send(message: ISendMessageOptions) {
-    let files: Upload[];
+  async send(message: ISendMessageOptions, isAnswer = false) {
+    let attachment = [];
     if (message.files?.length) {
-      files = await normalizeUploads(message.files);
+      const files = await normalizeUploads(message.files);
+      attachment = await Promise.all(files.map(file => uploadFile(this, file)));
     }
-
-    const methodByAttachmentType = {
-      photo: this.platform.vk.upload.messagePhoto.bind(this.platform.vk.upload),
-      document: this.platform.vk.upload.messageDocument.bind(this.platform.vk.upload),
-      audio_message: this.platform.vk.upload.audioMessage.bind(this.platform.vk.upload),
-    };
-
-    const attachment = files ? await Promise.all(files.map(source => (
-      methodByAttachmentType[source.type]({
-        source: { value: source.data },
-        peer_id: this.raw.peerId
-      })
-    ))) : [];
 
     const messageBody = {
       message: message.text,
@@ -64,7 +53,7 @@ export default class PlatformVkContext extends PlatformContext {
       })
     };
 
-    if (this.sendedAnswer && files?.[0]?.type !== 'audio_message') {
+    if (this.sendedAnswer && isAnswer) {
       await this.sendedAnswer.editMessage(messageBody);
       return this.sendedAnswer;
     }

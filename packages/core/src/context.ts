@@ -33,7 +33,7 @@ export default abstract class PlatformContext {
   abstract get attachments (): Attachment[];
   abstract get nestedAttachments (): Attachment[];
 
-  abstract send(options: ISendMessageOptions): Promise<unknown>;
+  abstract send(options: ISendMessageOptions, isAnswer?: boolean): Promise<unknown>;
 
   async answer(options: ISendMessageOptions, payload?) {
     this.isAnswered = true;

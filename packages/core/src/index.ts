@@ -25,7 +25,7 @@ export default class HentaBot {
   }
 
   onAnswer(ctx: PlatformContext) {
-    return this._answerComposed(ctx, () => ctx.send(ctx.answerBody));
+    return this._answerComposed(ctx, () => ctx.send(ctx.answerBody, true));
   }
 }
 
