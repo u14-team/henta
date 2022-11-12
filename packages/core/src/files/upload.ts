@@ -19,6 +19,10 @@ export default class Upload<T = unknown> {
   ) {}
 
   static fromUrl(type: string, url: string) {
+    if (typeof url !== 'string' || !url.startsWith('http')) {
+      throw new Error('URL is invalid');
+    }
+
     return new Upload<string>(url, UploadSourceType.Url, type) as UploadUrl;
   }
 

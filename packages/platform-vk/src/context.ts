@@ -2,11 +2,10 @@ import type { MessageContext } from 'vk-io';
 import PlatformContext from '@henta/core/context';
 import type HentaBot from '@henta/core';
 import getKeyboardButton from './util/keyboard.js';
-import BotError from '@henta/core/error';
 import VkAttachment from './attachment.js';
 import type PlatformVk from './index.js';
 import type { ISendMessageOptions } from '@henta/core';
-import { normalizeUploads, Upload, UploadSourceType, UploadStream } from '@henta/core/files';
+import { normalizeUploads, Upload } from '@henta/core/files';
 
 export default class PlatformVkContext extends PlatformContext {
   source = 'vk';
@@ -38,7 +37,8 @@ export default class PlatformVkContext extends PlatformContext {
 
     const methodByAttachmentType = {
       photo: this.platform.vk.upload.messagePhoto.bind(this.platform.vk.upload),
-      document: this.platform.vk.upload.messageDocument.bind(this.platform.vk.upload)
+      document: this.platform.vk.upload.messageDocument.bind(this.platform.vk.upload),
+      audio_message: this.platform.vk.upload.audioMessage.bind(this.platform.vk.upload),
     };
 
     const attachment = files ? await Promise.all(files.map(source => (
@@ -64,8 +64,9 @@ export default class PlatformVkContext extends PlatformContext {
       })
     };
 
-    if (this.sendedAnswer) {
-      return this.sendedAnswer.editMessage(messageBody);
+    if (this.sendedAnswer && files?.[0]?.type !== 'audio_message') {
+      await this.sendedAnswer.editMessage(messageBody);
+      return this.sendedAnswer;
     }
 
     return this.raw.send(messageBody);
