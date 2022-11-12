@@ -4,7 +4,8 @@ import type PlatformVkContext from '../context.js';
 function buildMethod(method: string) {
   return (ctx: PlatformVkContext, upload: Upload) =>
     ctx.platform.vk.upload[method]({
-      peer_id: ctx.peerId,
+      // пусть пока побудет так
+      peer_id: ctx.senderId,
       source: { value: upload.data }
     });
 }
