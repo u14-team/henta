@@ -64,7 +64,7 @@ export default class AttachmentHistory {
     await this.storage.insert(...historyAttachments);
   }
 
-  async request(platform: Platform, peerId: string, limit: number) {
+  async request(platform: Platform, peerId: string, limit: number, types: string[] = null) {
     if (limit === 0) {
       return;
     }
@@ -74,7 +74,7 @@ export default class AttachmentHistory {
       throw Error(`Attachment serializer ${platform.slug} not found`);
     }
 
-    const response = await this.storage.get(platform, peerId, limit);
+    const response = await this.storage.get(platform, peerId, limit, types);
     return response
       .map((item) => serializer.deserialize(item.type, item.payload, platform));
   }
