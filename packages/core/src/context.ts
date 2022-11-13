@@ -87,7 +87,13 @@ export default abstract class PlatformContext {
     attachments.forEach(attachment => {
       const foundIndex = allAttachments.findIndex(v => v.type === attachment.type);
       if (foundIndex === -1) {
-        throw new BotError('Вы не прикрепили все требуемые медиафайлы.');
+        // TODO: нужно вынести requireAttachments в отдельный пакет как и attachment requirer. Также сделать условный MediaNotFoundBotError для поддержки кастом ошибок. А то, что здесь: временное решение.
+        const words = {
+          'photo': 'изображением',
+          'audio_message': 'ГС'
+        };
+
+        throw new BotError(`🖼 Используйте эту команду вместе с ${words[attachment.type]}.\nМожно переслать мне сообщение с ${words[attachment.type]} или прикрепить его.`);
       }
 
       const [found] = allAttachments.splice(foundIndex, 1);

@@ -19,7 +19,7 @@ export interface IHistoryAttachment {
   source: string;
   peerId: string;
   type: string;
-  id?: string;
+  // id?: string;
 }
 
 export interface IAttachmentHistoryResponse {

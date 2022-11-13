@@ -1,5 +1,3 @@
-import type { Stream } from "node:stream";
-
 export enum UploadSourceType {
   Url = 'url',
   Stream = 'stream',
@@ -7,7 +5,7 @@ export enum UploadSourceType {
 }
 
 export type UploadUrl = Upload<string>;
-export type UploadStream = Upload<Stream>;
+export type UploadStream = Upload<ReadableStream>;
 
 export default class Upload<T = unknown> {
   name?: string;
@@ -26,8 +24,8 @@ export default class Upload<T = unknown> {
     return new Upload<string>(url, UploadSourceType.Url, type) as UploadUrl;
   }
 
-  static fromStream(type: string, stream: Stream) {
-    return new Upload<Stream>(stream, UploadSourceType.Stream, type) as UploadStream;
+  static fromStream(type: string, stream: ReadableStream) {
+    return new Upload<ReadableStream>(stream, UploadSourceType.Stream, type) as UploadStream;
   }
 
   setName(name: string) {
