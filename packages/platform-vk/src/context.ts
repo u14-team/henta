@@ -1,4 +1,4 @@
-import type { MessageContext } from 'vk-io';
+import type { IMessageContextSendOptions, MessageContext } from 'vk-io';
 import PlatformContext from '@henta/core/context';
 import type HentaBot from '@henta/core';
 import getKeyboardButton from './util/keyboard.js';
@@ -37,7 +37,19 @@ export default class PlatformVkContext extends PlatformContext {
       attachment = await Promise.all(files.map(file => uploadFile(this, file)));
     }
 
+    const forwardOptions = this.raw.conversationMessageId
+      ? { conversation_message_ids: this.raw.conversationMessageId }
+      : { message_ids: this.raw.id };
+
     const messageBody = {
+      ...(this.isChat && isAnswer ? {
+        forward: JSON.stringify({
+          ...forwardOptions,
+
+          peer_id: this.peerId,
+          is_reply: true
+        })
+      } : {}),
       message: message.text,
       content_source: JSON.stringify({
         type: 'message',
@@ -51,7 +63,7 @@ export default class PlatformVkContext extends PlatformContext {
         inline: true,
         buttons: this.normalizeKeyboard(message.keyboard).map(row => row.map(v => getKeyboardButton(v)))
       })
-    };
+    } as IMessageContextSendOptions;
 
     if (this.sendedAnswer && isAnswer) {
       await this.sendedAnswer.editMessage(messageBody);
