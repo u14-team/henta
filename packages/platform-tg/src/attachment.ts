@@ -5,7 +5,8 @@ export default class TgAttachment extends Attachment {
   declare platform: PlatformTg;
 
   async getUrl() {
-    const fileInfo = await this.platform.tg.telegram.getFileLink(this.payload.at(-1).file_id);
+    const payload = Array.isArray(this.payload) ? this.payload.at(-1) : this.payload;
+    const fileInfo = await this.platform.tg.telegram.getFileLink(payload.file_id);
     return fileInfo.toString();
   }
 }

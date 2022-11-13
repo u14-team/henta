@@ -11,6 +11,14 @@ import { normalizeUploads, Upload, UploadSourceType, UploadStream } from '@henta
 function collectAttachmentsFromMessage(message, platform) {
   const response = [];
 
+  if (message.voice) {
+    response.push(new TgAttachment(
+      'audio_message',
+      message.voice,
+      platform
+    ));
+  }
+
   if (message.photo) {
     response.push(new TgAttachment(
       'photo',
@@ -43,7 +51,12 @@ export default class PlatformTgContext extends PlatformContext {
     return this.raw.chat.type !== 'private';
   }
 
+  get peerId() {
+    return this.raw.chat.id.toString();
+  }
+
   get attachments() {
+    console.log('tg', this.raw);
     if (!this.raw.message) {
       return [];
     }
@@ -68,17 +81,32 @@ export default class PlatformTgContext extends PlatformContext {
     const keyboard = this.normalizeKeyboard(message.keyboard)
       ?.map(row => row.map(v => getKeyboardButton(v)));
 
-    // TODO: multiattachments
-    if (files) {
-      const firstAttachment = files.shift();
-      await this.raw.sendPhoto({ source: firstAttachment.data as any }, {
-        caption: message.text,
-        reply_markup: {
-          inline_keyboard: keyboard
-        }
-      });
+    const body = {
+      reply_markup: {
+        inline_keyboard: keyboard
+      }
+    };
 
-      return;
+    if (files) {
+      const sendAttachment = (attachment: Upload, body = {}) => {
+        const methods = {
+          photo: 'sendPhoto',
+          audio_message: 'sendVoice'
+        };
+
+        const methodName = methods[attachment.type];
+        return this.raw[methodName]({ source: attachment.data }, body);
+      };
+
+      const captionBody = { ...body, caption: message.text };
+      const firstAttachment = files.shift();
+
+      const [firstResponse] = await Promise.all([
+        sendAttachment(firstAttachment, captionBody),
+        ...files.map(file => sendAttachment(file))
+      ]);
+
+      return firstResponse;
     }
 
     return this.raw.reply(message.text, {
