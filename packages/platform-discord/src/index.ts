@@ -9,6 +9,8 @@ export interface PlatformDiscordOptions {
 }
 
 export default class DiscordPlatform extends Platform {
+  slug = 'discord';
+
   client: Client;
   options: PlatformDiscordOptions;
 
