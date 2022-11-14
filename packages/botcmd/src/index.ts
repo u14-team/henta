@@ -42,7 +42,16 @@ function buildCommand(command: Command, parent: Command, context: CommandView) {
 }
 
 function checkCommand(command: Command, commandLine: string) {
-  return command.name === commandLine || commandLine.startsWith(`${command.name} `);
+  if (command.name === commandLine || commandLine.startsWith(`${command.name} `)) {
+    return true;
+  }
+
+  const withoutSpaces = command.name.replace(/ /g, '');
+  if (withoutSpaces === commandLine || commandLine.startsWith(`${withoutSpaces} `)) {
+    return false;
+  }
+
+  return false;
 }
 
 export default class BotCmd {
@@ -67,6 +76,11 @@ export default class BotCmd {
     this.commands.push(command);
   }
 
+  find(query: string): Command {
+    const lowercase = query.toLowerCase();
+    return this.commands.find(item => checkCommand(item, lowercase));
+  }
+
   async handler(ctx: BotCmdContext, next) {
     if (ctx.isAnswered) {
       return next();
@@ -78,7 +92,7 @@ export default class BotCmd {
     }
 
     ctx.commandLine = commandLine;
-    const command = this.commands.find(item => checkCommand(item, commandLine.toLowerCase()));
+    const command = this.find(commandLine);
     if (!command) {
       return next();
     }
