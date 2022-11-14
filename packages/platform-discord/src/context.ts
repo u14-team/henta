@@ -26,9 +26,9 @@ export default class DiscordPlatformContext extends PlatformContext {
       `/${this.raw.commandName}`,
       // Обзор в дискорде юзается как базовая команда
       subcommand !== 'обзор' && subcommand,
-      ...this.raw.options['_hoistedOptions']
+      ...(this.raw.options?.['_hoistedOptions']
         .filter(option => option.type === 1)
-        .map(option => option.value)
+        .map(option => option.value) || [])
     ].filter(v => !!v).join(' ');
   }
 
