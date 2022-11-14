@@ -24,9 +24,10 @@ export default class DiscordPlatform extends Platform {
   }
 
   setCallback(callback: (PlatformVkContext) => void, bot: HentaBot) {
-    console.log('Set discord');
     this.client.on('interactionCreate', async interaction => {
-      if (!interaction.isChatInputCommand()) return;
+      if (!interaction.isChatInputCommand() && !interaction.isButton()) {
+        return;
+      }
     
       callback(new DiscordPlatformContext(interaction, bot, this));
     });
