@@ -3,13 +3,24 @@ import PlatformContext from '@henta/core/context';
 import ArgumentError from './error.js';
 import BotError from '@henta/core/error';
 
+function getDiscordArguments(ctx: PlatformContext) {
+  return (ctx.raw as any).options['_hoistedOptions']
+    .filter(option => option.type !== 11)
+    .map(option => option.value.toString());
+}
+
 export default function requireArguments(ctx: PlatformContext, params: ArgumentRequest[]) {
   const payloads: unknown[] = [];
-  const args = ctx['commandLine'].substring(ctx['commandName'].length).split(' ');
+  const args = ctx.source === 'discord'
+    ? getDiscordArguments(ctx)
+    : ctx['commandLine'].substring(ctx['commandName'].length).split(' ');
+
+    // remove whitespace
   if (!args[0]) {
     args.shift();
   }
 
+  console.log('require', ctx);
   for (const param of params) {
     try {
       const parser: ArgumentTypeParser = typeof param.parser === 'function' ? new (param.parser as any)() : param.parser;
