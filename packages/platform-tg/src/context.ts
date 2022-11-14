@@ -22,7 +22,10 @@ function collectAttachmentsFromMessage(message, platform) {
   if (message.photo) {
     response.push(new TgAttachment(
       'photo',
-      message.photo,
+      {
+        file_id: message.photo.at(-1).file_id,
+        sizes: message.photo
+      },
       platform
     ));
   }
