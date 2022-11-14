@@ -1,8 +1,8 @@
 
 import type HentaBot from '@henta/core';
 import PlatformContext from '@henta/core/context';
-import Context from 'telegraf/typings/context';
-import { Update } from 'telegraf/typings/core/types/typegram';
+import type Context from 'telegraf/typings/context';
+import type { Update } from 'telegraf/typings/core/types/typegram';
 import getKeyboardButton from './util/keyboard.js';
 import TgAttachment from './attachment.js';
 import { ISendMessageOptions } from '@henta/core';
@@ -56,7 +56,6 @@ export default class PlatformTgContext extends PlatformContext {
   }
 
   get attachments() {
-    console.log('tg', this.raw);
     if (!this.raw.message) {
       return [];
     }
