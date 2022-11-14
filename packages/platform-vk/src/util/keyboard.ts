@@ -1,9 +1,10 @@
 export default function getKeyboardButton(data) {
-  return {
-    action: {
-      type: 'text',
-      label: data.label,
-      payload: JSON.stringify(data.payload)
-    }
-  };
+  const action: any = { label: data.label };
+
+  if (data.url) {
+    Object.assign(action, { type: 'open_link', link: data.url });
+    return { action };
+  }
+
+  return { action };
 }
