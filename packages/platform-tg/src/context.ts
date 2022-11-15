@@ -111,11 +111,7 @@ export default class PlatformTgContext extends PlatformContext {
       return firstResponse;
     }
 
-    return this.raw.reply(message.text, {
-      reply_markup: JSON.stringify({
-        inline_keyboard: keyboard
-      }) as any
-    });
+    return this.raw.reply(message.text, body);
   }
 
   get payload() {

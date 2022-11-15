@@ -24,8 +24,12 @@ export default class HentaBot {
     this._answerComposed = compose(this._answerMiddlewares);
   }
 
-  onAnswer(ctx: PlatformContext) {
-    return this._answerComposed(ctx, () => ctx.send(ctx.answerBody, true));
+  async onAnswer(ctx: PlatformContext) {
+    try {
+      return await this._answerComposed(ctx, () => ctx.send(ctx.answerBody, true));
+    } catch (error) {
+      console.error('answer:', error.stack);
+    }
   }
 }
 
