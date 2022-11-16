@@ -11,16 +11,15 @@ function getDiscordArguments(ctx: PlatformContext) {
 
 export default function requireArguments(ctx: PlatformContext, params: ArgumentRequest[]) {
   const payloads: unknown[] = [];
-  const args = ctx.source === 'discord'
+  const args = /* ctx.source === 'discord'
     ? getDiscordArguments(ctx)
-    : ctx['commandLine'].substring(ctx['commandName'].length).split(' ');
+    : */ctx['commandLine'].substring(ctx['commandName'].length).split(' ');
 
     // remove whitespace
   if (!args[0]) {
     args.shift();
   }
 
-  console.log('require', ctx);
   for (const param of params) {
     try {
       const parser: ArgumentTypeParser = typeof param.parser === 'function' ? new (param.parser as any)() : param.parser;

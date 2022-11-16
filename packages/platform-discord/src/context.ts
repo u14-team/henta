@@ -21,14 +21,19 @@ export default class DiscordPlatformContext extends PlatformContext {
   }
 
   get originalText() {
-    const subcommand = this.raw.options?._subcommand;
+    if (!this.raw.options) {
+      return `/${this.raw.commandName}`;
+    }
+  
+    const subcommand = this.raw.options['_subcommand'];
+    const commandArgs = this.raw.options['_hoistedOptions']
+      .filter(option => option.type === 3)
+      .map(option => option.value);
+
     return [
       `/${this.raw.commandName}`,
-      // Обзор в дискорде юзается как базовая команда
       subcommand !== 'обзор' && subcommand,
-      ...(this.raw.options?.['_hoistedOptions']
-        .filter(option => option.type === 1)
-        .map(option => option.value) || [])
+      ...commandArgs
     ].filter(v => !!v).join(' ');
   }
 
