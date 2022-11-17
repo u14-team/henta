@@ -24,7 +24,7 @@ export default class Upload<T = unknown> {
     return new Upload<string>(url, UploadSourceType.Url, type) as UploadUrl;
   }
 
-  static fromStream(type: string, stream: ReadableStream) {
+  static fromStream(type: string, stream: ReadableStream | ReadableStream) {
     return new Upload<ReadableStream>(stream, UploadSourceType.Stream, type) as UploadStream;
   }
 
