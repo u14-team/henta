@@ -1,12 +1,12 @@
-import type AttachmentType from "@henta/core/src/attachment-type.enum.js";
 import type { Attachment } from "@henta/core";
 import "reflect-metadata";
 import { requireAttachments } from "./attachments/index.js";
 import type IAttachmentRequest from "./attachments/attachment-request.interface.js";
+import type { AttachmentTypeUnion } from "@henta/core/src/attachment-type.enum.js";
 
 const attachmentRequestsMetadataKey = Symbol("attachment_requests");
 
-export function AttachmentRequest(request: IAttachmentRequest | AttachmentType | string, to?: (attachment: Attachment) => any) {
+export function AttachmentRequest(request: IAttachmentRequest | AttachmentTypeUnion, to?: (attachment: Attachment) => any) {
   return (target: Object, propertyKey: string | symbol, parameterIndex: number) => {
     const requests = Reflect.getOwnMetadata(attachmentRequestsMetadataKey, target[propertyKey]) || [];
     requests.push({

@@ -1,7 +1,7 @@
-import type AttachmentType from '@henta/core/src/attachment-type.enum';
+import type { AttachmentTypeUnion } from '@henta/core/src/attachment-type.enum';
 
 export default interface IAttachmentRequest {
-  type: AttachmentType | string;
+  type: AttachmentTypeUnion;
   key: string;
   isRequired?: boolean;
 }

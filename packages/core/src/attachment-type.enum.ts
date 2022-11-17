@@ -5,4 +5,6 @@ enum AttachmentType {
   AudioMessage = 'audio_message',
 }
 
+export type AttachmentTypeString = `${AttachmentType}`;
+export type AttachmentTypeUnion = AttachmentType | AttachmentTypeString;
 export default AttachmentType;
