@@ -3,14 +3,13 @@ import type HentaBot from './index.js';
 import type Attachment from './attachment.js';
 import type Platform from './platform.js';
 import type ISendMessageOptions from './sendMessageOptions.js';
-import { IHistoryAttachment } from './index.js';
 
 export default abstract class PlatformContext {
   readonly bot: HentaBot;
 
   source: string;
   raw: unknown;
-  platform: unknown;
+  platform: Platform;
 
   text?: string;
 

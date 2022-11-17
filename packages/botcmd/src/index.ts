@@ -2,11 +2,12 @@ import PlatformContext from '@henta/core/context';
 import type BaseAttachmentHistory from '@henta/attachment-history';
 import requireArguments from './arguments/processor.js';
 import BotCmdContext from './botcmdContext.js';
+import { requireInputArgs, getAttachmentRequests } from '@henta/input';
 
 export interface Command {
   name: string;
   description?: string;
-  handler: (ctx: PlatformContext) => Promise<void>;
+  handler: (ctx: PlatformContext, ...args) => Promise<void>;
   requires?: string[];
   // payload
   [key: string]: any;
@@ -32,13 +33,24 @@ export class CommandView {
 }
 
 function buildCommand(command: Command, parent: Command, context: CommandView) {
-  return {
+  const name = command.name ? `${parent.name} ${command.name}` : parent.name;
+  const buildedCommand = {
     ...parent,
     ...command,
     view: parent.name,
-    name: command.name ? `${parent.name} ${command.name}` : parent.name,
+    name,
+    context,
+    originalFn: command.handler,
     handler: command.handler.bind(context)
-  };
+  } as any;
+
+  if (!buildedCommand.attachments) {
+    buildedCommand.attachments = getAttachmentRequests(command.handler)?.map(v => v.request);
+  } else {
+    console.warn('deprecated attachments:', name);
+  }
+
+  return buildedCommand;
 }
 
 function checkCommand(command: Command, commandLine: string) {
@@ -124,7 +136,8 @@ export default class BotCmd {
       ctx.commandInput.arguments = await requireArguments(ctx, command.arguments);
     }
 
-    await command.handler(ctx);
+    const args = await requireInputArgs(command.originalFn, ctx, this.attachmentHistory);
+    await command.handler(ctx, ...args);
     return next();
   }
 }

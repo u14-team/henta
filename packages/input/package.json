@@ -1,0 +1,9 @@
+{
+  "name": "@henta/input",
+  "type": "module",
+  "main": "src/index.ts",
+  "version": "0.1.0",
+  "devDependencies": {
+    "reflect-metadata": "^0.1.13"
+  }
+}
