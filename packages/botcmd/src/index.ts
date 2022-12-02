@@ -48,6 +48,7 @@ function buildCommand(command: Command, parent: Command, context: CommandView) {
     buildedCommand.attachments = getAttachmentRequests(command.handler)?.map(v => v.request);
   } else {
     console.warn('deprecated attachments:', name);
+    buildedCommand._isAttachmentsDeprecated = true;
   }
 
   return buildedCommand;
@@ -117,7 +118,7 @@ export default class BotCmd {
       arguments: []
     };
 
-    if (command.attachments) {
+    if (command.attachments && command._isAttachmentsDeprecated) {
       ctx.commandInput.attachments = await ctx.requireAttachments(
         command.attachments,
         // unstable, в планах вообще вынсти attachment requirer отдельно

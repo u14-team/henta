@@ -47,11 +47,7 @@ export async function requireAttachments<T extends { [key: string]: Attachment }
 
     foundList = [
       ...foundList.filter(v => !v.isFailed),
-      ...foundFromHistory.map((value, i) => ({
-        request: failedAttachments[i].request,
-        isFailed: false,
-        value
-      }))
+      ...requestAttachments(foundFromHistory, failedAttachments.map(v => v.request))
     ];
 
     failedAttachments = foundList.filter(v => v.isFailed);
