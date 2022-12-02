@@ -1,3 +1,5 @@
+import type { Readable } from "stream";
+
 export enum UploadSourceType {
   Url = 'url',
   Stream = 'stream',
@@ -24,8 +26,8 @@ export default class Upload<T = unknown> {
     return new Upload<string>(url, UploadSourceType.Url, type) as UploadUrl;
   }
 
-  static fromStream(type: string, stream: ReadableStream | ReadableStream) {
-    return new Upload<ReadableStream>(stream, UploadSourceType.Stream, type) as UploadStream;
+  static fromStream(type: string, stream: ReadableStream | Readable) {
+    return new Upload<ReadableStream>(stream as ReadableStream, UploadSourceType.Stream, type) as UploadStream;
   }
 
   setName(name: string) {

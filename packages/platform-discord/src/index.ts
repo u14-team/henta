@@ -51,7 +51,6 @@ export default class DiscordPlatform extends Platform {
   }
 
   getContextFromData(rawData: any, bot: HentaBot) {
-    ChatInputCommandInteraction.fr
     return new DiscordPlatformContext(
       new ChatInputCommandInteraction<CacheType>(this.client, rawData),
       bot,

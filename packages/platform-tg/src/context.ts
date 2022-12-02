@@ -6,7 +6,7 @@ import type { Update } from 'telegraf/typings/core/types/typegram';
 import getKeyboardButton from './util/keyboard.js';
 import TgAttachment from './attachment.js';
 import { ISendMessageOptions } from '@henta/core';
-import { normalizeUploads, Upload } from '@henta/core/files';
+import { normalizeUploads, Upload, UploadSourceType } from '@henta/core/files';
 
 function collectAttachmentsFromMessage(message, platform) {
   const response = [];
@@ -81,7 +81,7 @@ export default class PlatformTgContext extends PlatformContext {
   async send(message: ISendMessageOptions) {
     let files: Upload[];
     if (message.files?.length) {
-      files = await normalizeUploads(message.files);
+      files = await normalizeUploads(message.files, [UploadSourceType.Stream]);
     }
 
     const keyboard = this.normalizeKeyboard(message.keyboard)
