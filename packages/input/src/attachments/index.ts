@@ -22,7 +22,7 @@ export function requestAttachments(rawAttachments: Attachment[], requests: IAtta
   });
 }
 
-export async function requireAttachments<T extends unknown> (
+export async function requireAttachments<T extends { [key: string]: Attachment }> (
   ctx: PlatformContext,
   requests: IAttachmentRequest[],
   attachmentHistory?: AttachmentHistory

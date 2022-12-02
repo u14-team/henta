@@ -6,4 +6,5 @@ export default abstract class Platform {
 
   abstract setCallback(callback: (PlatformContext) => void, bot: HentaBot): void;
   abstract startPooling(): Promise<void>;
+  abstract getContextFromData(rawData: any, bot: HentaBot);
 }

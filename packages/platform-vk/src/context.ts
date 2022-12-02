@@ -1,4 +1,4 @@
-import type { IMessageContextSendOptions, MessageContext } from 'vk-io';
+import { IMessageContextSendOptions, MessageContext } from 'vk-io';
 import PlatformContext from '@henta/core/context';
 import type HentaBot from '@henta/core';
 import getKeyboardButton from './util/keyboard.js';
@@ -28,6 +28,10 @@ export default class PlatformVkContext extends PlatformContext {
 
   get senderId() {
     return this.raw.senderId.toString();
+  }
+
+  serialize() {
+    return this.raw.payload;
   }
 
   async send(message: ISendMessageOptions, isAnswer = false) {

@@ -1,10 +1,13 @@
 import type HentaBot from '@henta/core';
 import Platform from '@henta/core/platform';
+import { CacheType } from 'discord.js';
+import { ChatInputCommandInteraction } from 'discord.js';
 import { Client, GatewayIntentBits, REST, Routes } from 'discord.js';
 import DiscordPlatformContext from './context.js';
+import injectInteractionCreate from './injections/interactionCreate.js';
 
 export interface PlatformDiscordOptions {
-  token: string;
+  иken: string;
   clientId: string;
 }
 
@@ -23,6 +26,8 @@ export default class DiscordPlatform extends Platform {
         GatewayIntentBits.Guilds
       ]
     });
+
+    injectInteractionCreate(this.client);
   }
 
   setCallback(callback: (PlatformVkContext) => void, bot: HentaBot) {
@@ -43,5 +48,14 @@ export default class DiscordPlatform extends Platform {
     // console.log(commands)
     const rest = new REST({ version: '10' }).setToken(this.options.token);
     await rest.put(Routes.applicationCommands(this.options.clientId), { body: commands });
+  }
+
+  getContextFromData(rawData: any, bot: HentaBot) {
+    ChatInputCommandInteraction.fr
+    return new DiscordPlatformContext(
+      new ChatInputCommandInteraction<CacheType>(this.client, rawData),
+      bot,
+      this
+    );
   }
 }

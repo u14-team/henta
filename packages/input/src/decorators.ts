@@ -32,6 +32,10 @@ export function getAttachmentRequests(fn: any) {
 
 export async function requireInputArgs(fn: any, ctx, attachmentsHistory?) {
   const requests = Reflect.getMetadata(attachmentRequestsMetadataKey, fn);
+  if (!requests) {
+    return [];
+  }
+
   const attachments = await requireAttachments(ctx, requests.map(v => v.request), attachmentsHistory);
   const toByKey = Object.fromEntries(requests.map(v => [v.request.key, v.to]));
   const promises = Object.entries(attachments)

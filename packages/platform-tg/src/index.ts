@@ -1,6 +1,6 @@
 import Platform from '@henta/core/platform';
 import PlatformTgContext from './context.js';
-import { Telegraf } from 'telegraf';
+import { Context, Telegraf } from 'telegraf';
 import type HentaBot from '@henta/core';
 import TgAttachmentSender from './attachment.sender.js';
 import TgAttachment from './attachment.js';
@@ -30,6 +30,14 @@ export default class PlatformTg extends Platform {
     await this.tg.launch();
     process.once('SIGINT', () => this.tg.stop('SIGINT'));
     process.once('SIGTERM', () => this.tg.stop('SIGTERM'));
+  }
+
+  getContextFromData(rawData: any, bot: HentaBot) {
+    return new PlatformTgContext(
+      new Context(rawData, this.tg.telegram, this.tg.botInfo),
+      bot,
+      this
+    );
   }
 }
 

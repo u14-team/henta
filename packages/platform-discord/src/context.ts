@@ -82,4 +82,8 @@ export default class DiscordPlatformContext extends PlatformContext {
   get nestedAttachments() {
     return [];
   }
+
+  serialize() {
+    return this.raw['_rawData'];
+  }
 }
