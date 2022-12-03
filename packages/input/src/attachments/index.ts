@@ -17,7 +17,7 @@ export function requestAttachments(rawAttachments: Attachment[], requests: IAtta
     }
 
     // removing it from the array, thus we will no longer be able to use it in this search
-    const [value] = rawAttachments.splice(foundIndex, 1);
+    const [value] = attachments.splice(foundIndex, 1);
     return { request, value, isFailed: false } as IFoundAttachment;
   });
 }

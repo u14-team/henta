@@ -14,7 +14,7 @@ export function AttachmentRequest(request: IAttachmentRequest | AttachmentTypeUn
       parameterIndex,
       request: {
         ...(typeof request === 'object' ? request : { type: request }),
-        key: propertyKey,
+        key: `#${requests.length + 1}`,
       }
     });
 
