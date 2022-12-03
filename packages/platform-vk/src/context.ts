@@ -65,7 +65,8 @@ export default class PlatformVkContext extends PlatformContext {
       dont_parse_links: !(message.isParseLinks ?? true),
       keyboard: message.keyboard && JSON.stringify({
         inline: true,
-        buttons: this.normalizeKeyboard(message.keyboard).map(row => row.map(v => getKeyboardButton(v)))
+        buttons: this.normalizeKeyboard(message.keyboard, 4, 5, 10)
+          .map(row => row.map(v => getKeyboardButton(v)))
       })
     } as IMessageContextSendOptions;
 

@@ -42,7 +42,7 @@ export default abstract class PlatformContext {
     return this.sendedAnswer;
   }
 
-  normalizeKeyboard(rawKeyboard: (object | object[])[], buttonsInRow = 4, rows = 4) {
+  normalizeKeyboard(rawKeyboard: (object | object[])[], buttonsInRow = 4, rows = 4, max = 20) {
     if (!rawKeyboard || !rawKeyboard.find(v => !Array.isArray(v))) {
       return rawKeyboard;
     }
@@ -58,7 +58,7 @@ export default abstract class PlatformContext {
     return chunk([
       ...allButtons.filter((v: any) => !v.isRequired).splice(0, buttonsInRow * rows - requiredButtons.length),
       ...requiredButtons
-    ], buttonsInRow);
+    ].splice(0, max), buttonsInRow);
   }
 
   loadAttachments(attachments: any[]) {
