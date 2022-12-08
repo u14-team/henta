@@ -6,17 +6,21 @@ import PlatformVkContext from './context.js';
 
 export interface PlatformVkOptions {
   token: string;
+  webhookConfirmation: string;
+  webhookSecret: string;
 }
 
 export default class PlatformVk extends Platform {
   slug = 'vk';
   vk: VK;
 
-  constructor(options: PlatformVkOptions) {
+  constructor(readonly options: PlatformVkOptions) {
     super();
 
     this.vk = new VK({
-      token: options.token
+      token: options.token,
+      webhookConfirmation: options.webhookConfirmation,
+      webhookSecret: options.webhookSecret
     });
   }
 

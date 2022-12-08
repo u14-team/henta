@@ -7,7 +7,7 @@ import DiscordPlatformContext from './context.js';
 import injectInteractionCreate from './injections/interactionCreate.js';
 
 export interface PlatformDiscordOptions {
-  иken: string;
+  token: string;
   clientId: string;
 }
 
