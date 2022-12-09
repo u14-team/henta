@@ -8,6 +8,7 @@ export interface PlatformVkOptions {
   token: string;
   webhookConfirmation: string;
   webhookSecret: string;
+  groupId: number;
 }
 
 export default class PlatformVk extends Platform {
@@ -20,7 +21,7 @@ export default class PlatformVk extends Platform {
     this.vk = new VK({
       token: options.token,
       webhookConfirmation: options.webhookConfirmation,
-      webhookSecret: options.webhookSecret
+      webhookSecret: options.webhookSecret,
     });
   }
 
@@ -39,7 +40,7 @@ export default class PlatformVk extends Platform {
         // state?: S;
         source: 'WEBSOCKET' as any,
         updateType: 'message_new',
-        //groupId?: number;
+        groupId: this.options.groupId
       }),
       bot,
       this
