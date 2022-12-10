@@ -22,6 +22,8 @@ export default class PlatformVk extends Platform {
       token: options.token,
       webhookConfirmation: options.webhookConfirmation,
       webhookSecret: options.webhookSecret,
+      apiLimit: 20,
+      apiRequestMode: 'burst'
     });
   }
 
