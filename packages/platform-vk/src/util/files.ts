@@ -22,6 +22,5 @@ export function uploadFile(ctx: PlatformVkContext, upload: Upload) {
     throw new Error(`Upload method ${upload.type} not found`);
   }
 
-  console.log(`Loading file`, upload);
   return method(ctx, upload);
 }
