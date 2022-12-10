@@ -1,6 +1,6 @@
 import type HentaBot from '@henta/core';
 import Platform from '@henta/core/platform';
-import { MessageContext, VK } from 'vk-io';
+import { MessageContext, VK, SequentialWorker, APIRequest } from 'vk-io';
 import VkAttachment from './attachment.js';
 import PlatformVkContext from './context.js';
 
@@ -25,6 +25,31 @@ export default class PlatformVk extends Platform {
       apiLimit: 20,
       apiRequestMode: 'burst'
     });
+  }
+
+  // unstable
+  injectVkRequestMake(cb) {
+    APIRequest.prototype['make'] = function () {
+      const { options } = this.api;
+      const params = {
+        access_token: options.token,
+        v: options.apiVersion,
+        ...this.params
+      };
+
+      if (options.language !== undefined) {
+        params.lang = options.language;
+      }
+
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), options.apiTimeout);
+      try {
+        return cb(this, Object.entries(params).filter(({ 1: value }) => value !== undefined), controller);
+      }
+      finally {
+        clearTimeout(timeout);
+      }
+    }
   }
 
   setCallback(callback: (PlatformVkContext) => void, bot: HentaBot) {
