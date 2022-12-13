@@ -5,6 +5,9 @@
   "main": "src/index.ts",
   "version": "0.2.0",
   "dependencies": {
+    "form-data-encoder": "^2.1.4",
+    "i": "^0.3.7",
+    "npm": "^9.2.0",
     "vk-io": "^4.7.0"
   }
 }

@@ -94,16 +94,19 @@ export default class PlatformTgContext extends PlatformContext {
     };
 
     if (files) {
-      const sendAttachment = (attachment: Upload, body = {}) => {
+      const sendAttachment = (file: Upload, body = {}) => {
         const methods = {
           photo: 'sendPhoto',
-          audio_message: 'sendVoice'
+          audio_message: 'sendVoice',
+          document: 'sendDocument'
         };
 
         // this.raw.replyWithMediaGroup()
-
-        const methodName = methods[attachment.type];
-        return this.raw[methodName]({ source: attachment.data }, body);
+        const methodName = methods[file.type];
+        return this.raw[methodName]({
+          source: file.data,
+          filename: file.name
+        }, body);
       };
 
       const captionBody = { ...body, caption: message.text };
