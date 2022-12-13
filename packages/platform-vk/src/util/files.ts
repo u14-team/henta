@@ -6,7 +6,7 @@ function buildMethod(method: string) {
     ctx.platform.vk.upload[method]({
       // пусть пока побудет так
       peer_id: ctx.senderId,
-      source: { value: upload.data }
+      source: { value: upload.data, contentType: upload.mime, filename: upload.name },
     });
 }
 

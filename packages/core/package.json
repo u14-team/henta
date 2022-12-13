@@ -28,6 +28,7 @@
     "./files": "./src/files/files.ts"
   },
   "dependencies": {
-    "middleware-io": "^2.8.0"
+    "middleware-io": "^2.8.0",
+    "mime": "^3.0.0"
   }
 }

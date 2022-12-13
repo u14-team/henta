@@ -1,4 +1,5 @@
 import type { Readable } from "stream";
+import mime from 'mime';
 
 export enum UploadSourceType {
   Url = 'url',
@@ -33,5 +34,13 @@ export default class Upload<T = unknown> {
   setName(name: string) {
     this.name = name;
     return this;
+  }
+
+  get mime() {
+    if (this.type === 'photo') {
+      return 'image/jpeg';
+    }
+
+    return mime.getType(this.name);
   }
 }
