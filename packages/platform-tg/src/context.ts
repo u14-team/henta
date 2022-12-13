@@ -78,7 +78,7 @@ export default class PlatformTgContext extends PlatformContext {
     return this.raw.update;
   }
 
-  async send(message: ISendMessageOptions) {
+  async send(message: ISendMessageOptions, isAnswer = false) {
     let files: Upload[];
     if (message.files?.length) {
       files = await normalizeUploads(message.files, [UploadSourceType.Stream]);
@@ -100,11 +100,14 @@ export default class PlatformTgContext extends PlatformContext {
           audio_message: 'sendVoice'
         };
 
+        // this.raw.replyWithMediaGroup()
+
         const methodName = methods[attachment.type];
         return this.raw[methodName]({ source: attachment.data }, body);
       };
 
       const captionBody = { ...body, caption: message.text };
+      // TODO: sendMediaGroup
       const firstAttachment = files.shift();
 
       const [firstResponse] = await Promise.all([
@@ -113,6 +116,27 @@ export default class PlatformTgContext extends PlatformContext {
       ]);
 
       return firstResponse;
+    }
+
+    if (this.sendedAnswer && isAnswer) {
+      // console.log('edit', this.sendedAnswer);
+      if (this.sendedAnswer.caption !== undefined) {
+        return this.raw.telegram.editMessageCaption(
+          this.sendedAnswer.chat.id,
+          this.sendedAnswer.message_id,
+          null,
+          message.text,
+          body
+        );
+      }
+
+      return this.raw.telegram.editMessageText(
+        this.sendedAnswer.chat.id,
+        this.sendedAnswer.message_id,
+        null,
+        message.text,
+        body
+      );
     }
 
     return this.raw.reply(message.text, body);
