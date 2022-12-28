@@ -19,6 +19,7 @@
 		"discord.js": "^14.7.1"
 	},
 	"scripts": {
+		"postinstall": "npm run build",
 		"build": "npm run rollup:build",
 		"rollup:build": "NODE_ENV=production rollup -c rollup.config.js"
 	}
