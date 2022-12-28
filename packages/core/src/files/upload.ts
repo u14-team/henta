@@ -1,5 +1,5 @@
 import type { Readable } from "stream";
-import mime from 'mime';
+import * as mime from 'mime';
 
 export enum UploadSourceType {
   Url = 'url',
