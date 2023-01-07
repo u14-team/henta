@@ -1,0 +1,6 @@
+{
+  "name": "@henta/navigation",
+  "type": "module",
+  "main": "src/index.ts",
+  "version": "0.1.0"
+}

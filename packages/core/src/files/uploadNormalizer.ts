@@ -1,4 +1,4 @@
-import type { Stream } from "node:stream";
+import fetch from 'node-fetch';
 import Upload, { UploadSourceType, UploadUrl } from "./upload.js";
 
 export function normalizeUploads(rawUploads: any[], supportTypes: UploadSourceType[] = [
@@ -14,7 +14,7 @@ export function normalizeUploads(rawUploads: any[], supportTypes: UploadSourceTy
 const rebuildTable = {
   url: {
     stream: (from: UploadUrl) => fetch(from.data)
-      .then(response => Upload.fromStream(from.type, response.body as unknown as Stream)
+      .then(response => Upload.fromStream(from.type, response.body as ReadableStream)
         .setName(from.name))
   }
 };

@@ -1,10 +1,8 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
-    "outDir": "lib/",
     "esModuleInterop": true,
     "types": ["node"],
-    "target": "ESNext",
+    "target": "ES6",
     "module": "ESNext",
     "moduleResolution": "node",
     "skipLibCheck": true,
@@ -12,8 +10,6 @@
     "emitDecoratorMetadata": true,
     "inlineSourceMap": true,
     "resolveJsonModule": true,
-    "paths": {
-      "@app/*": ["src/*"]
-    }
+    "declaration": true,
   },
 }

@@ -1,8 +1,11 @@
 import PlatformContext from '@henta/core/context';
 import type BaseAttachmentHistory from '@henta/attachment-history';
-import requireArguments from './arguments/processor.js';
 import BotCmdContext from './botcmdContext.js';
-import { requireInputArgs, getAttachmentRequests } from '@henta/input';
+import { getAttachmentRequests } from '@henta/input';
+import { compose, Middleware } from 'middleware-io';
+import IBotCmdOptions from './options.interface.js';
+import { requestInputArgsMiddleware } from './middlewares.js';
+import { applyBotcmdDecorator, BotCmdCommand, BotCmdView } from './decorators.js';
 
 export interface Command {
   name: string;
@@ -70,6 +73,19 @@ function checkCommand(command: Command, commandLine: string) {
 export default class BotCmd {
   commands: Command[] = [];
   attachmentHistory?: BaseAttachmentHistory;
+  private _composed: Middleware<PlatformContext>;
+
+  constructor(public options: IBotCmdOptions = {}) {
+    this.attachmentHistory = options.attachmentHistory;
+
+    if (!this.options.middlewares) {
+      this.options.middlewares = [
+        requestInputArgsMiddleware
+      ];
+    }
+
+    this._composed = compose(this.options.middlewares);
+  }
 
   static View(options: Omit<Command, "handler">) {
     return function (target: any) {
@@ -82,6 +98,8 @@ export default class BotCmd {
     return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
       target.$commands = target.$commands || [];
       target.$commands.push({ ...(options || {}), handler: descriptor.value });
+
+      return BotCmdCommand(options)(target, propertyKey, descriptor);
     };
   }
 
@@ -94,53 +112,39 @@ export default class BotCmd {
     return this.commands.find(item => checkCommand(item, lowercase));
   }
 
+  /** Middleware end */
+  async execute(ctx: BotCmdContext) {
+    if (!ctx.botcmdData) {
+      throw new Error('BotCmd not found on context');
+    }
+
+    await ctx.botcmdData.command.handler(ctx, ...(ctx.botcmdData.args || []));
+  }
+
   async handler(ctx: BotCmdContext, next) {
     if (ctx.isAnswered) {
       return next();
     }
 
-    const commandLine = ctx.payload?.text || ctx.text?.trim();
-    if (!commandLine) {
+    if (!ctx.commandLine) {
       return next();
     }
 
-    ctx.commandLine = commandLine;
-    const command = this.find(commandLine);
+    const command = this.find(ctx.commandLine);
     if (!command) {
       return next();
     }
 
-    ctx.commandName = command.name;
-    ctx.command = command;
-
-    ctx.commandInput = {
-      attachments: [],
-      arguments: []
+    ctx.commandLinePosition += command.name.length;
+    ctx.botcmdData = {
+      botcmd: this,
+      commandLine: ctx.commandLine, // TODO: remove
+      command,
     };
 
-    if (command.attachments && command._isAttachmentsDeprecated) {
-      ctx.commandInput.attachments = await ctx.requireAttachments(
-        command.attachments,
-        // unstable, в планах вообще вынсти attachment requirer отдельно
-        this.attachmentHistory
-          ? await this.attachmentHistory.request(
-              ctx.platform,
-              ctx.peerId,
-              command.attachments.length,
-              command.attachments.map(v => v.type)
-            ).catch(() => [])
-          : []
-      );
-    }
-
-    if (command.arguments) {
-      ctx.commandInput.arguments = await requireArguments(ctx, command.arguments);
-    }
-
-    const args = await requireInputArgs(command.originalFn, ctx, this.attachmentHistory);
-    await command.handler(ctx, ...args);
+    await this._composed(ctx, () => this.execute(ctx));
     return next();
   }
 }
 
-export { BotCmdContext };
+export { BotCmdContext, BotCmdCommand, applyBotcmdDecorator, BotCmdView };

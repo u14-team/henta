@@ -1,6 +1,5 @@
 import type HentaBot from '@henta/core';
 import Platform from '@henta/core/platform';
-import { CacheType } from 'discord.js';
 import { ChatInputCommandInteraction } from 'discord.js';
 import { Client, GatewayIntentBits, REST, Routes } from 'discord.js';
 import DiscordPlatformContext from './context.js';
@@ -36,7 +35,7 @@ export default class DiscordPlatform extends Platform {
         return;
       }
     
-      callback(new DiscordPlatformContext(interaction, bot, this));
+      callback(new DiscordPlatformContext(interaction as any, bot, this));
     });
   }
 
@@ -51,8 +50,9 @@ export default class DiscordPlatform extends Platform {
   }
 
   getContextFromData(rawData: any, bot: HentaBot) {
+    const ClassConstructor = ChatInputCommandInteraction as any;
     return new DiscordPlatformContext(
-      new ChatInputCommandInteraction<CacheType>(this.client, rawData),
+      new ClassConstructor(this.client, rawData),
       bot,
       this
     );

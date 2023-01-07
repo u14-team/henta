@@ -62,7 +62,12 @@ export default class DiscordPlatformContext extends PlatformContext {
   }
 
   get payload() {
-    return this.raw.customId && JSON.parse(this.raw.customId);
+    const rawPayload = this.raw['customId'];
+    if (!rawPayload) {
+      return null;
+    }
+
+    return rawPayload;
   }
 
   get isChat() {

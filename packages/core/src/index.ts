@@ -3,6 +3,7 @@ import type Platform from './platform.js';
 import type PlatformContext from './context.js';
 import Attachment from './attachment.js';
 import type ISendMessageOptions from './sendMessageOptions.js';
+import KB from './util/kb.js';
 
 export default class HentaBot {
   private _middlewares: Middleware<PlatformContext>[] = [];
@@ -33,4 +34,4 @@ export default class HentaBot {
   }
 }
 
-export { Attachment, ISendMessageOptions };
+export { Attachment, ISendMessageOptions, KB };

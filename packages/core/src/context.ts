@@ -17,6 +17,8 @@ export default abstract class PlatformContext {
   answerBody?: unknown;
   isAnswered: boolean;
 
+  commandLinePosition = 0;
+
   constructor(raw: unknown, bot: HentaBot, platform: Platform) {
     this.raw = raw;
     this.bot = bot;
@@ -33,6 +35,11 @@ export default abstract class PlatformContext {
   abstract get nestedAttachments (): Attachment[];
 
   abstract send(options: ISendMessageOptions, isAnswer?: boolean): Promise<unknown>;
+
+  get commandLine() {
+    const rawCommandLine = this.payload?.text || this.text || '';
+    return rawCommandLine.substring(this.commandLinePosition);
+  }
 
   async answer(options: ISendMessageOptions, payload?) {
     this.isAnswered = true;
