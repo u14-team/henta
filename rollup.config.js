@@ -1,7 +1,6 @@
 import jsonPlugin from '@rollup/plugin-json';
 import ts from 'rollup-plugin-ts';
 
-import { tmpdir } from 'os';
 import { builtinModules } from 'module';
 import path from 'path';
 
@@ -19,7 +18,6 @@ async function getModuleOptions(moduleName) {
   const src = path.join(modulePath, 'src');
   const lib = path.join(modulePath, 'lib');
 
-  console.log(src)
   return {
     input: path.join(src, 'index.ts'),
     plugins: [
@@ -76,6 +74,7 @@ const modules = [
 	'core',
 	'input',
 	// 'installer',
+  'navigation',
 	'platform-discord',
 	'platform-tg',
   'platform-vk'

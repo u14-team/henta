@@ -40,6 +40,7 @@ export default class PlatformTgContext extends PlatformContext {
   constructor(raw: Context<Update>, bot: HentaBot, platform: any) {
     super(raw, bot, platform);
     this.text = this.originalText || this.raw?.message?.['caption'];
+    this.payload = this.raw.update['callback_query']?.data && JSON.parse(this.raw.update['callback_query']?.data);
   }
 
   get originalText() {
@@ -143,9 +144,5 @@ export default class PlatformTgContext extends PlatformContext {
     }
 
     return this.raw.reply(message.text, body);
-  }
-
-  get payload() {
-    return this.raw.update['callback_query']?.data && JSON.parse(this.raw.update['callback_query']?.data);
   }
 }

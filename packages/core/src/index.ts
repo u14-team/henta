@@ -1,15 +1,25 @@
 import { compose, Middleware } from 'middleware-io';
-import type Platform from './platform.js';
+import type Platform from './platform/platform.js';
 import type PlatformContext from './context.js';
 import Attachment from './attachment.js';
 import type ISendMessageOptions from './sendMessageOptions.js';
 import KB from './util/kb.js';
+import EventEmitter from 'node:events';
 
-export default class HentaBot {
+export default class HentaBot extends EventEmitter {
   private _middlewares: Middleware<PlatformContext>[] = [];
   private _composed: Middleware<PlatformContext>;
   private _answerMiddlewares: Middleware<PlatformContext>[] = [];
   private _answerComposed: Middleware<PlatformContext> = (ctx, next) => next();
+  public readonly platforms: Platform[] = [];
+
+  public addPlatform(platform: Platform) {
+    this.platforms.push(platform);
+  }
+
+  public dispatch(ctx: PlatformContext) {
+    this._composed(ctx, async () => {});
+  }
 
   subscribe(platform: Platform) {
     platform.setCallback(ctx => this._composed(ctx, async () => {}), this);

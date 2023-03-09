@@ -1,7 +1,7 @@
 import BotError from './error.js';
 import type HentaBot from './index.js';
 import type Attachment from './attachment.js';
-import type Platform from './platform.js';
+import type Platform from './platform/platform.js';
 import type ISendMessageOptions from './sendMessageOptions.js';
 
 export default abstract class PlatformContext {
@@ -19,6 +19,8 @@ export default abstract class PlatformContext {
 
   commandLinePosition = 0;
 
+  payload: any = {};
+
   constructor(raw: unknown, bot: HentaBot, platform: Platform) {
     this.raw = raw;
     this.bot = bot;
@@ -29,7 +31,6 @@ export default abstract class PlatformContext {
   abstract get senderId (): string;
   abstract get peerId (): string;
   abstract get isChat (): boolean;
-  abstract get payload (): any;
 
   abstract get attachments (): Attachment[];
   abstract get nestedAttachments (): Attachment[];

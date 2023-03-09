@@ -1,5 +1,5 @@
 import type HentaBot from '@henta/core';
-import Platform from '@henta/core/platform';
+import Platform from '@henta/core/src/platform/platform.js';
 import { ChatInputCommandInteraction } from 'discord.js';
 import { Client, GatewayIntentBits, REST, Routes } from 'discord.js';
 import DiscordPlatformContext from './context.js';

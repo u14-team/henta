@@ -7,11 +7,9 @@ export interface StringParserOptions {
 
 export class StringParser extends ArgumentTypeParser<string> {
   isTextRequired = true;
-  options: StringParserOptions;
 
-  constructor(options: StringParserOptions = { toEnd: false }) {
+  constructor(private options: StringParserOptions = { toEnd: false }) {
     super();
-    this.options = options;
   }
 
   parse(_ctx, args: string[], request: IArgumentRequest) {

@@ -14,7 +14,7 @@ export function normalizeUploads(rawUploads: any[], supportTypes: UploadSourceTy
 const rebuildTable = {
   url: {
     stream: (from: UploadUrl) => fetch(from.data)
-      .then(response => Upload.fromStream(from.type, response.body as ReadableStream)
+      .then(response => Upload.fromStream(from.type, response.body as any as ReadableStream)
         .setName(from.name))
   }
 };

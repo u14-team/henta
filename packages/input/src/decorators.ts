@@ -43,7 +43,7 @@ export function CustomRequest(handler: (context: IRequestContext) => Promise<any
 export function ArgumentRequest(params: Partial<IArgumentRequest> = {}) {
   return CustomRequest(requireArguments, {
     parser: new StringParser(),
-    isRequired: true,
+    isRequired: params.default === undefined,
     ...params
   } as IArgumentRequest)
 }

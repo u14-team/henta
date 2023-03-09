@@ -13,23 +13,19 @@ export default function requireArguments(context: IRequestContext) {
     args.shift();
   }
 
-  console.log(params)
   for (const param of params) {
     try {
-      const parser: ArgumentTypeParser = typeof param.parser === 'function'
-        ? new (param.parser as any)()
-        : param.parser;
-
-      const isTextRequired = parser.isTextRequired ?? true;
+      const isTextRequired = param.parser.isTextRequired ?? true;
       if (isTextRequired && args.length === 0) {
         throw new ArgumentError(`Слишком мало аргументов!!!`, param);
       }
 
-      const payload = parser.parse(ctx, args, param);
+      const payload = param.parser.parse(ctx, args, param);
       payloads.push(payload);
     } catch (error) {
       if (error instanceof ArgumentError && !param.isRequired) {
         payloads.push(param.default || null);
+        continue;
       }
 
       throw error;
@@ -44,8 +40,7 @@ export default function requireArguments(context: IRequestContext) {
       }
 
       try {
-        const parser: ArgumentTypeParser = typeof param.parser === 'function' ? new (param.parser as any)() : param.parser;
-        return await parser.resolve(ctx, payload)
+        return await param.parser.resolve(ctx, payload)
       } catch (error) {
         if (error instanceof ArgumentError && !param.isRequired) {
           return null;
