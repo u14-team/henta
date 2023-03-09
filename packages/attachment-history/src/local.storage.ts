@@ -1,4 +1,4 @@
-import Platform from '@henta/core/platform';
+import Platform from '@henta/core/src/platform/platform.js';
 import { IHistoryAttachment } from './attachmentHistory.js';
 import IAttachmentHistoryStorage from './storage.interface.js';
 

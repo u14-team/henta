@@ -1,5 +1,5 @@
 import type HentaBot from '@henta/core';
-import Platform from '@henta/core/platform';
+import Platform from '@henta/core/src/platform/platform.js';
 import { MessageContext, VK, SequentialWorker, APIRequest, Upload } from 'vk-io';
 import VkAttachment from './attachment.js';
 import PlatformVkContext from './context.js';

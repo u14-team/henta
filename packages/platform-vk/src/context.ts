@@ -31,7 +31,7 @@ export default class PlatformVkContext extends PlatformContext {
   }
 
   serialize() {
-    return this.raw.payload;
+    return this.raw['payload'];
   }
 
   async send(message: ISendMessageOptions, isAnswer = false) {

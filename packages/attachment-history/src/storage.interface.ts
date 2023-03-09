@@ -1,4 +1,4 @@
-import type Platform from '@henta/core/platform';
+import type Platform from '@henta/core/src/platform/platform.js';
 import type { IHistoryAttachment } from './attachmentHistory.js';
 
 export default interface IAttachmentHistoryStorage {

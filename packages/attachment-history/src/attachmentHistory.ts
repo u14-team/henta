@@ -1,6 +1,6 @@
 import type PlatformContext from "@henta/core/context";
 import type { Attachment } from "@henta/core/src";
-import type Platform from '@henta/core/platform';
+import type Platform from '@henta/core/src/platform/platform.js';
 import type IAttachmentHistoryStorage from './storage.interface.js';
 
 export interface IAttachmentHistoryRequestQuery {

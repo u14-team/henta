@@ -29,6 +29,8 @@
   },
   "dependencies": {
     "middleware-io": "^2.8.0",
-    "mime": "^3.0.0"
+    "mime": "^3.0.0",
+    "node-fetch": "^3.3.0",
+    "node-vad": "^1.1.4"
   }
 }
