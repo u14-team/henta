@@ -1,4 +1,4 @@
-import AttachmentsBehaviour from "@henta/core/src/platform/attachments.behaviour";
+import {AttachmentsBehaviour} from "@henta/core";
 
 export default class TelegramAttachmentsBehaviour extends AttachmentsBehaviour {
   

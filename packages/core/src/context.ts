@@ -1,8 +1,10 @@
 import BotError from './error.js';
-import type HentaBot from './index.js';
+// import type HentaBot from './index.js';
 import type Attachment from './attachment.js';
 import type Platform from './platform/platform.js';
 import type ISendMessageOptions from './sendMessageOptions.js';
+
+type HentaBot = any;
 
 export default abstract class PlatformContext {
   readonly bot: HentaBot;

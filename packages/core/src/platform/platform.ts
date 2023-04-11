@@ -1,18 +1,20 @@
-import AttachmentsBehaviour from './attachments.behaviour.js';
-import UpdatesBehaviour from './updates.behaviour.js';
-import ActionsBehaviour from './actions.behaviour.js';
+import type AttachmentsBehaviour from './attachments.behaviour.js';
+import type UpdatesBehaviour from './updates.behaviour.js';
+import type ActionsBehaviour from './actions.behaviour.js';
 
 export default abstract class Platform {
   public slug: string;
 
   /** receiving events about new messages */
-  public updatesBehaviour: UpdatesBehaviour;
+  public abstract updatesBehaviour: UpdatesBehaviour;
 
   /** sending a message and other common actions */
   public actionsBehaviour: ActionsBehaviour;
 
   /** uploading and downloading attachments */
   public attachmentsBehaviour: AttachmentsBehaviour;
+
+  public abstract contextFromSerializedData(rawData: any);
 
   /* abstract setCallback(callback: (PlatformContext) => void, bot: HentaBot): void;
   abstract startPooling(): Promise<void>;

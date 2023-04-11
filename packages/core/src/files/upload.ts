@@ -1,5 +1,4 @@
-import type { Readable } from "stream";
-import * as mime from 'mime';
+import type { Readable } from 'stream';
 
 export enum UploadSourceType {
   Url = 'url',
@@ -11,15 +10,15 @@ export type UploadUrl = Upload<string>;
 export type UploadStream = Upload<ReadableStream>;
 
 export default class Upload<T = unknown> {
-  name?: string;
+  public name?: string;
 
-   constructor(
-    readonly data: T,
-    readonly sourceType: UploadSourceType,
-    readonly type: string
+  public constructor(
+    public readonly data: T,
+    public readonly sourceType: UploadSourceType,
+    public readonly type: string,
   ) {}
 
-  static fromUrl(type: string, url: string) {
+  public static fromUrl(type: string, url: string) {
     if (typeof url !== 'string' || !url.startsWith('http')) {
       throw new Error('URL is invalid');
     }
@@ -27,20 +26,25 @@ export default class Upload<T = unknown> {
     return new Upload<string>(url, UploadSourceType.Url, type) as UploadUrl;
   }
 
-  static fromStream(type: string, stream: ReadableStream | Readable) {
-    return new Upload<ReadableStream>(stream as ReadableStream, UploadSourceType.Stream, type) as UploadStream;
+  public static fromStream(type: string, stream: ReadableStream | Readable) {
+    return new Upload<ReadableStream>(
+      stream as ReadableStream,
+      UploadSourceType.Stream,
+      type,
+    ) as UploadStream;
   }
 
-  setName(name: string) {
+  public setName(name: string) {
     this.name = name;
     return this;
   }
 
-  get mime() {
+  public get mime() {
     if (this.type === 'photo') {
       return 'image/jpeg';
     }
 
-    return mime.getType(this.name);
+    return 'unknown';
+    // return mime.getType(this.name);
   }
 }

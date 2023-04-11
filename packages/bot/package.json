@@ -1,11 +1,11 @@
 {
-  "name": "@henta/platform-tg",
-  "description": "TG support on henta",
+  "name": "@henta/bot",
+  "description": "Platform manager",
   "version": "0.1.0",
   "type": "module",
   "main": "lib/index.js",
   "dependencies": {
-    "telegraf": "^4.9.0"
+    "middleware-io": "^2.8.0"
   },
 	"types": "./lib/index.d.ts",
 	"exports": {

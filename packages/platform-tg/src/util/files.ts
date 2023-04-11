@@ -1,4 +1,4 @@
-import type { Upload } from '@henta/core/files';
+import type { Upload } from '@henta/core';
 import type PlatformTgContext from '../context.js';
 
 function buildMethod(method: string) {
