@@ -1,15 +1,15 @@
-import type { Attachment } from "@henta/core";
-import "reflect-metadata";
-import type IAttachmentRequest from "./attachments/attachment-request.interface.js";
-import type { AttachmentTypeUnion } from "@henta/core/src/attachment-type.enum.js";
-import type PlatformContext from "@henta/core/context";
-import type AttachmentHistory from "@henta/attachment-history";
-import { IArgumentRequest } from "./arguments/interfaces.js";
-import { StringParser } from "./arguments/parsers.js";
-import requireArguments from "./arguments/processor.js";
+import type { Attachment } from '@henta/core';
+import 'reflect-metadata';
+import type IAttachmentRequest from './attachments/attachment-request.interface.js';
+import type { AttachmentTypeUnion } from '@henta/core/src/attachment-type.enum.js';
+import type PlatformContext from '@henta/core/context';
+import type AttachmentHistory from '@henta/attachment-history';
+import type { IArgumentRequest } from './arguments/interfaces.js';
+import { StringParser } from './arguments/parsers.js';
+import requireArguments from './arguments/processor.js';
 
-const inputRequestsMetadataKey = Symbol("input_requests");
-const attachmentRequestsMetadataKey = Symbol("attachment_requests");
+const inputRequestsMetadataKey = Symbol('input_requests');
+const attachmentRequestsMetadataKey = Symbol('attachment_requests');
 
 export interface IRequestContextItem<T = any> {
   handler: (context: IRequestContext) => Promise<unknown[]>;
@@ -23,13 +23,22 @@ export interface IRequestContext<T = any> {
   attachmentsHistory?: AttachmentHistory;
 }
 
-export function CustomRequest(handler: (context: IRequestContext) => Promise<any[]>, payload?) {
-  return (target: Object, propertyKey: string | symbol, parameterIndex: number) => {
-    const requests: IRequestContextItem[] = Reflect.getOwnMetadata(inputRequestsMetadataKey, target[propertyKey]) || [];
+export function CustomRequest(
+  handler: (context: IRequestContext) => Promise<any[]>,
+  payload?,
+) {
+  return (
+    target: object,
+    propertyKey: string | symbol,
+    parameterIndex: number,
+  ) => {
+    const requests: IRequestContextItem[] =
+      Reflect.getOwnMetadata(inputRequestsMetadataKey, target[propertyKey]) ||
+      [];
     requests.unshift({
       handler,
       parameterIndex,
-      payload
+      payload,
     } as IRequestContextItem);
 
     Reflect.defineMetadata(
@@ -37,27 +46,39 @@ export function CustomRequest(handler: (context: IRequestContext) => Promise<any
       requests,
       target[propertyKey],
     );
-  }
+  };
 }
 
 export function ArgumentRequest(params: Partial<IArgumentRequest> = {}) {
   return CustomRequest(requireArguments, {
     parser: new StringParser(),
     isRequired: params.default === undefined,
-    ...params
-  } as IArgumentRequest)
+    ...params,
+  } as IArgumentRequest);
 }
 
-export function AttachmentRequest(request: IAttachmentRequest | AttachmentTypeUnion, to?: (attachment: Attachment) => any) {
-  return (target: Object, propertyKey: string | symbol, parameterIndex: number) => {
-    const requests = Reflect.getOwnMetadata(attachmentRequestsMetadataKey, target[propertyKey]) || [];
+export function AttachmentRequest(
+  request: IAttachmentRequest | AttachmentTypeUnion,
+  to?: (attachment: Attachment) => any,
+) {
+  return (
+    target: object,
+    propertyKey: string | symbol,
+    parameterIndex: number,
+  ) => {
+    const requests =
+      Reflect.getOwnMetadata(
+        attachmentRequestsMetadataKey,
+        target[propertyKey],
+      ) || [];
+
     requests.push({
       to,
       parameterIndex,
       request: {
         ...(typeof request === 'object' ? request : { type: request }),
         key: `#${requests.length + 1}`,
-      }
+      },
     });
 
     Reflect.defineMetadata(
@@ -65,7 +86,7 @@ export function AttachmentRequest(request: IAttachmentRequest | AttachmentTypeUn
       requests,
       target[propertyKey],
     );
-  }
+  };
 }
 
 export function getAttachmentRequests(fn: any) {
@@ -73,7 +94,10 @@ export function getAttachmentRequests(fn: any) {
 }
 
 export async function requireInputArgs(fn: any, ctx, attachmentsHistory?) {
-  const requests = Reflect.getMetadata(inputRequestsMetadataKey, fn) as IRequestContextItem[];
+  const requests = Reflect.getMetadata(
+    inputRequestsMetadataKey,
+    fn,
+  ) as IRequestContextItem[];
   if (!requests?.length) {
     return [];
   }
@@ -92,16 +116,16 @@ export async function requireInputArgs(fn: any, ctx, attachmentsHistory?) {
       const responses = await handler({
         ctx,
         items,
-        attachmentsHistory
+        attachmentsHistory,
       });
 
-      responses.map((v, i) => response[items[i].parameterIndex] = v);
-    })
+      responses.map((v, i) => (response[items[i].parameterIndex] = v));
+    }),
   );
 
   return response.splice(1);
 
-/*
+  /*
   const requests = Reflect.getMetadata(attachmentRequestsMetadataKey, fn);
   if (!requests) {
     return [];

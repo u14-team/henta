@@ -1,48 +1,46 @@
 import type { Command } from '.';
+import type ICommandOptions from './types/command-options.interface';
 
-const botcmdCommandsObjReflectSymbol = Symbol("botcmd_commands_obj");
-// const botcmdCommandsReflectSymbol = Symbol("botcmd_commands");
+const commandsSymbol = 'henta:botcmd:commands';
+const commandViewMetadataSymbol = 'henta:botcmd:view';
+
+export function getCommandViewMetadata(target): ICommandOptions {
+  return Reflect.getMetadata(commandViewMetadataSymbol, target);
+}
+
+export function getCommands(
+  target,
+): { descriptor: PropertyDescriptor; options: ICommandOptions }[] {
+  return Reflect.getMetadata(commandsSymbol, target);
+}
 
 export function applyBotcmdDecorator(cb) {
   return (target: any, propertyKey: string) => {
-    const commandsObject = Reflect.getOwnMetadata(botcmdCommandsObjReflectSymbol, target);
+    const commandsObject = Reflect.getMetadata(commandsSymbol, target);
     if (!commandsObject?.[propertyKey]) {
       throw new Error('no command');
     }
 
     cb(commandsObject[propertyKey]);
-    Reflect.defineMetadata(
-      botcmdCommandsObjReflectSymbol,
-      commandsObject,
-      target,
-    );
+    Reflect.defineMetadata(commandsSymbol, commandsObject, target);
   };
 }
 
-export function BotCmdCommand(options?) {
+export function BotcmdCommand(options?: ICommandOptions) {
   return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
-    const commandsObject = Reflect.getOwnMetadata(botcmdCommandsObjReflectSymbol, target) || {};
-    commandsObject[propertyKey] = { ...(options || {}), handler: descriptor.value };
+    const commands = Reflect.getMetadata(commandsSymbol, target) || [];
 
-    Reflect.defineMetadata(
-      botcmdCommandsObjReflectSymbol,
-      commandsObject,
-      target,
-    );
+    commands.push({
+      descriptor,
+      options: options || {},
+    });
 
-    // TODO: remove this
-    target.$commands = target.$commands || [];
-    target.$commands.push(commandsObject[propertyKey]);
-  }; 
+    Reflect.defineMetadata(commandsSymbol, commands, target);
+  };
 }
 
-export function BotCmdView(options: Omit<Command, "handler">) {
+export function BotcmdView(options: Omit<Command, 'handler'>) {
   return (target: any) => {
-    target.$view = options; // TODO: make metadata
-    target.$commands = target.$commands || [];
-    // const commandsObject = Reflect.getOwnMetadata(botcmdCommandsObjReflectSymbol, target) || {};
-    // TODO: remove bc
-    // target.$commands = Object.values(commandsObject);
-    // console.log('view', target)
-  }; 
+    Reflect.defineMetadata(commandViewMetadataSymbol, options, target);
+  };
 }

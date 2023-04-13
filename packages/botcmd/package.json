@@ -3,19 +3,16 @@
   "description": "Command parser",
   "version": "0.1.0",
   "type": "module",
-  "main": "src/index.ts",
-  "typesVersions": {
-    "*": {
-      "arguments": [
-        "src/arguments/index.ts"
-      ]
-    }
-  },
-  "exports": {
-    ".": "./src/index.ts",
-    "./arguments": "./src/arguments/index.ts"
-  },
-  "scripts": {
-    "build": "tsc --project tsconfig.json"
+  "main": "lib/index.js",
+  "types": "./lib/index.d.ts",
+	"exports": {
+		".": {
+			"import": "./lib/index.mjs",
+			"require": "./lib/index.js",
+			"types": "./lib/index.d.ts"
+		}
+	},
+  "dependencies": {
+    "middleware-io": "^2.8.1"
   }
 }

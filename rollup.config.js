@@ -38,7 +38,7 @@ async function getModuleOptions(moduleName) {
 
 const modules = [
   // 'attachment-history',
-  // 'botcmd',
+  'botcmd',
   'core',
   'bot',
   // 'input',
