@@ -7,9 +7,9 @@ import type AttachmentHistory from '@henta/attachment-history';
 import type { IArgumentRequest } from './arguments/interfaces.js';
 import { StringParser } from './arguments/parsers.js';
 import requireArguments from './arguments/processor.js';
+import requireAttachments from './attachments/processor.js';
 
 const inputRequestsMetadataKey = Symbol('input_requests');
-const attachmentRequestsMetadataKey = Symbol('attachment_requests');
 
 export interface IRequestContextItem<T = any> {
   handler: (context: IRequestContext) => Promise<unknown[]>;
@@ -35,6 +35,7 @@ export function CustomRequest(
     const requests: IRequestContextItem[] =
       Reflect.getOwnMetadata(inputRequestsMetadataKey, target[propertyKey]) ||
       [];
+
     requests.unshift({
       handler,
       parameterIndex,
@@ -58,39 +59,17 @@ export function ArgumentRequest(params: Partial<IArgumentRequest> = {}) {
 }
 
 export function AttachmentRequest(
-  request: IAttachmentRequest | AttachmentTypeUnion,
+  requestOrType: IAttachmentRequest | AttachmentTypeUnion,
   to?: (attachment: Attachment) => any,
 ) {
-  return (
-    target: object,
-    propertyKey: string | symbol,
-    parameterIndex: number,
-  ) => {
-    const requests =
-      Reflect.getOwnMetadata(
-        attachmentRequestsMetadataKey,
-        target[propertyKey],
-      ) || [];
+  const request: IAttachmentRequest =
+    typeof requestOrType === 'string' ? { type: requestOrType } : requestOrType;
 
-    requests.push({
-      to,
-      parameterIndex,
-      request: {
-        ...(typeof request === 'object' ? request : { type: request }),
-        key: `#${requests.length + 1}`,
-      },
-    });
+  if (to) {
+    request.to = to;
+  }
 
-    Reflect.defineMetadata(
-      attachmentRequestsMetadataKey,
-      requests,
-      target[propertyKey],
-    );
-  };
-}
-
-export function getAttachmentRequests(fn: any) {
-  return Reflect.getMetadata(attachmentRequestsMetadataKey, fn);
+  return CustomRequest(requireAttachments, request);
 }
 
 export async function requireInputArgs(fn: any, ctx, attachmentsHistory?) {
@@ -124,17 +103,4 @@ export async function requireInputArgs(fn: any, ctx, attachmentsHistory?) {
   );
 
   return response.splice(1);
-
-  /*
-  const requests = Reflect.getMetadata(attachmentRequestsMetadataKey, fn);
-  if (!requests) {
-    return [];
-  }
-
-  const attachments = await requireAttachments(ctx, requests.map(v => v.request), attachmentsHistory);
-  const toByKey = Object.fromEntries(requests.map(v => [v.request.key, v.to]));
-  const promises = Object.entries(attachments)
-    .map(([key, attachment]: [string, Attachment]) => toByKey[key]?.(attachment) || attachment);
-
-  return Promise.all(promises);*/
 }

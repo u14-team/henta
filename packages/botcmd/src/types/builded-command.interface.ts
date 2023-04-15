@@ -7,4 +7,6 @@ export default interface IBuildedCommand {
   names: string[];
   handler: (ctx: PlatformContext, ...args) => Promise<void>;
   view: CommandView;
+  /** Original method without this context */
+  value: (ctx: PlatformContext, ...args) => Promise<void>;
 }

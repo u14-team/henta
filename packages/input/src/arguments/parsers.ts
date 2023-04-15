@@ -1,18 +1,19 @@
 import ArgumentError from './error.js';
-import { IArgumentRequest, ArgumentTypeParser } from './interfaces.js';
+import type { IArgumentRequest } from './interfaces.js';
+import { ArgumentTypeParser } from './interfaces.js';
 
 export interface StringParserOptions {
   toEnd: boolean;
 }
 
 export class StringParser extends ArgumentTypeParser<string> {
-  isTextRequired = true;
+  public isTextRequired = true;
 
-  constructor(private options: StringParserOptions = { toEnd: false }) {
+  public constructor(private options: StringParserOptions = { toEnd: false }) {
     super();
   }
 
-  parse(_ctx, args: string[], request: IArgumentRequest) {
+  public parse(_ctx, args: string[], request: IArgumentRequest) {
     if (this.options.toEnd) {
       return args.splice(0).join(' ');
     }
@@ -20,7 +21,7 @@ export class StringParser extends ArgumentTypeParser<string> {
     return args.shift();
   }
 
-  resolve(_ctx, payload: string) {
+  public resolve(_ctx, payload: string) {
     return payload;
   }
 }
@@ -30,16 +31,16 @@ export interface INumberParserOptions {
 }
 
 export class NumberParser extends ArgumentTypeParser<number> {
-  isTextRequired = true;
+  public isTextRequired = true;
 
-  constructor(private options: INumberParserOptions = {}) {
+  public constructor(private options: INumberParserOptions = {}) {
     super();
   }
 
-  parse(_ctx, args: string[], request: IArgumentRequest) {
+  public parse(_ctx, args: string[], request: IArgumentRequest) {
     const number = parseFloat(args.shift());
     if (!Number.isFinite(number)) {
-      throw new ArgumentError(`input is not a finite number`, request);
+      throw new ArgumentError('input is not a finite number', request);
     }
 
     if (this.options.min !== undefined && number < this.options.min) {
@@ -49,19 +50,19 @@ export class NumberParser extends ArgumentTypeParser<number> {
     return number;
   }
 
-  resolve(_ctx, payload: number) {
+  public resolve(_ctx, payload: number) {
     return payload;
   }
 }
 
 export class IntParser extends NumberParser {
-  isTextRequired = true;
+  public isTextRequired = true;
 
-  constructor(options: INumberParserOptions = {}) {
+  public constructor(options: INumberParserOptions = {}) {
     super(options);
   }
 
-  parse(_ctx, args: string[], request: IArgumentRequest) {
+  public parse(_ctx, args: string[], request: IArgumentRequest) {
     const number = super.parse(_ctx, args, request);
     return Math.floor(number);
   }

@@ -25,7 +25,7 @@ export default class BotcmdContainer {
   ): { pattern: string; command: IBuildedCommand } | null {
     // maybe faster?
     for (const [key, value] of this.commandByName) {
-      if (key === commandLine || key.startsWith(`${commandLine} `)) {
+      if (key === commandLine || `${commandLine} `.startsWith(key)) {
         return { pattern: key, command: value };
       }
     }

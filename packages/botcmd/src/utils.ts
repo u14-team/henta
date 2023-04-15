@@ -12,6 +12,7 @@ export function buildCommandsFromView(view: CommandView) {
     ({ descriptor, options }): IBuildedCommand => ({
       options: { ...options, ...metadata },
       names: computeNames(options, viewNames),
+      value: descriptor.value,
       handler: descriptor.value.bind(view),
       view,
     }),
@@ -23,7 +24,9 @@ export function computeNames(command: ICommandOptions, parentNames?: string[]) {
   const selfNames = [command.name, ...(command.aliases || [])];
   if (parentNames) {
     return parentNames.flatMap((parentName) =>
-      selfNames.map((selfName) => `${parentName} ${selfName}`),
+      selfNames.map((selfName) =>
+        selfName ? `${parentName} ${selfName}` : parentName,
+      ),
     );
   }
 

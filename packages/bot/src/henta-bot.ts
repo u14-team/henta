@@ -39,6 +39,10 @@ export default class HentaBot {
     this.middleware = compose(steps);
   }
 
+  public setAnswerMiddleware(steps: Middleware<PlatformContext>[]) {
+    this.answerMiddleware = compose(steps);
+  }
+
   public async run() {
     if (this.mode !== BotMode.Local) {
       await this.initBridge();

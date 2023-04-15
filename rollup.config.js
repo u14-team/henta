@@ -41,7 +41,7 @@ const modules = [
   'botcmd',
   'core',
   'bot',
-  // 'input',
+  'input',
   // 'installer',
   //'navigation',
   //'platform-discord',

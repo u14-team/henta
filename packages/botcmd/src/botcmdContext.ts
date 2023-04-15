@@ -1,8 +1,8 @@
 import PlatformContext from '@henta/core/context';
-import type { Command } from '.';
+import type IBuildedCommand from './types/builded-command.interface';
 
 export interface BotcmdData {
-  command: Command;
+  command: IBuildedCommand;
 
   /** Data passed to fn args */
   args?: any[];

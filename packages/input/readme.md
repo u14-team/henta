@@ -38,9 +38,9 @@ import type { Attachment } from '@henta/core';
 import { Upload, AttachmentType } from '@henta/core/files';
 import { AttachmentRequest } from '@henta/input';
 
-@BotCmd.View({ name: 'mycommand' })
+@BotcmdView({ name: 'mycommand' })
 export default class MyCommandView extends CommandView {
-  @BotCmd.Command()
+  @BotcmdCommand()
   async handler(
     ctx: Context,
     // You can use converter
