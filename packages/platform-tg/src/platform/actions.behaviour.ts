@@ -1,5 +1,3 @@
-import {ActionsBehaviour} from "@henta/core";
+import { ActionsBehaviour } from '@henta/core';
 
-export default class TelegramActionsBehaviour extends ActionsBehaviour {
-  
-}
+export default class TelegramActionsBehaviour extends ActionsBehaviour {}

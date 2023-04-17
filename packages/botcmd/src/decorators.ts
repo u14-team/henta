@@ -1,4 +1,3 @@
-import type { Command } from '.';
 import type ICommandOptions from './types/command-options.interface';
 
 const commandsSymbol = 'henta:botcmd:commands';
@@ -39,7 +38,7 @@ export function BotcmdCommand(options?: ICommandOptions) {
   };
 }
 
-export function BotcmdView(options: Omit<Command, 'handler'>) {
+export function BotcmdView(options: ICommandOptions) {
   return (target: any) => {
     Reflect.defineMetadata(commandViewMetadataSymbol, options, target);
   };

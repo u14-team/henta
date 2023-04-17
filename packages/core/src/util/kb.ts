@@ -6,8 +6,8 @@ export default class KB {
     return {
       label,
       payload: {
-        text
-      }
+        text,
+      },
     };
   }
 }

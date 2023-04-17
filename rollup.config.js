@@ -37,15 +37,15 @@ async function getModuleOptions(moduleName) {
 }
 
 const modules = [
-  // 'attachment-history',
+  'attachment-history',
   'botcmd',
   'core',
   'bot',
   'input',
-  // 'installer',
-  //'navigation',
-  //'platform-discord',
+  'navigation',
   'platform-tg',
+  // 'installer',
+  //'platform-discord',
   //'platform-vk',
 ];
 

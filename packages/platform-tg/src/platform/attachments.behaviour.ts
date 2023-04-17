@@ -1,5 +1,3 @@
-import {AttachmentsBehaviour} from "@henta/core";
+import { AttachmentsBehaviour } from '@henta/core';
 
-export default class TelegramAttachmentsBehaviour extends AttachmentsBehaviour {
-  
-}
+export default class TelegramAttachmentsBehaviour extends AttachmentsBehaviour {}

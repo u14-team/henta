@@ -1,4 +1,4 @@
-import type PlatformContext from '@henta/core/context';
+import type { PlatformContext } from '@henta/core';
 import type { Attachment } from '@henta/core';
 import type AttachmentHistory from '@henta/attachment-history/src/attachmentHistory';
 import type IAttachmentRequest from './attachment-request.interface.js';

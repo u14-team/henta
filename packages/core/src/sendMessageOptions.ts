@@ -1,4 +1,4 @@
-import Upload from './files/upload.js';
+import type Upload from './files/upload.js';
 
 export default interface ISendMessageOptions {
   text?: string;

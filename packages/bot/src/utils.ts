@@ -10,7 +10,7 @@ export function applyAnswerMiddleware(
     ctx.answerBody = options;
 
     await answerMiddleware(ctx, async () => {
-      ctx.sendedAnswer = ctx.send(ctx.answerBody, true);
+      ctx.sendedAnswer = await ctx.send(ctx.answerBody, true);
     });
 
     return ctx.sendedAnswer;

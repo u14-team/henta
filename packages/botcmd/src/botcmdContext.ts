@@ -1,4 +1,4 @@
-import PlatformContext from '@henta/core/context';
+import { PlatformContext } from '@henta/core';
 import type IBuildedCommand from './types/builded-command.interface';
 
 export interface BotcmdData {

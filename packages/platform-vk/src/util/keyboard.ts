@@ -6,6 +6,9 @@ export default function getKeyboardButton(data) {
     return { action };
   }
 
-  Object.assign(action, { type: 'text', payload: JSON.stringify(data.payload) });
+  Object.assign(action, {
+    type: 'text',
+    payload: JSON.stringify(data.payload),
+  });
   return { action };
 }

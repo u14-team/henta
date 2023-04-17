@@ -1,4 +1,4 @@
-import type { Upload } from '@henta/core/files';
+import type { Upload } from '@henta/core';
 import type PlatformVkContext from '../context.js';
 
 function buildMethod(method: string) {
@@ -6,7 +6,11 @@ function buildMethod(method: string) {
     ctx.platform.vk.upload[method]({
       // пусть пока побудет так
       peer_id: ctx.senderId,
-      source: { value: upload.data, contentType: upload.mime, filename: upload.name },
+      source: {
+        value: upload.data,
+        contentType: upload.mime,
+        filename: upload.name,
+      },
     });
 }
 

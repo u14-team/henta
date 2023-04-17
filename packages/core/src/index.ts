@@ -1,5 +1,7 @@
+import AttachmentType from './attachment-type.enum.js';
 import Attachment from './attachment.js';
 import PlatformContext from './context.js';
+import BotError from './error.js';
 import Upload, { UploadSourceType } from './files/upload.js';
 import { normalizeUploads } from './files/uploadNormalizer.js';
 import ActionsBehaviour from './platform/actions.behaviour.js';
@@ -21,4 +23,6 @@ export {
   AttachmentsBehaviour,
   UpdatesBehaviour,
   ActionsBehaviour,
+  BotError,
+  AttachmentType,
 };

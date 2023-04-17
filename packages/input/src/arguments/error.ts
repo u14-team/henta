@@ -1,11 +1,8 @@
-import BotError from '@henta/core/error';
-import { IArgumentRequest } from './interfaces';
+import { BotError } from '@henta/core';
+import type { IArgumentRequest } from './interfaces';
 
 export default class ArgumentError extends BotError {
-  constructor(
-    message,
-    public request: IArgumentRequest
-  ) {
+  constructor(message, public request: IArgumentRequest) {
     super(message);
   }
 }

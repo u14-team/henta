@@ -1,6 +1,12 @@
 import type HentaBot from '@henta/core';
-import Platform from '@henta/core/src/platform/platform.js';
-import { MessageContext, VK, SequentialWorker, APIRequest, Upload } from 'vk-io';
+import { Platform } from '@henta/core';
+import {
+  MessageContext,
+  VK,
+  SequentialWorker,
+  APIRequest,
+  Upload,
+} from 'vk-io';
 import VkAttachment from './attachment.js';
 import PlatformVkContext from './context.js';
 import { FormDataEncoder } from 'form-data-encoder';
@@ -25,7 +31,7 @@ export default class PlatformVk extends Platform {
       webhookConfirmation: options.webhookConfirmation,
       webhookSecret: options.webhookSecret,
       apiLimit: 20,
-      apiRequestMode: 'burst'
+      apiRequestMode: 'burst',
     });
   }
 
@@ -36,7 +42,7 @@ export default class PlatformVk extends Platform {
       const params = {
         access_token: options.token,
         v: options.apiVersion,
-        ...this.params
+        ...this.params,
       };
 
       if (options.language !== undefined) {
@@ -46,52 +52,58 @@ export default class PlatformVk extends Platform {
       const controller = new AbortController();
       const timeout = setTimeout(() => controller.abort(), options.apiTimeout);
       try {
-        return cb(this, Object.entries(params).filter(({ 1: value }) => value !== undefined), controller);
-      }
-      finally {
+        return cb(
+          this,
+          Object.entries(params).filter(({ 1: value }) => value !== undefined),
+          controller,
+        );
+      } finally {
         clearTimeout(timeout);
       }
-    }
+    };
   }
 
   injectVkUpload(cb) {
-    Upload.prototype['upload'] = async function (url, { formData, timeout, forceBuffer }) {
+    Upload.prototype['upload'] = async function (
+      url,
+      { formData, timeout, forceBuffer },
+    ) {
       const { agent, uploadTimeout } = this.options;
       const encoder = new FormDataEncoder(formData);
       const rawBody = Readable.from(encoder.encode());
       const controller = new AbortController();
-      const interval = setTimeout(() => controller.abort(), timeout || uploadTimeout);
+      const interval = setTimeout(
+        () => controller.abort(),
+        timeout || uploadTimeout,
+      );
       const headers = {
         // eslint-disable-next-line @typescript-eslint/naming-convention
         Connection: 'keep-alive',
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        ...encoder.headers
+        ...encoder.headers,
       };
 
-      console.time('body')
-      const body = forceBuffer
-        ? await streamToBuffer(rawBody)
-        : rawBody;
+      console.time('body');
+      const body = forceBuffer ? await streamToBuffer(rawBody) : rawBody;
 
-        console.timeEnd('body')
+      console.timeEnd('body');
 
       try {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const result = await cb(url, body, headers, controller.signal);
-        return result.response !== undefined
-          ? result.response
-          : result;
+        return result.response !== undefined ? result.response : result;
       } catch (error) {
         throw error;
-      }
-      finally {
+      } finally {
         clearTimeout(interval);
       }
     };
   }
 
   setCallback(callback: (PlatformVkContext) => void, bot: HentaBot) {
-    this.vk.updates.on('message_new', rawContext => callback(new PlatformVkContext(rawContext, bot, this)));
+    this.vk.updates.on('message_new', (rawContext) =>
+      callback(new PlatformVkContext(rawContext, bot, this)),
+    );
   }
 
   getContextFromData(rawData: any, bot: HentaBot) {
@@ -105,10 +117,10 @@ export default class PlatformVk extends Platform {
         // state?: S;
         source: 'WEBSOCKET' as any,
         updateType: 'message_new',
-        groupId: this.options.groupId
+        groupId: this.options.groupId,
       }),
       bot,
-      this
+      this,
     );
   }
 

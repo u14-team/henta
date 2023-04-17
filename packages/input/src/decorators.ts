@@ -1,8 +1,7 @@
-import type { Attachment } from '@henta/core';
+import type { Attachment, PlatformContext } from '@henta/core';
 import 'reflect-metadata';
 import type IAttachmentRequest from './attachments/attachment-request.interface.js';
-import type { AttachmentTypeUnion } from '@henta/core/src/attachment-type.enum.js';
-import type PlatformContext from '@henta/core/context';
+import type { AttachmentTypeUnion } from '@henta/core';
 import type AttachmentHistory from '@henta/attachment-history';
 import type { IArgumentRequest } from './arguments/interfaces.js';
 import { StringParser } from './arguments/parsers.js';
@@ -56,6 +55,21 @@ export function ArgumentRequest(params: Partial<IArgumentRequest> = {}) {
     isRequired: params.default === undefined,
     ...params,
   } as IArgumentRequest);
+}
+
+/** same as `ArgumentRequest({ parser: new StringParser({ toEnd: true }) });` */
+export function CommandLineRequest(defaultValue?: string | null) {
+  if (defaultValue === null) {
+    return ArgumentRequest({
+      parser: new StringParser({ toEnd: true }),
+      isRequired: false,
+    });
+  }
+
+  return ArgumentRequest({
+    parser: new StringParser({ toEnd: true }),
+    default: defaultValue,
+  });
 }
 
 export function AttachmentRequest(

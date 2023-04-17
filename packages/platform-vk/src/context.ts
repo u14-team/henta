@@ -1,11 +1,11 @@
-import { IMessageContextSendOptions, MessageContext } from 'vk-io';
-import PlatformContext from '@henta/core/context';
+import type { IMessageContextSendOptions, MessageContext } from 'vk-io';
+import { PlatformContext } from '@henta/core';
 import type HentaBot from '@henta/core';
 import getKeyboardButton from './util/keyboard.js';
 import VkAttachment from './attachment.js';
 import type PlatformVk from './index.js';
 import type { ISendMessageOptions } from '@henta/core';
-import { normalizeUploads, Upload } from '@henta/core/files';
+import { normalizeUploads, Upload } from '@henta/core';
 import { uploadFile } from './util/files.js';
 
 export default class PlatformVkContext extends PlatformContext {
@@ -38,7 +38,9 @@ export default class PlatformVkContext extends PlatformContext {
     let attachment = [];
     if (message.files?.length) {
       const files = await normalizeUploads(message.files);
-      attachment = await Promise.all(files.map(file => uploadFile(this, file)));
+      attachment = await Promise.all(
+        files.map((file) => uploadFile(this, file)),
+      );
     }
 
     const forwardOptions = this.raw.conversationMessageId
@@ -46,14 +48,16 @@ export default class PlatformVkContext extends PlatformContext {
       : { message_ids: this.raw.id };
 
     const messageBody = {
-      ...(this.isChat && isAnswer ? {
-        forward: JSON.stringify({
-          ...forwardOptions,
+      ...(this.isChat && isAnswer
+        ? {
+            forward: JSON.stringify({
+              ...forwardOptions,
 
-          peer_id: this.peerId,
-          is_reply: true
-        })
-      } : {}),
+              peer_id: this.peerId,
+              is_reply: true,
+            }),
+          }
+        : {}),
       message: message.text,
       content_source: JSON.stringify({
         type: 'message',
@@ -63,11 +67,14 @@ export default class PlatformVkContext extends PlatformContext {
       }),
       attachment,
       dont_parse_links: !(message.isParseLinks ?? true),
-      keyboard: message.keyboard && JSON.stringify({
-        inline: true,
-        buttons: this.normalizeKeyboard(message.keyboard, 4, 5, 10)
-          .map(row => row.map(v => getKeyboardButton(v)))
-      })
+      keyboard:
+        message.keyboard &&
+        JSON.stringify({
+          inline: true,
+          buttons: this.normalizeKeyboard(message.keyboard, 4, 5, 10).map(
+            (row) => row.map((v) => getKeyboardButton(v)),
+          ),
+        }),
     } as IMessageContextSendOptions;
 
     if (this.sendedAnswer && isAnswer) {
@@ -87,12 +94,10 @@ export default class PlatformVkContext extends PlatformContext {
   }
 
   get attachments() {
-    return this.raw.attachments
-      .map(attachment => new VkAttachment(
-        attachment.type,
-        attachment.toJSON(),
-        this.platform
-      ));
+    return this.raw.attachments.map(
+      (attachment) =>
+        new VkAttachment(attachment.type, attachment.toJSON(), this.platform),
+    );
   }
 
   get nestedAttachments() {
@@ -103,14 +108,12 @@ export default class PlatformVkContext extends PlatformContext {
     }
 
     if (this.raw.hasForwards) {
-      this.raw.forwards.forEach(v => response.push(...v.attachments));
+      this.raw.forwards.forEach((v) => response.push(...v.attachments));
     }
 
-    return response
-      .map(attachment => new VkAttachment(
-        attachment.type,
-        attachment.toJSON(),
-        this.platform
-      ));
+    return response.map(
+      (attachment) =>
+        new VkAttachment(attachment.type, attachment.toJSON(), this.platform),
+    );
   }
 }

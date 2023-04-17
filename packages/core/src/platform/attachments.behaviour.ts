@@ -1,3 +1,1 @@
-export default abstract class AttachmentsBehaviour {
-  
-}
+export default abstract class AttachmentsBehaviour {}

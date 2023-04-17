@@ -144,7 +144,7 @@ export default class PlatformTgContext extends PlatformContext {
       }
 
       return this.raw.telegram.editMessageText(
-        this.sendedAnswer.chat.id,
+        this.sendedAnswer.chat?.id,
         this.sendedAnswer.message_id,
         null,
         message.text,

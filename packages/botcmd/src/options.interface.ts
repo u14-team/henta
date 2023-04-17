@@ -1,4 +1,4 @@
-import type PlatformContext from '@henta/core/context';
+import type { PlatformContext } from '@henta/core';
 import type BaseAttachmentHistory from '@henta/attachment-history';
 import type { Middleware } from 'middleware-io';
 

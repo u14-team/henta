@@ -1,12 +1,12 @@
 # @henta/input
 Multifunctional input data parser.
+> 📌 Is part of [HENTA Framework](https://github.com/u14-team/henta)
 
 ## Attachments
 Base:
 ```js
 import { AttachmentRequest } from '@henta/input';
-import type { Attachment } from '@henta/core';
-import type PlatformContext from '@henta/core/context';
+import type { Attachment, PlatformContext } from '@henta/core';
 
 async function handler(
     ctx: PlatformContext,
@@ -33,9 +33,8 @@ hentaBot.use(myHentaMiddleware);
 
 BotCmd command
 ```js
-import BotCmd, { CommandView } from '@henta/botcmd';
-import type { Attachment } from '@henta/core';
-import { Upload, AttachmentType } from '@henta/core/files';
+import { CommandView, BotcmdView, BotcmdCommand } from '@henta/botcmd';
+import type { Attachment, PlatformContext } from '@henta/core';
 import { AttachmentRequest } from '@henta/input';
 
 @BotcmdView({ name: 'mycommand' })
@@ -45,7 +44,7 @@ export default class MyCommandView extends CommandView {
     ctx: Context,
     // You can use converter
     // And also pass only the type to the first argument
-    @AttachmentRequest('photo', (v) => v.getUrl()) url: string,
+    @AttachmentRequest('photo', (item) => item.getUrl()) url: string,
     @AttachmentRequest(AttachmentType.Photo) attachment: Attachment
   ) {
     await ctx.answer({

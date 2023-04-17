@@ -1,17 +1,26 @@
-import PlatformContext from '@henta/core/context';
+import { PlatformContext } from '@henta/core';
 import DiscordAttachment from './attachment.js';
 import type HentaBot from '@henta/core';
-import { CacheType, ChatInputCommandInteraction, MessagePayload } from 'discord.js';
+import type {
+  CacheType,
+  ChatInputCommandInteraction,
+  MessagePayload,
+} from 'discord.js';
 import { buildAttachment } from './util/upload.js';
-import { normalizeUploads, UploadSourceType, UploadStream } from '@henta/core/files';
-import { ISendMessageOptions } from '@henta/core';
+import type { UploadStream } from '@henta/core';
+import { normalizeUploads, UploadSourceType } from '@henta/core';
+import type { ISendMessageOptions } from '@henta/core';
 import { getKeyboardData } from './util/keyboard.js';
 
 export default class DiscordPlatformContext extends PlatformContext {
   source = 'discord';
   declare raw: ChatInputCommandInteraction<CacheType>;
 
-  constructor(raw: ChatInputCommandInteraction<CacheType>, bot: HentaBot, platform: any) {
+  constructor(
+    raw: ChatInputCommandInteraction<CacheType>,
+    bot: HentaBot,
+    platform: any,
+  ) {
     super(raw, bot, platform);
     this.text = this.originalText;
   }
@@ -24,17 +33,19 @@ export default class DiscordPlatformContext extends PlatformContext {
     if (!this.raw.options) {
       return `/${this.raw.commandName}`;
     }
-  
+
     const subcommand = this.raw.options['_subcommand'];
     const commandArgs = this.raw.options['_hoistedOptions']
-      .filter(option => option.type === 3)
-      .map(option => option.value);
+      .filter((option) => option.type === 3)
+      .map((option) => option.value);
 
     return [
       `/${this.raw.commandName}`,
       subcommand !== 'обзор' && subcommand,
-      ...commandArgs
-    ].filter(v => !!v).join(' ');
+      ...commandArgs,
+    ]
+      .filter((v) => !!v)
+      .join(' ');
   }
 
   get senderId() {
@@ -44,14 +55,20 @@ export default class DiscordPlatformContext extends PlatformContext {
   async send(message: ISendMessageOptions) {
     let files;
     if (message.files && message.files.length) {
-      const normalizedFiles = await normalizeUploads(message.files, [UploadSourceType.Stream]);
-      files = await Promise.all(normalizedFiles.map(async source => buildAttachment(source as UploadStream)));
+      const normalizedFiles = await normalizeUploads(message.files, [
+        UploadSourceType.Stream,
+      ]);
+      files = await Promise.all(
+        normalizedFiles.map(async (source) =>
+          buildAttachment(source as UploadStream),
+        ),
+      );
     }
 
     const body = {
       content: message.text,
       components: getKeyboardData(this, message),
-      files
+      files,
     } as unknown as MessagePayload;
 
     if (this.sendedAnswer) {
@@ -80,8 +97,11 @@ export default class DiscordPlatformContext extends PlatformContext {
     }
 
     return this.raw.options['_hoistedOptions']
-      .filter(option => option.type === 11)
-      .map(option => new DiscordAttachment('photo', option.attachment, this.platform));
+      .filter((option) => option.type === 11)
+      .map(
+        (option) =>
+          new DiscordAttachment('photo', option.attachment, this.platform),
+      );
   }
 
   get nestedAttachments() {

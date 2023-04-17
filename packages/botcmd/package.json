@@ -12,6 +12,19 @@
 			"types": "./lib/index.d.ts"
 		}
 	},
+  "author": "TheEVolk (https://t.me/theevolk)",
+  "repository": "github:u14-team/henta",
+  "bugs": "https://github.com/u14-team/henta/issues",
+  "keywords": [
+    "henta",
+    "bot",
+    "command",
+    "parser"
+  ],
+  "files": [
+    "lib/"
+  ],
+  "license": "MIT",
   "dependencies": {
     "middleware-io": "^2.8.1"
   }

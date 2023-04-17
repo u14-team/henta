@@ -28,6 +28,8 @@
 		"postinstall": "npm run build",
 		"build": "npm run rollup:build",
 		"watch": "NODE_ENV=development rollup -c rollup.config.js --watch",
-		"rollup:build": "NODE_ENV=production rollup -c rollup.config.js"
+		"rollup:build": "NODE_ENV=production rollup -c rollup.config.js",
+		"lint": "eslint .",
+    "lint:fix": "eslint . --fix"
 	}
 }

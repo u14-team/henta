@@ -14,10 +14,12 @@ export default class VkAttachment extends Attachment {
   }
 
   getUrl() {
-    switch(this.type) {
-      case 'photo': return this.payload.largeSizeUrl;
+    switch (this.type) {
+      case 'photo':
+        return this.payload.largeSizeUrl;
       case 'audio_message':
-      case 'document': return this.payload.url;
+      case 'document':
+        return this.payload.url;
     }
 
     throw new Error(`Url on attachment ${this.type} is not supported`);
