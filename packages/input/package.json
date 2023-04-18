@@ -30,7 +30,7 @@
     "reflect-metadata": "^0.1.13"
   },
   "peerDependencies": {
-    "@henta/core": "4.0.0-dev"
+    "@henta/core": "*"
   },
   "publishConfig": {
     "access": "public"

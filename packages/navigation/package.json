@@ -24,7 +24,7 @@
     "lib/"
   ],
   "peerDependencies": {
-    "@henta/core": "4.0.0-dev"
+    "@henta/core": "*"
   },
   "license": "MIT",
   "publishConfig": {
