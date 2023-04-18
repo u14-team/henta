@@ -31,5 +31,8 @@
   },
   "peerDependencies": {
     "@henta/core": "4.0.0-dev"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

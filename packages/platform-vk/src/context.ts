@@ -5,7 +5,7 @@ import getKeyboardButton from './util/keyboard.js';
 import VkAttachment from './attachment.js';
 import type PlatformVk from './index.js';
 import type { ISendMessageOptions } from '@henta/core';
-import { normalizeUploads, Upload } from '@henta/core';
+import { normalizeUploads } from '@henta/core';
 import { uploadFile } from './util/files.js';
 
 export default class PlatformVkContext extends PlatformContext {

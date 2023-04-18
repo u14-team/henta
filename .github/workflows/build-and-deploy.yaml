@@ -1,0 +1,53 @@
+name: 🔨 Build docker
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  buildAndTest:
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref }}
+          submodules: recursive
+          ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: "Automated Version Bump"
+        id: version-bump
+        uses: "phips28/gh-action-bump-version@master"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Changelog
+        uses: scottbrenner/generate-changelog-action@master
+        id: Changelog
+        env:
+          REPO: ${{ github.repository }}
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.version-bump.outputs.newTag }}
+          release_name: Release ${{ steps.version-bump.outputs.newTag }}
+          body: |
+            ${{ steps.Changelog.outputs.changelog }}
+          draft: false
+          prerelease: false
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1.7.0
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          registry: cr.yandex/crp428vimkuuip6nnfgs
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
