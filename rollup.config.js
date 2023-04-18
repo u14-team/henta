@@ -1,7 +1,5 @@
 import jsonPlugin from '@rollup/plugin-json';
 import typescript from '@rollup/plugin-typescript';
-
-import { builtinModules } from 'module';
 import path from 'path';
 
 function getModulePath(moduleName) {
@@ -10,9 +8,6 @@ function getModulePath(moduleName) {
 
 async function getModuleOptions(moduleName) {
   const modulePath = getModulePath(moduleName);
-  const modulePkg = await import(path.join(modulePath, 'package.json'), {
-    assert: { type: 'json' },
-  });
 
   const src = path.join(modulePath, 'src');
   const lib = path.join(modulePath, 'lib');
@@ -45,11 +40,9 @@ const modules = [
   'navigation',
   'platform-tg',
   // 'installer',
-  //'platform-discord',
-  //'platform-vk',
+  'platform-discord',
+  'platform-vk',
 ];
-
-const coreModules = builtinModules.filter((name) => !/(^_|\/)/.test(name));
 
 export default async () =>
   Promise.all(modules.map((module) => getModuleOptions(module)));
