@@ -27,3 +27,7 @@ HENTA consists of a set of libraries that facilitate the creation of bots of any
 
 # Community modules
 > If you want to add your module in the list, create a [new issue](https://github.com/u14-team/henta/issues/new) in the repository.
+
+# Community
+- [VK Chat](https://vk.me/join/2qDKyes0PJlPljT5hgsUQgk0eKrstr84qEo=)
+- [Telegram Chat](https://t.me/hentachat)
