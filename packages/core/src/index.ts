@@ -1,4 +1,7 @@
-import AttachmentType from './attachment-type.enum.js';
+import AttachmentType, {
+  AttachmentTypeString,
+  AttachmentTypeUnion,
+} from './attachment-type.enum.js';
 import Attachment from './attachment.js';
 import PlatformContext from './context.js';
 import BotError from './error.js';
@@ -25,4 +28,6 @@ export {
   ActionsBehaviour,
   BotError,
   AttachmentType,
+  AttachmentTypeUnion,
+  AttachmentTypeString,
 };
