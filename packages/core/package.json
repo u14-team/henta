@@ -2,7 +2,7 @@
   "name": "@henta/core",
   "description": "henta core",
   "type": "module",
-  "version": "4.0.0-dev",
+  "version": "4.0.0-rc1",
   "main": "lib/index.js",
   "types": "./lib/index.d.ts",
 	"exports": {
@@ -29,8 +29,7 @@
   "license": "MIT",
   "dependencies": {
     "mime": "^3.0.0",
-    "node-fetch": "^3.3.0",
-    "node-vad": "^1.1.4"
+    "node-fetch": "^3.3.0"
   },
   "publishConfig": {
     "access": "public"
