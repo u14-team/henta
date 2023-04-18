@@ -1,9 +1,10 @@
 {
+  "allowSyntheticDefaultImports": true,
   "compilerOptions": {
     "esModuleInterop": true,
     "types": ["node"],
-    "target": "ES6",
-    "module": "ESNext",
+    "target": "esnext",
+    "module": "esnext",
     "moduleResolution": "node",
     "skipLibCheck": true,
     "experimentalDecorators": true,

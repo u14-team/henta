@@ -1,5 +1,5 @@
 import type HentaBot from '@henta/core';
-import Platform from '@henta/core/src/platform/platform.js';
+import { Platform } from '@henta/core';
 import { ChatInputCommandInteraction } from 'discord.js';
 import { Client, GatewayIntentBits, REST, Routes } from 'discord.js';
 import DiscordPlatformContext from './context.js';
@@ -21,20 +21,18 @@ export default class DiscordPlatform extends Platform {
 
     this.options = options;
     this.client = new Client({
-      intents: [
-        GatewayIntentBits.Guilds
-      ]
+      intents: [GatewayIntentBits.Guilds],
     });
 
     injectInteractionCreate(this.client);
   }
 
   setCallback(callback: (PlatformVkContext) => void, bot: HentaBot) {
-    this.client.on('interactionCreate', async interaction => {
+    this.client.on('interactionCreate', async (interaction) => {
       if (!interaction.isChatInputCommand() && !interaction.isButton()) {
         return;
       }
-    
+
       callback(new DiscordPlatformContext(interaction as any, bot, this));
     });
   }
@@ -46,7 +44,9 @@ export default class DiscordPlatform extends Platform {
   async setCommands(commands) {
     // console.log(commands)
     const rest = new REST({ version: '10' }).setToken(this.options.token);
-    await rest.put(Routes.applicationCommands(this.options.clientId), { body: commands });
+    await rest.put(Routes.applicationCommands(this.options.clientId), {
+      body: commands,
+    });
   }
 
   getContextFromData(rawData: any, bot: HentaBot) {
@@ -54,7 +54,7 @@ export default class DiscordPlatform extends Platform {
     return new DiscordPlatformContext(
       new ClassConstructor(this.client, rawData),
       bot,
-      this
+      this,
     );
   }
 }

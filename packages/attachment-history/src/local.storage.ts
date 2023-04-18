@@ -1,14 +1,18 @@
-import Platform from '@henta/core/src/platform/platform.js';
-import { IHistoryAttachment } from './attachmentHistory.js';
-import IAttachmentHistoryStorage from './storage.interface.js';
+import type { Platform } from '@henta/core';
+import type { IHistoryAttachment } from './attachmentHistory.js';
+import type IAttachmentHistoryStorage from './storage.interface.js';
 
-export default class LocalAttachmentHistoryStorage implements IAttachmentHistoryStorage {
+export default class LocalAttachmentHistoryStorage
+  implements IAttachmentHistoryStorage
+{
   values: IHistoryAttachment[] = [];
 
   get(platform: Platform, peerId: string, limit: number) {
     return [...this.values]
       .reverse()
-      .filter(value => value.peerId === peerId && value.source === platform.slug)
+      .filter(
+        (value) => value.peerId === peerId && value.source === platform.slug,
+      )
       .splice(0, limit);
   }
 

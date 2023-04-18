@@ -2,35 +2,37 @@
   "name": "@henta/core",
   "description": "henta core",
   "type": "module",
-  "main": "src/index.ts",
   "version": "4.0.0-dev",
-  "typesVersions": {
-    "*": {
-      "context": [
-        "src/context.ts"
-      ],
-      "platform": [
-        "src/platform.ts"
-      ],
-      "error": [
-        "src/error.ts"
-      ],
-      "files": [
-        "src/files/files.ts"
-      ]
-    }
-  },
-  "exports": {
-    ".": "./src/index.ts",
-    "./context": "./src/context.ts",
-    "./platform": "./src/platform.ts",
-    "./error": "./src/error.ts",
-    "./files": "./src/files/files.ts"
-  },
+  "main": "lib/index.js",
+  "types": "./lib/index.d.ts",
+	"exports": {
+		".": {
+			"import": "./lib/index.mjs",
+			"require": "./lib/index.js",
+			"types": "./lib/index.d.ts"
+		}
+	},
+  "author": "TheEVolk (https://t.me/theevolk)",
+  "repository": "github:u14-team/henta",
+  "bugs": "https://github.com/u14-team/henta/issues",
+  "keywords": [
+    "henta",
+    "bot",
+    "input",
+    "arguments",
+    "attachments",
+    "parser"
+  ],
+  "files": [
+    "lib/"
+  ],
+  "license": "MIT",
   "dependencies": {
-    "middleware-io": "^2.8.0",
     "mime": "^3.0.0",
     "node-fetch": "^3.3.0",
     "node-vad": "^1.1.4"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

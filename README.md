@@ -1,33 +1,29 @@
 # HENTA
-Фреймворк для создания полностью программируемых чат-ботов любой сложности.
+> Powerfull bot creating framework
+HENTA consists of a set of libraries that facilitate the creation of bots of any complexity. Libraries can be used both together and separately.
 
-```js
-import VkPlatform from '@henta/platform-vk';
-import TgPlatform from '@henta/platform-tg';
+## Features
+- single code for multiple platforms
+- cluster mode support
+- command and argument parser
+- abstraction from the architecture of your project
 
-import HentaBot from '@henta/core';
+# What is included in this framework
+- [@henta/core](packages/code): basic types and functions for creating platforms
+- [@henta/bot](packages/bot): simple interface for creating a bot
+- [@henta/botcmd](packages/botcmd): parsing and creating commands
+- [@henta/attachment-history](packages/attachment-history): chat attachment history
+- [@henta/input](packages/input): parsing command arguments and attachments
+- [@henta/navigation](packages/navigation): functions for pagination and other navigation features
 
-const hentaBot = new HentaBot();
-const vkPlatform = new VkPlatform({ token: process.env.VK_TOKEN });
-const tgPlatform = new TgPlatform({ token: process.env.TG_TOKEN });
+# Supported platforms
+> Platforms are interfaces for interacting with a certain messenger, social network or other way of communicating with your bot.
 
-// subscribe to platforms
-hentaBot.subscribe(vkPlatform);
-hentaBot.subscribe(tgPlatform);
+- [@henta/platform-tg](packages/platform-tg): Telegram
+- [@henta/platform-vk](packages/platform-vk): VK
+- [@henta/platform-discord](packages/platform-discord): Discord
 
-hentaBot.use((ctx, next) => {
-  ctx.answer({ text: 'Хей!' });
-  return next();
-});
+> If you want to add your platform in the list, create a [new issue](https://github.com/u14-team/henta/issues/new) in the repository.
 
-export default async function initBot() {
-  await Promise.all([
-    vkPlatform.startPooling(),
-    tgPlatform.startPooling()
-  ]);
-
-  console.log('Bot initialized successfully.');
-}
-
-initBot();
-```
+# Community modules
+> If you want to add your module in the list, create a [new issue](https://github.com/u14-team/henta/issues/new) in the repository.

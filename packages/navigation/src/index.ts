@@ -1,7 +1,6 @@
-import { ISendMessageOptions, KB } from '@henta/core';
-import type PlatformContext from '@henta/core/context';
-import BotError from '@henta/core/error';
-import type IKeyboardButton from '@henta/core/src/interfaces/keyboard-button.interface';
+import { KB } from '@henta/core';
+import type { PlatformContext, ISendMessageOptions } from '@henta/core';
+import type { IKeyboardButton } from '@henta/core';
 
 export interface ISelectorOptions<T = unknown> {
   ctx?: PlatformContext;
@@ -18,7 +17,9 @@ export interface ISelectorOptions<T = unknown> {
 }
 
 /** shows one item with the ability to scroll back and forth */
-export async function messageWithSelector(options: ISelectorOptions): Promise<ISendMessageOptions> {
+export async function messageWithSelector(
+  options: ISelectorOptions,
+): Promise<ISendMessageOptions> {
   const indexOffset = options.indexOffset || 0;
   const currentIndex = options.currentIndex + indexOffset;
   const item = options.items[currentIndex];
@@ -33,8 +34,10 @@ export async function messageWithSelector(options: ISelectorOptions): Promise<IS
 
   const response = await options.handler(item);
 
-  const nextIndex = currentIndex >= options.items.length - 1 ? 0 : currentIndex + 1;
-  const prevIndex = currentIndex <= 0 ? options.items.length - 1 : currentIndex - 1;
+  const nextIndex =
+    currentIndex >= options.items.length - 1 ? 0 : currentIndex + 1;
+  const prevIndex =
+    currentIndex <= 0 ? options.items.length - 1 : currentIndex - 1;
 
   // console.log('index', {nextIndex, prevIndex}, 'l', options.items.length);
   return {
@@ -45,13 +48,15 @@ export async function messageWithSelector(options: ISelectorOptions): Promise<IS
         options.centerButton ?? {
           label: '✔️',
           payload: {
-            text: options.confirmCommand || `${options.baseCommand} ${options.currentIndex}`,
-            isConfirmed: true
-          }
+            text:
+              options.confirmCommand ||
+              `${options.baseCommand} ${options.currentIndex}`,
+            isConfirmed: true,
+          },
         },
         KB.text('▶️', `${options.baseCommand} ${nextIndex - indexOffset}`),
       ].filter(Boolean),
-      ...options.otherRows
-    ]
-  }
+      ...options.otherRows,
+    ],
+  };
 }

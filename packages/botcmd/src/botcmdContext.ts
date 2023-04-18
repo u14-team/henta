@@ -1,16 +1,13 @@
-import PlatformContext from '@henta/core/context';
-import type { Command } from '.';
-import BotCmd from '.';
+import { PlatformContext } from '@henta/core';
+import type IBuildedCommand from './types/builded-command.interface';
 
-export interface BotCmdData {
-  botcmd: BotCmd;
-  commandLine: string;
-  command: Command;
+export interface BotcmdData {
+  command: IBuildedCommand;
 
   /** Data passed to fn args */
   args?: any[];
 }
 
-export default abstract class BotCmdContext extends PlatformContext {
-  botcmdData?: BotCmdData;
+export default abstract class BotcmdContext extends PlatformContext {
+  public botcmdData?: BotcmdData;
 }

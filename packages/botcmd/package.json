@@ -3,19 +3,32 @@
   "description": "Command parser",
   "version": "0.1.0",
   "type": "module",
-  "main": "src/index.ts",
-  "typesVersions": {
-    "*": {
-      "arguments": [
-        "src/arguments/index.ts"
-      ]
-    }
+  "main": "lib/index.js",
+  "types": "./lib/index.d.ts",
+	"exports": {
+		".": {
+			"import": "./lib/index.mjs",
+			"require": "./lib/index.js",
+			"types": "./lib/index.d.ts"
+		}
+	},
+  "author": "TheEVolk (https://t.me/theevolk)",
+  "repository": "github:u14-team/henta",
+  "bugs": "https://github.com/u14-team/henta/issues",
+  "keywords": [
+    "henta",
+    "bot",
+    "command",
+    "parser"
+  ],
+  "files": [
+    "lib/"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "middleware-io": "^2.8.1"
   },
-  "exports": {
-    ".": "./src/index.ts",
-    "./arguments": "./src/arguments/index.ts"
-  },
-  "scripts": {
-    "build": "tsc --project tsconfig.json"
+  "publishConfig": {
+    "access": "public"
   }
 }

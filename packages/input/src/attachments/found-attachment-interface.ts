@@ -1,4 +1,4 @@
-import type Attachment from '@henta/core/src/attachment';
+import type { Attachment } from '@henta/core';
 import type IAttachmentRequest from './attachment-request.interface';
 
 export default interface IFoundAttachment {

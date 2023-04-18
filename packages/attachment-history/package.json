@@ -2,6 +2,29 @@
   "name": "@henta/attachment-history",
   "description": "henta attachment history system",
   "type": "module",
-  "main": "src/index.ts",
-  "version": "0.1.0-dev"
+  "main": "lib/index.js",
+  "version": "0.1.0",
+  "publishConfig": {
+    "access": "public"
+  },
+  "types": "./lib/index.d.ts",
+	"exports": {
+		".": {
+			"import": "./lib/index.mjs",
+			"require": "./lib/index.js",
+			"types": "./lib/index.d.ts"
+		}
+	},
+  "author": "TheEVolk (https://t.me/theevolk)",
+  "repository": "github:u14-team/henta",
+  "bugs": "https://github.com/u14-team/henta/issues",
+  "keywords": [
+    "henta",
+    "bot",
+    "simple"
+  ],
+  "files": [
+    "lib/"
+  ],
+  "license": "MIT"
 }

@@ -1,9 +1,38 @@
 {
   "name": "@henta/input",
   "type": "module",
-  "main": "src/index.ts",
+  "main": "lib/index.js",
+  "types": "./lib/index.d.ts",
+	"exports": {
+		".": {
+			"import": "./lib/index.mjs",
+			"require": "./lib/index.js",
+			"types": "./lib/index.d.ts"
+		}
+	},
   "version": "0.1.0",
+  "author": "TheEVolk (https://t.me/theevolk)",
+  "repository": "github:u14-team/henta",
+  "bugs": "https://github.com/u14-team/henta/issues",
+  "keywords": [
+    "henta",
+    "bot",
+    "input",
+    "arguments",
+    "attachments",
+    "parser"
+  ],
+  "files": [
+    "lib/"
+  ],
+  "license": "MIT",
   "devDependencies": {
     "reflect-metadata": "^0.1.13"
+  },
+  "peerDependencies": {
+    "@henta/core": "4.0.0-dev"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

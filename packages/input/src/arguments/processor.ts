@@ -1,10 +1,10 @@
-import { IArgumentRequest, ArgumentTypeParser } from './interfaces.js';
+import type { IArgumentRequest } from './interfaces.js';
 import ArgumentError from './error.js';
-import { IRequestContext } from '../decorators.js';
+import type { IRequestContext } from '../decorators.js';
 
 export default function requireArguments(context: IRequestContext) {
   const ctx = context.ctx;
-  const params = context.items.map(item => item.payload as IArgumentRequest);
+  const params = context.items.map((item) => item.payload as IArgumentRequest);
 
   const payloads: unknown[] = [];
   const args = ctx.commandLine.trim().split(' ');
@@ -17,7 +17,7 @@ export default function requireArguments(context: IRequestContext) {
     try {
       const isTextRequired = param.parser.isTextRequired ?? true;
       if (isTextRequired && args.length === 0) {
-        throw new ArgumentError(`Слишком мало аргументов!!!`, param);
+        throw new ArgumentError('Слишком мало аргументов!!!', param);
       }
 
       const payload = param.parser.parse(ctx, args, param);
@@ -40,7 +40,7 @@ export default function requireArguments(context: IRequestContext) {
       }
 
       try {
-        return await param.parser.resolve(ctx, payload)
+        return await param.parser.resolve(ctx, payload);
       } catch (error) {
         if (error instanceof ArgumentError && !param.isRequired) {
           return null;
@@ -48,6 +48,6 @@ export default function requireArguments(context: IRequestContext) {
 
         throw error;
       }
-    })
+    }),
   );
 }

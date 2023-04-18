@@ -1,3 +1,1 @@
-export default abstract class ActionsBehaviour {
-
-}
+export default abstract class ActionsBehaviour {}

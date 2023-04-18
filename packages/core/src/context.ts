@@ -1,8 +1,10 @@
 import BotError from './error.js';
-import type HentaBot from './index.js';
+// import type HentaBot from './index.js';
 import type Attachment from './attachment.js';
 import type Platform from './platform/platform.js';
 import type ISendMessageOptions from './sendMessageOptions.js';
+
+type HentaBot = any;
 
 export default abstract class PlatformContext {
   readonly bot: HentaBot;
@@ -27,15 +29,18 @@ export default abstract class PlatformContext {
     this.platform = platform;
   }
 
-  abstract get originalText (): string | undefined;
-  abstract get senderId (): string;
-  abstract get peerId (): string;
-  abstract get isChat (): boolean;
+  abstract get originalText(): string | undefined;
+  abstract get senderId(): string;
+  abstract get peerId(): string;
+  abstract get isChat(): boolean;
 
-  abstract get attachments (): Attachment[];
-  abstract get nestedAttachments (): Attachment[];
+  abstract get attachments(): Attachment[];
+  abstract get nestedAttachments(): Attachment[];
 
-  abstract send(options: ISendMessageOptions, isAnswer?: boolean): Promise<unknown>;
+  abstract send(
+    options: ISendMessageOptions,
+    isAnswer?: boolean,
+  ): Promise<unknown>;
 
   get commandLine() {
     const rawCommandLine = this.payload?.text || this.text || '';
@@ -50,8 +55,13 @@ export default abstract class PlatformContext {
     return this.sendedAnswer;
   }
 
-  normalizeKeyboard(rawKeyboard: (object | object[])[], buttonsInRow = 4, rows = 4, max = 20) {
-    if (!rawKeyboard || !rawKeyboard.find(v => !Array.isArray(v))) {
+  normalizeKeyboard(
+    rawKeyboard: (object | object[])[],
+    buttonsInRow = 4,
+    rows = 4,
+    max = 20,
+  ) {
+    if (!rawKeyboard || !rawKeyboard.find((v) => !Array.isArray(v))) {
       return rawKeyboard;
     }
 
@@ -59,24 +69,28 @@ export default abstract class PlatformContext {
     const requiredButtons = allButtons.filter((v: any) => v.isRequired);
 
     function chunk(array, chunkSize) {
-      return new Array(Math.ceil(array.length / chunkSize)).fill(0)
+      return new Array(Math.ceil(array.length / chunkSize))
+        .fill(0)
         .map((x, i) => array.slice(i * chunkSize, i * chunkSize + chunkSize));
     }
 
-    return chunk([
-      ...allButtons.filter((v: any) => !v.isRequired).splice(0, buttonsInRow * rows - requiredButtons.length),
-      ...requiredButtons
-    ].splice(0, max), buttonsInRow);
+    return chunk(
+      [
+        ...allButtons
+          .filter((v: any) => !v.isRequired)
+          .splice(0, buttonsInRow * rows - requiredButtons.length),
+        ...requiredButtons,
+      ].splice(0, max),
+      buttonsInRow,
+    );
   }
 
   loadAttachments(attachments: any[]) {
     // TODO: attachment loader
-    return attachments.map(
-      attachment => ({
-        type: attachment.type,
-        data: attachment.source
-      })
-    );
+    return attachments.map((attachment) => ({
+      type: attachment.type,
+      data: attachment.source,
+    }));
   }
 
   requireAttachments(attachments: any[], fallback = []) {
@@ -87,20 +101,28 @@ export default abstract class PlatformContext {
     const allAttachments: Attachment[] = [
       ...this.attachments,
       ...this.nestedAttachments,
-      ...fallback
+      ...fallback,
     ];
 
     const foundList = [];
-    attachments.forEach(attachment => {
-      const foundIndex = allAttachments.findIndex(v => v.type === attachment.type);
+    attachments.forEach((attachment) => {
+      const foundIndex = allAttachments.findIndex(
+        (v) => v.type === attachment.type,
+      );
       if (foundIndex === -1) {
         // TODO: нужно вынести requireAttachments в отдельный пакет как и attachment requirer. Также сделать условный MediaNotFoundBotError для поддержки кастом ошибок. А то, что здесь: временное решение.
         const words = {
-          'photo': 'изображением',
-          'audio_message': 'ГС'
+          photo: 'изображением',
+          audio_message: 'ГС',
         };
 
-        throw new BotError(`🖼 Используйте эту команду вместе с ${words[attachment.type]}.\nМожно переслать мне сообщение с ${words[attachment.type]} или прикрепить его.`);
+        throw new BotError(
+          `🖼 Используйте эту команду вместе с ${
+            words[attachment.type]
+          }.\nМожно переслать мне сообщение с ${
+            words[attachment.type]
+          } или прикрепить его.`,
+        );
       }
 
       const [found] = allAttachments.splice(foundIndex, 1);
@@ -112,6 +134,6 @@ export default abstract class PlatformContext {
       foundList.push(typeof value === 'function' ? value : () => value);
     });
 
-    return Promise.all(foundList.map(v => v()));
+    return Promise.all(foundList.map((v) => v()));
   }
 }
