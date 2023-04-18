@@ -10,7 +10,7 @@
 			"types": "./lib/index.d.ts"
 		}
 	},
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "TheEVolk (https://t.me/theevolk)",
   "repository": "github:u14-team/henta",
   "bugs": "https://github.com/u14-team/henta/issues",
