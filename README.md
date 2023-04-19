@@ -31,3 +31,7 @@ HENTA consists of a set of libraries that facilitate the creation of bots of any
 # Community
 - [VK Chat](https://vk.me/join/2qDKyes0PJlPljT5hgsUQgk0eKrstr84qEo=)
 - [Telegram Chat](https://t.me/hentachat)
+
+# Support
+Support the developer who has been trying for several years to create the most convenient tool for creating bots of any complexity on one enthusiasm.
+- [Boosty](https://boosty.to/theevolk/donate)
