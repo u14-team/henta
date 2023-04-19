@@ -34,4 +34,5 @@ HENTA consists of a set of libraries that facilitate the creation of bots of any
 
 # Support
 Support the developer who has been trying for several years to create the most convenient tool for creating bots of any complexity on one enthusiasm.
+- [SberTips](https://pay.mysbertips.ru/61439894) ⚡️
 - [Boosty](https://boosty.to/theevolk/donate)
