@@ -4,7 +4,7 @@ bot's reaction to requests
 
 ```ts
 const botMentionsMiddleware = (ctx, next) => mentionsMiddleware(ctx, next, {
-  name: /\/|mybot|botik/,
+  mention: /\/|mybot|botik/,
   // optional
   noMentionCallback: (ctx, next, reason) => {
     console.log('no mention callback', reason);

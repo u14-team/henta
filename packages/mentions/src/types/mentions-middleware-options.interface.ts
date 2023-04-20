@@ -3,7 +3,7 @@ import type NoMentionReason from './no-mention-reason.enum';
 
 export default interface IMentionsMiddlewareOptions {
   mention: RegExp;
-  noMentionCallback: (
+  noMentionCallback?: (
     ctx: PlatformContext,
     next,
     reason: NoMentionReason,
