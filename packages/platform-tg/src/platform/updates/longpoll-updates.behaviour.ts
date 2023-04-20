@@ -5,7 +5,7 @@ import PlatformTgContext from '../../context';
 
 export default class LongpollTelegramUpdatesBehaviour extends TelegramUpdatesBehaviour {
   public async run() {
-    await this.platform.tg.launch();
+    this.platform.tg.launch();
 
     const dispatch = this.dispatch.bind(this);
     this.platform.tg.on('message', dispatch);
