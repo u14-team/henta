@@ -1,0 +1,33 @@
+{
+  "name": "@henta/mentions",
+  "description": "bot reaction middleware",
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "./lib/index.d.ts",
+	"exports": {
+		".": {
+			"import": "./lib/index.mjs",
+			"require": "./lib/index.js",
+			"types": "./lib/index.d.ts"
+		}
+	},
+  "version": "0.1.0",
+  "author": "TheEVolk (https://t.me/theevolk)",
+  "repository": "github:u14-team/henta",
+  "bugs": "https://github.com/u14-team/henta/issues",
+  "keywords": [
+    "henta",
+    "bot",
+    "mentions"
+  ],
+  "files": [
+    "lib/"
+  ],
+  "peerDependencies": {
+    "@henta/core": "*"
+  },
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  }
+}
