@@ -14,20 +14,20 @@
     "lib/"
   ],
   "license": "MIT",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "type": "module",
   "main": "lib/index.js",
   "dependencies": {
-    "telegraf": "^4.9.0"
+    "telegraf": "^4.12.2"
   },
-	"types": "./lib/index.d.ts",
-	"exports": {
-		".": {
-			"import": "./lib/index.mjs",
-			"require": "./lib/index.js",
-			"types": "./lib/index.d.ts"
-		}
-	},
+  "types": "./lib/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./lib/index.mjs",
+      "require": "./lib/index.js",
+      "types": "./lib/index.d.ts"
+    }
+  },
   "publishConfig": {
     "access": "public"
   }
