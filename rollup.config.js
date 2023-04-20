@@ -42,6 +42,7 @@ const modules = [
   // 'installer',
   'platform-discord',
   'platform-vk',
+  'mentions',
 ];
 
 export default async () =>
