@@ -5,7 +5,10 @@ import type { IKeyboardButton } from '@henta/core';
 export interface ISelectorOptions<T = unknown> {
   ctx?: PlatformContext;
   items: T[];
-  centerButton?: IKeyboardButton;
+  centerButton?:
+    | IKeyboardButton
+    | ((item: T) => IKeyboardButton)
+    | ((item: T) => Promise<IKeyboardButton>);
   currentIndex: number;
   otherRows?: IKeyboardButton[][];
   handler: (item: T) => Promise<ISendMessageOptions> | ISendMessageOptions;
@@ -39,21 +42,30 @@ export async function messageWithSelector(
   const prevIndex =
     currentIndex <= 0 ? options.items.length - 1 : currentIndex - 1;
 
+  const centerButton = {
+    label: '✔️',
+    payload: {
+      text:
+        options.confirmCommand ||
+        `${options.baseCommand} ${options.currentIndex}`,
+      isConfirmed: true,
+    },
+  };
+
+  if (options.centerButton) {
+    options.centerButton =
+      typeof options.centerButton === 'function'
+        ? await options.centerButton(item)
+        : options.centerButton;
+  }
+
   // console.log('index', {nextIndex, prevIndex}, 'l', options.items.length);
   return {
     ...response,
     keyboard: [
       [
         KB.text('◀️', `${options.baseCommand} ${prevIndex - indexOffset}`),
-        options.centerButton ?? {
-          label: '✔️',
-          payload: {
-            text:
-              options.confirmCommand ||
-              `${options.baseCommand} ${options.currentIndex}`,
-            isConfirmed: true,
-          },
-        },
+        centerButton,
         KB.text('▶️', `${options.baseCommand} ${nextIndex - indexOffset}`),
       ].filter(Boolean),
       ...options.otherRows,
