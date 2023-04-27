@@ -47,6 +47,11 @@ export default abstract class PlatformContext {
     return rawCommandLine.substring(this.commandLinePosition);
   }
 
+  /** same as `ctx.source + ':' + ctx.senderId` */
+  public get scope() {
+    return `${this.source}:${this.senderId}`;
+  }
+
   async answer(options: ISendMessageOptions, payload?) {
     this.isAnswered = true;
     this.answerBody = options;
