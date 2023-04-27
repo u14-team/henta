@@ -20,6 +20,10 @@ export default class HentaBot {
     this.platforms.set(platform.slug, platform);
   }
 
+  public getPlatform(slug: string): Platform {
+    return this.platforms.get(slug);
+  }
+
   public dispatch(ctx: PlatformContext, force = false) {
     if (!force && this.mode !== BotMode.Worker && this.mode !== BotMode.Local) {
       this.bridge.dispatch({
