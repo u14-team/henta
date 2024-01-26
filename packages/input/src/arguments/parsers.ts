@@ -28,6 +28,7 @@ export class StringParser extends ArgumentTypeParser<string> {
 
 export interface INumberParserOptions {
   min?: number;
+  max?: number;
 }
 
 export class NumberParser extends ArgumentTypeParser<number> {
@@ -45,6 +46,10 @@ export class NumberParser extends ArgumentTypeParser<number> {
 
     if (this.options.min !== undefined && number < this.options.min) {
       throw new ArgumentError('the number must be greater than zero', request);
+    }
+
+    if (this.options.max !== undefined && number <= this.options.max) {
+      throw new ArgumentError(`the number must be less than or equal to ${this.options.max}`, request);
     }
 
     return number;
