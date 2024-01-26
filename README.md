@@ -14,7 +14,7 @@ You can create issues, or you can contact me via telegram [@theevolk](https://t.
 - abstraction from the architecture of your project
 
 # What is included in this framework
-- [@henta/core](packages/code): basic types and functions for creating platforms
+- [@henta/core](packages/core): basic types and functions for creating platforms
 - [@henta/bot](packages/bot): simple interface for creating a bot
 - [@henta/botcmd](packages/botcmd): parsing and creating commands
 - [@henta/attachment-history](packages/attachment-history): chat attachment history
