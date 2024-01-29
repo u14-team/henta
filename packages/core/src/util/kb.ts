@@ -10,4 +10,8 @@ export default class KB {
       },
     };
   }
+
+  public static link(label: string, url: string): any {
+    return { label, url };
+  }
 }
