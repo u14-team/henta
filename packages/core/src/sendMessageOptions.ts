@@ -5,5 +5,6 @@ export default interface ISendMessageOptions {
   files?: Upload[];
   keyboard?: any; // TODO
 
+  payload?: any;
   isParseLinks?: boolean;
 }
