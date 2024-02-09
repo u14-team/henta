@@ -86,7 +86,8 @@ export default class PlatformTgContext extends PlatformContext {
 
   public async send(message: ISendMessageOptions, isAnswer = false) {
     if (this.raw.update.callback_query && message.payload?.popup) {
-      return this.raw.answerCbQuery(message.text);
+      await this.raw.answerCbQuery(message.text);
+      return this.sendedAnswer;
     }
 
     let files: Upload[];
