@@ -86,7 +86,9 @@ export default class PlatformTgContext extends PlatformContext {
 
   public async send(message: ISendMessageOptions, isAnswer = false) {
     if (this.raw.update.callback_query && message.payload?.popup) {
-      await this.raw.answerCbQuery(message.text);
+      const popupType = message.payload.popup;
+      
+      await this.raw.answerCbQuery(message.text, { show_alert: popupType === 'alert' });
       return this.sendedAnswer;
     }
 
