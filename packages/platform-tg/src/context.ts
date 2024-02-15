@@ -100,10 +100,16 @@ export default class PlatformTgContext extends PlatformContext {
     );
 
     const body = {
+      parse_mode: 'HTML',
       reply_markup: {
         inline_keyboard: keyboard,
       },
     };
+
+    // Escape all tag-like entities not related to https://core.telegram.org/api/entities#allowed-entities
+    if (message.text?.includes('<') || message.text?.includes('>')) {
+      message.text = message.text.replace(/<(?![\/]?(?:b|strong|i|em|code|s|strike|del|u|pre|tg-spoiler)\b)(.*?)>/g, '&lt;$1&gt;');
+    }
 
     if (files) {
       const sendAttachment = (file: Upload, body = {}) => {
