@@ -19,7 +19,8 @@
 		"prettier": "^2.8.7",
 		"rollup": "^3.9.0",
 		"rollup-plugin-ts": "^3.0.2",
-		"typescript": "^4.7.2"
+		"typescript": "^4.7.2",
+		"cross-env": "^7.0.3"
 	},
 	"dependencies": {
 		"@rollup/plugin-typescript": "^11.1.0",
@@ -28,8 +29,8 @@
 	"scripts": {
 		"postinstall": "npm run build",
 		"build": "npm run rollup:build",
-		"watch": "NODE_ENV=development rollup -c rollup.config.js --watch",
-		"rollup:build": "NODE_ENV=production rollup -c rollup.config.js",
+		"watch": "cross-env NODE_ENV=development rollup -c rollup.config.js --watch",
+		"rollup:build": "cross-env NODE_ENV=production rollup -c rollup.config.js",
 		"lint": "eslint .",
 		"lint:fix": "eslint . --fix"
 	}

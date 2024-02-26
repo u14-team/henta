@@ -1,10 +1,10 @@
 import { Attachment } from '@henta/core';
-import type PlatformVk from './index.js';
+import type PlatformVk from './platform';
 
 export default class VkAttachment extends Attachment {
-  declare platform: PlatformVk;
+  public declare platform: PlatformVk;
 
-  constructor(type: string, payload: any, platform: any) {
+  public constructor(type: string, payload: any, platform: any) {
     let computedType = type;
     if (type === 'doc' && payload.extension === 'ogg') {
       computedType = 'audio_message';
@@ -13,7 +13,7 @@ export default class VkAttachment extends Attachment {
     super(computedType, payload, platform);
   }
 
-  getUrl() {
+  public getUrl() {
     switch (this.type) {
       case 'photo':
         return this.payload.largeSizeUrl;
