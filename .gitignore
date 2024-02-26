@@ -3,3 +3,5 @@
 .yarn
 **/lib
 package-lock.json
+.vscode
+.idea
