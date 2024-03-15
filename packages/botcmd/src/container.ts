@@ -15,7 +15,9 @@ export default class BotcmdContainer {
       });
     }
 
-    this.commandByName = new Map([...this.commandByName].sort());
+    this.commandByName = new Map(
+      [...this.commandByName].sort(([a], [b]) => b.length - a.length),
+    );
   }
 
   public find(
