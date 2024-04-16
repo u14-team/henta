@@ -103,6 +103,8 @@ export default class PlatformTgContext extends PlatformContext {
 
     const body = {
       parse_mode: 'HTML',
+      disable_web_page_preview:
+        message.isParseLinks !== undefined ? !message.isParseLinks : false,
       reply_markup: {
         inline_keyboard: keyboard,
       },
