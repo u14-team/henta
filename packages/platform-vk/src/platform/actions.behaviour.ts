@@ -20,9 +20,9 @@ export default class VKActionsBehaviour extends ActionsBehaviour {
         row.map((v) => getKeyboardButton(v)),
       );
 
-      options.keyboard = JSON.stringify({
-        inline: true,
+      params.keyboard = JSON.stringify({
         buttons: keyboard,
+        inline: true,
       });
     }
 
