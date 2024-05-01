@@ -35,10 +35,10 @@ export default class TelegramActionsBehaviour extends ActionsBehaviour {
       );
     }
 
-    return void this.tg.telegram.sendMessage(peerId, options.text, extra);
+    await this.tg.telegram.sendMessage(peerId, options.text, extra);
   }
 
   public async deleteMessage(messageId: string, peerId: string) {
-    return void this.tg.telegram.deleteMessage(peerId, +messageId);
+    await this.tg.telegram.deleteMessage(peerId, +messageId);
   }
 }

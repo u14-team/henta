@@ -30,11 +30,11 @@ export default class VKActionsBehaviour extends ActionsBehaviour {
       params.dont_parse_links = !options.isParseLinks;
     }
 
-    return void this.vk.api.messages.send(params);
+    await this.vk.api.messages.send(params);
   }
 
   public async deleteMessage(messageId: string, peerId: string) {
-    return void this.vk.api.messages.delete({
+    await this.vk.api.messages.delete({
       peer_id: +peerId,
       cmids: [+messageId],
       delete_for_all: true,
