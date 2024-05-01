@@ -9,7 +9,7 @@ export default abstract class Platform {
   public abstract updatesBehaviour: UpdatesBehaviour;
 
   /** sending a message and other common actions */
-  public actionsBehaviour: ActionsBehaviour;
+  public abstract actionsBehaviour: ActionsBehaviour;
 
   /** uploading and downloading attachments */
   public attachmentsBehaviour: AttachmentsBehaviour;
