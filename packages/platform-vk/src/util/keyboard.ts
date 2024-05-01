@@ -1,14 +1,21 @@
-export default function getKeyboardButton(data) {
-  const action: any = { label: data.label };
+import type { ITextButton, IURLButton } from 'vk-io';
 
+export default function getKeyboardButton(data) {
   if (data.url) {
-    Object.assign(action, { type: 'open_link', link: data.url });
-    return { action };
+    return {
+      action: {
+        type: 'open_link',
+        label: data.label,
+        link: data.url,
+      },
+    } as IURLButton;
   }
 
-  Object.assign(action, {
-    type: 'text',
-    payload: JSON.stringify(data.payload),
-  });
-  return { action };
+  return {
+    action: {
+      type: 'text',
+      label: data.label,
+      payload: JSON.stringify(data.payload),
+    },
+  } as ITextButton;
 }
