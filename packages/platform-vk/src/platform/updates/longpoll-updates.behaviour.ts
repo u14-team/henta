@@ -17,6 +17,12 @@ export default class LongpollVkUpdatesBehaviour extends VkUpdatesBehaviour {
 
   public dispatch(rawContext: MessageContext) {
     try {
+      // If payload data has text field - it was definitely added by button,
+      // so we return text to use it as a command.
+      if (rawContext.messagePayload.text) {
+        rawContext.text = rawContext.messagePayload.text;
+      }
+
       const context = new PlatformVkContext(rawContext, this.platform);
       this.emit('message', context);
     } catch (error) {
