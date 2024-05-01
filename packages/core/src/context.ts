@@ -32,6 +32,7 @@ export default abstract class PlatformContext {
   abstract get originalText(): string | undefined;
   abstract get senderId(): string;
   abstract get peerId(): string;
+  abstract get messageId(): string;
   abstract get isChat(): boolean;
 
   abstract get attachments(): Attachment[];

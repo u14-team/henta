@@ -4,11 +4,13 @@ import { Context, Telegraf } from 'telegraf';
 import type TelegramUpdatesBehaviour from './updates/updates.behaviour';
 import LongpollTelegramUpdatesBehaviour from './updates/longpoll-updates.behaviour';
 import PlatformTgContext from '../context';
+import TelegramActionsBehaviour from './actions.behaviour';
 
 export default class TelegramPlatform extends Platform {
   public readonly slug = 'tg';
   public readonly tg: Telegraf;
   public readonly updatesBehaviour: TelegramUpdatesBehaviour;
+  public readonly actionsBehaviour: TelegramActionsBehaviour;
 
   public constructor(private readonly options: ITelegramPlatformOptions) {
     super();
@@ -16,6 +18,7 @@ export default class TelegramPlatform extends Platform {
     this.normalizeOptions();
     this.tg = new Telegraf(this.options.token);
     this.updatesBehaviour = this.createUpdatesBehaviour();
+    this.actionsBehaviour = new TelegramActionsBehaviour(this.tg);
   }
 
   public contextFromSerializedData(rawData: any) {

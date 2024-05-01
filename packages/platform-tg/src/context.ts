@@ -53,12 +53,16 @@ export default class PlatformTgContext extends PlatformContext {
     return this.raw.from.id.toString();
   }
 
-  public get isChat() {
-    return this.raw.chat.type !== 'private';
-  }
-
   public get peerId() {
     return this.raw.chat.id.toString();
+  }
+
+  public get messageId(): string {
+    return this.raw.update['message']['message_id'].toString();
+  }
+
+  public get isChat() {
+    return this.raw.chat.type !== 'private';
   }
 
   public get attachments() {

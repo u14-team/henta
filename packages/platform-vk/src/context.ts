@@ -23,12 +23,16 @@ export default class PlatformVkContext extends PlatformContext {
     return this.raw.senderId.toString();
   }
 
-  public get isChat() {
-    return this.raw.isChat;
-  }
-
   public get peerId(): string {
     return this.raw.peerId.toString();
+  }
+
+  public get messageId(): string {
+    return this.raw.conversationMessageId.toString();
+  }
+
+  public get isChat() {
+    return this.raw.isChat;
   }
 
   public get attachments() {
