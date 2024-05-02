@@ -1,6 +1,6 @@
 import type AttachmentsBehaviour from './attachments.behaviour.js';
 import type UpdatesBehaviour from './updates.behaviour.js';
-import type ActionsBehaviour from './actions.behaviour.js';
+import type MessagesBehaviour from './messages.behaviour';
 
 export default abstract class Platform {
   public slug: string;
@@ -8,8 +8,8 @@ export default abstract class Platform {
   /** receiving events about new messages */
   public abstract updatesBehaviour: UpdatesBehaviour;
 
-  /** sending a message and other common actions */
-  public abstract actionsBehaviour: ActionsBehaviour;
+  /** actions with messages */
+  public abstract messagesBehaviour: MessagesBehaviour;
 
   /** uploading and downloading attachments */
   public attachmentsBehaviour: AttachmentsBehaviour;
