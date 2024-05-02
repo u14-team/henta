@@ -4,19 +4,16 @@ export default abstract class MessagesBehaviour {
   /**
    * @return messageId
    */
-  public abstract sendMessage(
+  public abstract send(
     options: ISendMessageOptions,
     peerId: string,
   ): Promise<string>;
 
-  public abstract editMessage(
+  public abstract edit(
     options: ISendMessageOptions,
     messageId: string,
     peerId: string,
   ): Promise<void>;
 
-  public abstract deleteMessage(
-    messageId: string,
-    peerId: string,
-  ): Promise<void>;
+  public abstract delete(messageId: string, peerId: string): Promise<void>;
 }

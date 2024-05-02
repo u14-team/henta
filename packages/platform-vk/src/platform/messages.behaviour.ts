@@ -8,7 +8,7 @@ export default class VkMessagesBehaviour extends MessagesBehaviour {
     super();
   }
 
-  public async sendMessage(
+  public async send(
     options: ISendMessageOptions,
     peerId: string,
   ): Promise<string> {
@@ -19,7 +19,7 @@ export default class VkMessagesBehaviour extends MessagesBehaviour {
     return message.toString();
   }
 
-  public async editMessage(
+  public async edit(
     options: ISendMessageOptions,
     messageId: string,
     peerId: string,
@@ -33,7 +33,7 @@ export default class VkMessagesBehaviour extends MessagesBehaviour {
     });
   }
 
-  public async deleteMessage(messageId: string, peerId: string): Promise<void> {
+  public async delete(messageId: string, peerId: string): Promise<void> {
     await this.vk.api.messages.delete({
       peer_id: parseInt(peerId),
       cmids: [parseInt(messageId)],

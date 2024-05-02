@@ -8,7 +8,7 @@ export default class TelegramMessagesBehaviour extends MessagesBehaviour {
     super();
   }
 
-  public async sendMessage(
+  public async send(
     options: ISendMessageOptions,
     peerId: string,
   ): Promise<string> {
@@ -24,7 +24,7 @@ export default class TelegramMessagesBehaviour extends MessagesBehaviour {
     return message.message_id.toString();
   }
 
-  public async editMessage(
+  public async edit(
     options: ISendMessageOptions,
     messageId: string,
     peerId: string,
@@ -50,7 +50,7 @@ export default class TelegramMessagesBehaviour extends MessagesBehaviour {
     );
   }
 
-  public async deleteMessage(messageId: string, peerId: string): Promise<void> {
+  public async delete(messageId: string, peerId: string): Promise<void> {
     await this.tg.telegram.deleteMessage(peerId, parseInt(messageId));
   }
 
