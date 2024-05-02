@@ -16,7 +16,7 @@ export default class VkMessagesBehaviour extends MessagesBehaviour {
       this.prepareMessageParams(options, peerId),
     );
 
-    return message[0].conversation_message_id.toString();
+    return message.toString();
   }
 
   public async editMessage(
