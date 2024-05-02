@@ -6,13 +6,13 @@ import type IVKPlatformOptions from '../types/options.interface';
 import type VkUpdatesBehaviour from './updates/updates.behaviour';
 import LongpollVkUpdatesBehaviour from './updates/longpoll-updates.behaviour';
 import PlatformVkContext from '../context';
-import VKActionsBehaviour from './actions.behaviour';
+import VkMessagesBehaviour from './messages.behaviour';
 
 export default class VkPlatform extends Platform {
   public readonly slug = 'vk';
   public readonly vk: VK;
   public readonly updatesBehaviour: VkUpdatesBehaviour;
-  public readonly actionsBehaviour: VKActionsBehaviour;
+  public readonly messagesBehaviour: VkMessagesBehaviour;
 
   public constructor(private readonly options: IVKPlatformOptions) {
     super();
@@ -28,7 +28,7 @@ export default class VkPlatform extends Platform {
     });
 
     this.updatesBehaviour = this.createUpdatesBehaviour();
-    this.actionsBehaviour = new VKActionsBehaviour(this.vk);
+    this.messagesBehaviour = new VkMessagesBehaviour(this.vk);
   }
 
   public contextFromSerializedData(rawData: any) {

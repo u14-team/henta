@@ -8,7 +8,7 @@ import BotError from './error.js';
 import Upload, { UploadSourceType } from './files/upload.js';
 import { normalizeUploads } from './files/uploadNormalizer.js';
 import IKeyboardButton from './interfaces/keyboard-button.interface.js';
-import ActionsBehaviour from './platform/actions.behaviour.js';
+import MessagesBehaviour from './platform/messages.behaviour.js';
 import AttachmentsBehaviour from './platform/attachments.behaviour.js';
 import Platform from './platform/platform.js';
 import UpdatesBehaviour from './platform/updates.behaviour.js';
@@ -26,7 +26,7 @@ export {
   Platform,
   AttachmentsBehaviour,
   UpdatesBehaviour,
-  ActionsBehaviour,
+  MessagesBehaviour,
   BotError,
   AttachmentType,
   AttachmentTypeUnion,
