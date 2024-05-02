@@ -11,8 +11,12 @@ export default class VkMessagesBehaviour extends MessagesBehaviour {
   public async sendMessage(
     options: ISendMessageOptions,
     peerId: string,
-  ): Promise<void> {
-    await this.vk.api.messages.send(this.prepareMessageParams(options, peerId));
+  ): Promise<string> {
+    const message = await this.vk.api.messages.send(
+      this.prepareMessageParams(options, peerId),
+    );
+
+    return message[0].conversation_message_id.toString();
   }
 
   public async editMessage(

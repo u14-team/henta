@@ -11,10 +11,17 @@ export default class TelegramMessagesBehaviour extends MessagesBehaviour {
   public async sendMessage(
     options: ISendMessageOptions,
     peerId: string,
-  ): Promise<void> {
+  ): Promise<string> {
     // Called first to process "options.text".
     const params = this.prepareMessageParams(options);
-    await this.tg.telegram.sendMessage(peerId, options.text, params);
+
+    const message = await this.tg.telegram.sendMessage(
+      peerId,
+      options.text,
+      params,
+    );
+
+    return message.message_id.toString();
   }
 
   public async editMessage(

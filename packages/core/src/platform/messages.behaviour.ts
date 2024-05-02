@@ -1,10 +1,13 @@
 import type ISendMessageOptions from '../sendMessageOptions';
 
 export default abstract class MessagesBehaviour {
+  /**
+   * @return messageId
+   */
   public abstract sendMessage(
     options: ISendMessageOptions,
     peerId: string,
-  ): Promise<void>;
+  ): Promise<string>;
 
   public abstract editMessage(
     options: ISendMessageOptions,
