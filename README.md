@@ -2,6 +2,13 @@
 > Powerfull bot creating framework
 HENTA consists of a set of libraries that facilitate the creation of bots of any complexity. Libraries can be used both together and separately.
 
+## Дисклеймер
+Спустя огромное количество времени и полученного опыта я все еще продолжаю экспериментировать над фреймворком.
+До звания адекватного ему еще очень далеко и я часто наступаю на грабли, но с каждым годом он совершенствуется.
+
+Последняя итерация фреймворка сильно перевернула его логику, переложив на проект огромную кучу логики.
+Продолжаем наблюдение.
+
 ## Status
 Although the framework is not updated regularly, you can always become part of the community and propose your changes to contribute to the development of the project. I am also always ready to help you if you have any problems.
 
