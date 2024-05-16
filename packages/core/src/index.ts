@@ -32,4 +32,5 @@ export {
   AttachmentTypeUnion,
   AttachmentTypeString,
   IKeyboardButton,
+  PlatformContext as Context,
 };
