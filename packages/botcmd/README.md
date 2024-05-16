@@ -81,3 +81,23 @@ hentaBot.setMiddleware([
   // ...some middlewares after command
 ]);
 ```
+
+## Command metadata
+You can define your own command metadata using decorator `@SetMetadata(key, value)`.
+
+Sample:
+```ts
+import { BotcmdCommand, BotcmdView, CommandView } from '@henta/botcmd';
+
+@SetMetadata('botcmd:custom:hello', 'world')
+@BotcmdView({ name: 'тест', aliases: ['test', 'tost'] })
+export default class TestView extends CommandView {
+  @BotcmdCommand()
+  public async handler(ctx) {
+    const metadataValue = getCommandMetadata('botcmd:custom:hello', ctx.botcmdData.command);
+    await ctx.answer({
+      text: `Hello ${metadataValue}`,
+    });
+  }
+}
+```
