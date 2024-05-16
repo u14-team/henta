@@ -1,8 +1,8 @@
 import { requireInputArgs } from '@henta/input';
-import type BotCmdContext from './botcmdContext';
 import type AttachmentHistory from '@henta/attachment-history';
+import type { BotCmdContext } from '..';
 
-export async function requestInputArgsMiddleware(
+export default async function requestInputArgsMiddleware(
   ctx: BotCmdContext,
   next,
   attachmentHistory?: AttachmentHistory,

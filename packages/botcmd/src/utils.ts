@@ -1,5 +1,5 @@
 import type { BotcmdContainer, CommandView } from '.';
-import { getCommandViewMetadata, getCommands } from './decorators';
+import { getCommandViewMetadata, getCommands } from './processor';
 import type IBuildedCommand from './types/builded-command.interface';
 import type ICommandOptions from './types/command-options.interface';
 

@@ -57,7 +57,7 @@ export function ArgumentRequest(params: Partial<IArgumentRequest> = {}) {
   } as IArgumentRequest);
 }
 
-/** same as `ArgumentRequest({ parser: new StringParser({ toEnd: true }) });` */
+/** @alias `ArgumentRequest({ parser: new StringParser({ toEnd: true }) });` */
 export function CommandLineRequest(defaultValue?: string | null) {
   if (defaultValue === null) {
     return ArgumentRequest({
