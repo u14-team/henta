@@ -13,5 +13,6 @@ export type { IFoundAttachment };
 export * from './decorators.js';
 export * from './arguments/parsers.js';
 export * from './arguments/interfaces.js';
+export * from './consts.js';
 
 export { ArgumentError };

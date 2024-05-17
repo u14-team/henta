@@ -15,6 +15,8 @@ import UpdatesBehaviour from './platform/updates.behaviour.js';
 import type ISendMessageOptions from './sendMessageOptions.js';
 import KB from './util/kb.js';
 
+export * from './util/reflector.js';
+
 export {
   Attachment,
   ISendMessageOptions,

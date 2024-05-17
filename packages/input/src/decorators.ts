@@ -7,8 +7,14 @@ import type { IArgumentRequest } from './arguments/interfaces.js';
 import { StringParser } from './arguments/parsers.js';
 import requireArguments from './arguments/processor.js';
 import requireAttachments from './attachments/processor.js';
+import { applyDecorators } from '@henta/core';
+import AddFnMetadata from './decorators/add-fn-metadata.decorator.js';
+import {
+  INPUT_ARGUMENTS_METADATA,
+  INPUT_ATTACHMENTS_METADATA,
+} from './consts.js';
 
-const inputRequestsMetadataKey = Symbol('input_requests');
+export const inputRequestsMetadataKey = Symbol('input_requests');
 
 export interface IRequestContextItem<T = any> {
   handler: (context: IRequestContext) => Promise<unknown[]>;
@@ -50,11 +56,17 @@ export function CustomRequest(
 }
 
 export function ArgumentRequest(params: Partial<IArgumentRequest> = {}) {
-  return CustomRequest(requireArguments, {
+  const options: IArgumentRequest = {
     parser: new StringParser(),
     isRequired: params.default === undefined,
     ...params,
-  } as IArgumentRequest);
+  };
+
+  return applyDecorators(
+    (target, key) =>
+      AddFnMetadata(INPUT_ARGUMENTS_METADATA, options)(target[key]),
+    CustomRequest(requireArguments, options),
+  );
 }
 
 /** @alias `ArgumentRequest({ parser: new StringParser({ toEnd: true }) });` */
@@ -83,7 +95,11 @@ export function AttachmentRequest(
     request.to = to;
   }
 
-  return CustomRequest(requireAttachments, request);
+  return applyDecorators(
+    (target, key) =>
+      AddFnMetadata(INPUT_ATTACHMENTS_METADATA, request)(target[key]),
+    CustomRequest(requireAttachments, request),
+  );
 }
 
 export async function requireInputArgs(fn: any, ctx, attachmentsHistory?) {
