@@ -15,7 +15,7 @@ Powerful command parser middleware for your bots.
 // test.view.ts
 import Context from '@app/interfaces/context'; // your context interface extends BotcmdContext
 
-@BotcmdView({ name: 'test' })
+@BotcmdView('test')
 export default class TestView extends CommandView {
   @BotcmdCommand()
   public async handler(ctx: Context) {
@@ -52,7 +52,7 @@ You can use a [@henta/input](https://github.com/u14-team/henta/packages/input) t
 // get-link.view.ts
 import Context from '@app/interfaces/context'; // your context interface extends BotcmdContext
 
-@BotcmdView({ name: 'getlink' })
+@BotcmdView('getlink')
 export default class GetLinkView extends CommandView {
   @BotcmdCommand()
   public async handler(
@@ -90,7 +90,7 @@ Sample:
 import { BotcmdCommand, BotcmdView, CommandView } from '@henta/botcmd';
 
 @SetMetadata('botcmd:custom:hello', 'world')
-@BotcmdView({ name: 'тест', aliases: ['test', 'tost'] })
+@BotcmdView('тест', 'test', 'tost')
 export default class TestView extends CommandView {
   @BotcmdCommand()
   public async handler(ctx) {
