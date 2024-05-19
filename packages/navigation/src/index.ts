@@ -42,33 +42,35 @@ export async function messageWithSelector(
   const prevIndex =
     currentIndex <= 0 ? options.items.length - 1 : currentIndex - 1;
 
-  const centerButton = {
-    label: '✔️',
-    payload: {
-      text:
-        options.confirmCommand ||
-        `${options.baseCommand} ${options.currentIndex}`,
-      isConfirmed: true,
-    },
-  };
-
-  if (options.centerButton) {
-    options.centerButton =
-      typeof options.centerButton === 'function'
-        ? await options.centerButton(item)
-        : options.centerButton;
-  }
-
-  // console.log('index', {nextIndex, prevIndex}, 'l', options.items.length);
   return {
     ...response,
     keyboard: [
       [
         KB.text('◀️', `${options.baseCommand} ${prevIndex - indexOffset}`),
-        centerButton,
+        await resolveCenterButton(options, item),
         KB.text('▶️', `${options.baseCommand} ${nextIndex - indexOffset}`),
       ].filter(Boolean),
       ...options.otherRows,
     ],
   };
+}
+
+async function resolveCenterButton(options: ISelectorOptions, item) {
+  if (!options.centerButton) {
+    return {
+      label: '✔️',
+      payload: {
+        text:
+          options.confirmCommand ||
+          `${options.baseCommand} ${options.currentIndex}`,
+        isConfirmed: true,
+      },
+    };
+  }
+
+  if (typeof options.centerButton === 'function') {
+    return options.centerButton(item);
+  }
+
+  return options.centerButton;
 }
