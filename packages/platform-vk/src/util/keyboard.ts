@@ -1,4 +1,4 @@
-import type { ITextButton, IURLButton } from 'vk-io';
+import type { ICallbackButton, ITextButton, IURLButton } from 'vk-io';
 
 export default function getKeyboardButton(data) {
   if (data.url) {
@@ -13,9 +13,9 @@ export default function getKeyboardButton(data) {
 
   return {
     action: {
-      type: 'text',
+      type: 'callback',
       label: data.label,
       payload: JSON.stringify(data.payload),
     },
-  } as ITextButton;
+  } as ICallbackButton;
 }

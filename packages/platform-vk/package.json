@@ -3,9 +3,6 @@
   "description": "VK support on henta",
   "type": "module",
   "dependencies": {
-    "form-data-encoder": "^2.1.4",
-    "i": "^0.3.7",
-    "npm": "^9.2.0",
     "vk-io": "^4.7.0"
   },
   "main": "lib/index.js",
@@ -17,14 +14,13 @@
 			"types": "./lib/index.d.ts"
 		}
 	},
-  "version": "0.4.2",
+  "version": "0.5.0",
   "author": "TheEVolk (https://t.me/theevolk)",
   "repository": "github:u14-team/henta",
   "bugs": "https://github.com/u14-team/henta/issues",
   "keywords": [
     "henta",
-    "bot",
-    "simple"
+    "vk"
   ],
   "files": [
     "lib/"

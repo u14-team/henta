@@ -9,6 +9,7 @@ export default class LongpollVkUpdatesBehaviour extends VkUpdatesBehaviour {
     const dispatch = this.dispatch.bind(this);
 
     this.platform.vk.updates.on('message_new', dispatch);
+    this.platform.vk.updates.on('message_event', dispatch);
   }
 
   public async stop() {

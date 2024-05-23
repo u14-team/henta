@@ -1,18 +1,27 @@
-import type { IMessageContextSendOptions, MessageContext } from 'vk-io';
+import {
+  getRandomId,
+  type IMessageContextSendOptions,
+  type MessageContext,
+  type MessageEventContext,
+} from 'vk-io';
 import type { ISendMessageOptions } from '@henta/core';
 import { normalizeUploads, PlatformContext } from '@henta/core';
 import getKeyboardButton from './util/keyboard.js';
 import VkAttachment from './attachment.js';
 import { uploadFile } from './util/files.js';
+import type VkPlatform from './platform/index.js';
 
 export default class PlatformVkContext extends PlatformContext {
   public readonly source = 'vk';
-  public declare raw: MessageContext;
+  public declare raw: MessageContext | MessageEventContext;
 
-  public constructor(raw: MessageContext, platform: any) {
+  public constructor(
+    raw: MessageContext | MessageEventContext,
+    platform: VkPlatform,
+  ) {
     super(raw, null, platform);
     this.text = this.raw.text;
-    this.payload = this.raw.messagePayload;
+    this.payload = this.raw.messagePayload ?? this.raw.eventPayload;
   }
 
   public get originalText() {
@@ -20,7 +29,7 @@ export default class PlatformVkContext extends PlatformContext {
   }
 
   public get senderId() {
-    return this.raw.senderId.toString();
+    return (this.raw.senderId ?? this.raw.userId).toString();
   }
 
   public get peerId(): string {
@@ -36,6 +45,10 @@ export default class PlatformVkContext extends PlatformContext {
   }
 
   public get attachments() {
+    if (!this.raw.attachments) {
+      return [];
+    }
+
     return this.raw.attachments.map(
       (attachment) =>
         new VkAttachment(attachment.type, attachment.toJSON(), this.platform),
@@ -63,6 +76,7 @@ export default class PlatformVkContext extends PlatformContext {
     return this.raw['payload'];
   }
 
+  // TODO: перенести в messagesBehaviour
   public async send(message: ISendMessageOptions, isAnswer = false) {
     let attachment = [];
     if (message.files?.length) {
@@ -87,15 +101,17 @@ export default class PlatformVkContext extends PlatformContext {
             }),
           }
         : {}),
+      peer_id: this.raw.peerId,
       message: message.text,
       content_source: JSON.stringify({
         type: 'message',
-        owner_id: this.raw.senderId,
-        peer_id: this.raw.peerId,
+        owner_id: this.senderId,
+        peer_id: this.peerId,
         conversation_message_id: this.raw.conversationMessageId,
       }),
       attachment,
       dont_parse_links: !(message.isParseLinks ?? true),
+      random_id: getRandomId(),
       keyboard:
         message.keyboard &&
         JSON.stringify({
@@ -111,6 +127,6 @@ export default class PlatformVkContext extends PlatformContext {
       return this.sendedAnswer;
     }
 
-    return this.raw.send(messageBody);
+    return (this.platform as VkPlatform).vk.api.messages.send(messageBody);
   }
 }

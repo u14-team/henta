@@ -48,7 +48,7 @@ export default class VkMessagesBehaviour extends MessagesBehaviour {
     const params: IMessageContextSendOptions = {
       peer_id: parseInt(peerId),
       message: options.text,
-      random_id: Math.random(),
+      random_id: getRandomId(),
     };
 
     if (options.keyboard) {
