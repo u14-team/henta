@@ -5,6 +5,7 @@ import type VkUpdatesBehaviour from './updates/updates.behaviour';
 import LongpollVkUpdatesBehaviour from './updates/longpoll-updates.behaviour';
 import PlatformVkContext from '../context';
 import VkMessagesBehaviour from './messages.behaviour';
+import { type VKOptions } from 'vk-io/lib/types';
 
 export default class VkPlatform extends Platform {
   public readonly slug = 'vk';
@@ -12,18 +13,17 @@ export default class VkPlatform extends Platform {
   public readonly updatesBehaviour: VkUpdatesBehaviour;
   public readonly messagesBehaviour: VkMessagesBehaviour;
 
-  public constructor(private readonly options: IVKPlatformOptions) {
+  public constructor(options: IVKPlatformOptions) {
     super();
 
-    this.normalizeOptions();
-
-    this.vk = new VK({
-      token: options.token,
-      webhookConfirmation: options.webhookConfirmation,
-      webhookSecret: options.webhookSecret,
-      apiLimit: 20,
-      apiRequestMode: 'burst',
-    });
+    this.vk = options.vk instanceof VK && options.vk;
+    if (!this.vk) {
+      this.vk = this.createClient(
+        options as IVKPlatformOptions & {
+          vk?: Partial<VKOptions> & { token: string };
+        },
+      );
+    }
 
     this.updatesBehaviour = this.createUpdatesBehaviour();
     this.messagesBehaviour = new VkMessagesBehaviour(this.vk);
@@ -37,28 +37,31 @@ export default class VkPlatform extends Platform {
         upload: this.vk.upload,
         source: 'WEBSOCKET' as any,
         updateType: 'message_new',
-        groupId: this.options.groupId,
+        // groupId: this.vk.,
       }),
       this,
     );
   }
 
-  private normalizeOptions() {
-    if (!this.options.token) {
-      throw new Error('vk.io token is required');
+  private createClient(
+    options: IVKPlatformOptions & {
+      vk?: Partial<VKOptions> & { token: string };
+    },
+  ) {
+    if (!options.vk) {
+      options.vk = {
+        token: options.token,
+        webhookConfirmation: options.webhookConfirmation,
+        webhookSecret: options.webhookSecret,
+        apiLimit: 20,
+        apiRequestMode: 'burst',
+      };
     }
 
-    this.options.updatesMode = this.options.updatesMode || 'longpoll';
+    return new VK(options.vk);
   }
 
   private createUpdatesBehaviour() {
-    switch (this.options.updatesMode) {
-      case 'longpoll':
-        return new LongpollVkUpdatesBehaviour(this);
-      default:
-        throw new Error(
-          `Updates mode ${this.options.updatesMode} is not supported`,
-        );
-    }
+    return new LongpollVkUpdatesBehaviour(this);
   }
 }
