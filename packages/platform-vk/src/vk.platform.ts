@@ -1,17 +1,14 @@
 import { Platform } from '@henta/core';
 import { MessageContext, VK } from 'vk-io';
-import type IVKPlatformOptions from '../types/options.interface';
-import type VkUpdatesBehaviour from './updates/updates.behaviour';
-import LongpollVkUpdatesBehaviour from './updates/longpoll-updates.behaviour';
-import PlatformVkContext from '../context';
-import VkMessagesBehaviour from './messages.behaviour';
+import type IVKPlatformOptions from './types/options.interface';
+import PlatformVkContext from './context';
+import VkMessagesBehaviour from './behaviours/messages.behaviour';
 import { type VKOptions } from 'vk-io/lib/types';
 
 export default class VkPlatform extends Platform {
   public readonly slug = 'vk';
   public readonly vk: VK;
-  public readonly updatesBehaviour: VkUpdatesBehaviour;
-  public readonly messagesBehaviour: VkMessagesBehaviour;
+  public readonly messagesBehaviour = new VkMessagesBehaviour(this);
 
   public constructor(options: IVKPlatformOptions) {
     super();
@@ -24,9 +21,11 @@ export default class VkPlatform extends Platform {
         },
       );
     }
+  }
 
-    this.updatesBehaviour = this.createUpdatesBehaviour();
-    this.messagesBehaviour = new VkMessagesBehaviour(this.vk);
+  public dispatch(payload: any) {
+    const context = new PlatformVkContext(payload, this);
+    this.emit('message', context);
   }
 
   public contextFromSerializedData(rawData: any) {
@@ -59,9 +58,5 @@ export default class VkPlatform extends Platform {
     }
 
     return new VK(options.vk);
-  }
-
-  private createUpdatesBehaviour() {
-    return new LongpollVkUpdatesBehaviour(this);
   }
 }

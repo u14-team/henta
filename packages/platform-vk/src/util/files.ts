@@ -1,30 +1,29 @@
 import type { Upload } from '@henta/core';
-import type PlatformVkContext from '../context.js';
-
-function buildMethod(method: string) {
-  return (ctx: PlatformVkContext, upload: Upload) =>
-    ctx.platform.vk.upload[method]({
-      // пусть пока побудет так
-      peer_id: ctx.senderId,
-      source: {
-        value: upload.data,
-        contentType: upload.mime,
-        filename: upload.name,
-      },
-    });
-}
+import type { Upload as VkUpload } from 'vk-io';
 
 const methodByAttachmentType = {
-  photo: buildMethod('messagePhoto'),
-  document: buildMethod('messageDocument'),
-  audio_message: buildMethod('audioMessage'),
+  photo: 'messagePhoto',
+  document: 'messageDocument',
+  audio_message: 'audioMessage',
 };
 
-export function uploadFile(ctx: PlatformVkContext, upload: Upload) {
-  const method = methodByAttachmentType[upload.type];
-  if (!method) {
+export function uploadFile(
+  vkUpload: VkUpload,
+  upload: Upload,
+  peerId?: string,
+) {
+  const methodName = methodByAttachmentType[upload.type];
+  if (!methodName) {
     throw new Error(`Upload method ${upload.type} not found`);
   }
 
-  return method(ctx, upload);
+  return vkUpload[methodName]({
+    // пусть пока побудет так
+    peer_id: peerId,
+    source: {
+      value: upload.data,
+      contentType: upload.mime,
+      filename: upload.name,
+    },
+  });
 }

@@ -1,6 +1,8 @@
 // import TgAttachment from './attachment.js';
 import TgAttachment from './attachment.js';
-import TelegramPlatform from './platform/index.js';
+import TgPlatform from './tg.platform.js';
+
+export * from './listeners';
 
 export { TgAttachment };
-export default TelegramPlatform;
+export default TgPlatform;

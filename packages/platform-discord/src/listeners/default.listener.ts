@@ -1,7 +1,10 @@
+import { PlatformListener } from '@henta/core';
 import type DiscordPlatform from '..';
 
-export default class DefaultDiscordUpdateListener {
-  public constructor(private readonly platform: DiscordPlatform) {}
+export default class DiscordListener extends PlatformListener<DiscordPlatform> {
+  public constructor(platform: DiscordPlatform) {
+    super(platform);
+  }
 
   public async start() {
     await this.platform.client.login(this.platform.options.token);
@@ -13,5 +16,9 @@ export default class DefaultDiscordUpdateListener {
 
       this.platform.dispatch(interaction);
     });
+  }
+
+  public async stop(): Promise<void> {
+    this.platform.client.destroy();
   }
 }

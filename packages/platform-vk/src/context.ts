@@ -1,15 +1,8 @@
-import {
-  getRandomId,
-  type IMessageContextSendOptions,
-  type MessageContext,
-  type MessageEventContext,
-} from 'vk-io';
+import { type MessageContext, type MessageEventContext } from 'vk-io';
 import type { ISendMessageOptions } from '@henta/core';
-import { normalizeUploads, PlatformContext } from '@henta/core';
-import getKeyboardButton from './util/keyboard.js';
+import { PlatformContext } from '@henta/core';
 import VkAttachment from './attachment.js';
-import { uploadFile } from './util/files.js';
-import type VkPlatform from './platform/index.js';
+import type VkPlatform from './vk.platform.js';
 
 export default class PlatformVkContext extends PlatformContext {
   public readonly source = 'vk';
@@ -78,55 +71,15 @@ export default class PlatformVkContext extends PlatformContext {
 
   // TODO: перенести в messagesBehaviour
   public async send(message: ISendMessageOptions, isAnswer = false) {
-    let attachment = [];
-    if (message.files?.length) {
-      const files = await normalizeUploads(message.files);
-      attachment = await Promise.all(
-        files.map((file) => uploadFile(this, file)),
+    const platform = this.platform as VkPlatform;
+    if (this.sendedAnswer && isAnswer) {
+      return platform.messagesBehaviour.edit(
+        message,
+        this.sendedAnswer,
+        this.peerId,
       );
     }
 
-    const forwardOptions = this.raw.conversationMessageId
-      ? { conversation_message_ids: this.raw.conversationMessageId }
-      : { message_ids: this.raw.id };
-
-    const messageBody = {
-      ...(this.isChat && isAnswer
-        ? {
-            forward: JSON.stringify({
-              ...forwardOptions,
-
-              peer_id: this.peerId,
-              is_reply: true,
-            }),
-          }
-        : {}),
-      peer_id: this.raw.peerId,
-      message: message.text,
-      content_source: JSON.stringify({
-        type: 'message',
-        owner_id: this.senderId,
-        peer_id: this.peerId,
-        conversation_message_id: this.raw.conversationMessageId,
-      }),
-      attachment,
-      dont_parse_links: !(message.isParseLinks ?? true),
-      random_id: getRandomId(),
-      keyboard:
-        message.keyboard &&
-        JSON.stringify({
-          inline: true,
-          buttons: this.normalizeKeyboard(message.keyboard, 4, 5, 10).map(
-            (row) => row.map((v) => getKeyboardButton(v)),
-          ),
-        }),
-    } as IMessageContextSendOptions;
-
-    if (this.sendedAnswer && isAnswer) {
-      await this.sendedAnswer.editMessage(messageBody);
-      return this.sendedAnswer;
-    }
-
-    return (this.platform as VkPlatform).vk.api.messages.send(messageBody);
+    return platform.messagesBehaviour.send(message, this.peerId);
   }
 }

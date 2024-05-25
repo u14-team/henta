@@ -1,5 +1,5 @@
 import { Attachment } from '@henta/core';
-import type PlatformVk from './platform';
+import type PlatformVk from './vk.platform';
 
 export default class VkAttachment extends Attachment {
   public declare platform: PlatformVk;

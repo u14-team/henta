@@ -1,9 +1,11 @@
-import type { Platform, PlatformContext } from '@henta/core';
+import type { Context, Platform, PlatformContext } from '@henta/core';
 import type { Middleware } from 'middleware-io';
 import { compose } from 'middleware-io';
 import { applyAnswerMiddleware } from './utils';
 import BotMode from './bot-mode.enum';
 import type HentaBridge from './bridge';
+import type { PlatformListener } from '@henta/core/src';
+import HentaBotPlatforms from './platforms';
 
 export default class HentaBot {
   public bridge?: HentaBridge;
@@ -11,20 +13,22 @@ export default class HentaBot {
   private middleware: Middleware<PlatformContext> = (ctx, next) => next();
   private answerMiddleware: Middleware<PlatformContext> = (ctx, next) => next();
 
-  private readonly platforms = new Map<string, Platform>();
+  public readonly platforms = new HentaBotPlatforms(this);
+  public readonly listeners = new Set<PlatformListener>();
 
   public constructor(public mode: BotMode = BotMode.Local) {}
 
+  /** @deprecated use bot.platforms.add */
   public addPlatform(platform: Platform): void {
-    platform.updatesBehaviour.on('message', (ctx) => this.dispatch(ctx));
-    this.platforms.set(platform.slug, platform);
+    return this.platforms.add(platform);
   }
 
+  /** @deprecated use bot.platforms.get */
   public getPlatform(slug: string): Platform {
     return this.platforms.get(slug);
   }
 
-  public dispatch(ctx: PlatformContext, force = false) {
+  public dispatch(ctx: Context, force = false) {
     if (!force && this.mode !== BotMode.Worker && this.mode !== BotMode.Local) {
       this.bridge.dispatch({
         slug: ctx.source,
@@ -47,25 +51,33 @@ export default class HentaBot {
     this.answerMiddleware = compose(steps);
   }
 
+  /** @deprecated use bot.start() instead */
   public async run() {
+    return this.start();
+  }
+
+  public async start() {
     if (this.mode !== BotMode.Local) {
       await this.initBridge();
     }
 
     if (this.mode !== BotMode.Worker) {
-      for (const platform of this.platforms.values()) {
-        await platform.updatesBehaviour.run();
+      for (const listener of this.listeners) {
+        await listener.start();
+      }
+
+      if (!this.listeners.size) {
+        console.warn(
+          'No listeners found. Use bot.addListener(platformListener); to receive events.',
+        );
       }
     }
-
-    process.once('SIGINT', () => this.stop());
-    process.once('SIGTERM', () => this.stop());
   }
 
   public async stop() {
     if (this.mode !== BotMode.Worker) {
-      for (const platform of this.platforms.values()) {
-        await platform.updatesBehaviour.stop();
+      for (const listener of this.listeners) {
+        await listener.stop();
       }
     }
   }

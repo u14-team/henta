@@ -16,6 +16,7 @@ import type ISendMessageOptions from './sendMessageOptions.js';
 import KB from './util/kb.js';
 
 export * from './util/reflector.js';
+export * from './platform';
 
 export {
   Attachment,
