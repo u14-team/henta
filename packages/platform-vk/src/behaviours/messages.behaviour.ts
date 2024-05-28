@@ -41,31 +41,30 @@ export default class VkMessagesBehaviour extends MessagesBehaviour {
     super();
   }
 
-  public async send(
-    options: ISendMessageOptions,
-    peerId: string,
-  ): Promise<string> {
+  public async send(options: ISendMessageOptions, peerId: string) {
     const params = await this.prepareMessageParams(options, peerId);
     const message = await this.platform.vk.api.messages.send({
       ...params,
       random_id: getRandomId(),
-      peer_id: peerId as unknown as number,
+      peer_ids: peerId as unknown as number,
     });
 
-    return message.toString();
+    return typeof message === 'number'
+      ? { message_id: message }
+      : { conversation_message_id: message[0]['conversation_message_id'] };
   }
 
   public async edit(
     options: ISendMessageOptions,
-    messageId: string,
+    message: any,
     peerId: string,
   ): Promise<void> {
     const params = (await this.prepareMessageParams(options, peerId)) as any;
 
     await this.platform.vk.api.messages.edit({
       ...params,
-      message_id: parseInt(messageId),
-      peer_id: params.peer_id,
+      ...message,
+      peer_id: peerId,
     });
   }
 
@@ -82,7 +81,6 @@ export default class VkMessagesBehaviour extends MessagesBehaviour {
     peerId: string,
   ): Promise<IMessageContextSendOptions> {
     const params: IMessageContextSendOptions = {
-      peer_id: parseInt(peerId),
       message: options.text,
       random_id: getRandomId(),
     };
