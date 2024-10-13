@@ -43,6 +43,7 @@ const modules = [
   'platform-discord',
   'platform-vk',
   'mentions',
+  'react',
 ];
 
 export default async () =>

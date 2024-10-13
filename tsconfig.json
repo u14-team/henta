@@ -12,5 +12,6 @@
     "inlineSourceMap": true,
     "resolveJsonModule": true,
     "declaration": true,
+    "jsx": "react"
   },
 }

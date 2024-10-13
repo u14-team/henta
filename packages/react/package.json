@@ -1,0 +1,38 @@
+{
+  "name": "@henta/react",
+  "description": "React renderer henta",
+  "type": "module",
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-reconciler": "^0.29.2"
+  },
+  "main": "lib/index.js",
+  "types": "./lib/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./lib/index.mjs",
+      "require": "./lib/index.js",
+      "types": "./lib/index.d.ts"
+    }
+  },
+  "version": "0.1.0",
+  "author": "TheEVolk (https://t.me/theevolk)",
+  "repository": "github:u14-team/henta",
+  "bugs": "https://github.com/u14-team/henta/issues",
+  "keywords": [
+    "henta",
+    "vk"
+  ],
+  "files": [
+    "lib/"
+  ],
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.11",
+    "@types/react-reconciler": "^0.28.8"
+  }
+}

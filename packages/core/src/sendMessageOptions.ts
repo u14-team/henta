@@ -1,10 +1,5 @@
-import type Upload from './files/upload.js';
+import type ISendMessageContent from './types/interfaces/send-message-content.interface';
 
-export default interface ISendMessageOptions {
-  text?: string;
-  files?: Upload[];
-  keyboard?: any; // TODO
-
-  payload?: any;
-  isParseLinks?: boolean;
-}
+/** @deprecated use ISendMessageContent */
+type ISendMessageOptions = ISendMessageContent;
+export default ISendMessageOptions;
